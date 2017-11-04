@@ -1,0 +1,17 @@
+<aside class="sidebar sidebar-primary widget-area" role="complementary" aria-label="Primary Sidebar" itemscope itemtype="https://schema.org/WPSideBar">
+  <section id="vfc-office-hours-widget-2" class="widget featured-content vfc-office-hours-widget">
+    <div class="widget-wrap">
+      <h4 class="widget-title widgettitle">Hours of Operation</h4>
+      {% for day in site.data.hours %}
+      <div class="vfc-office-hours-widget-day-row">
+        <div class="vfc-office-hours-widget-day">{{ day.first }}</div>
+        <div class="vfc-office-hours-widget-hours">
+          {% for times in day.last %}
+          <div>{{ times }}</div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</aside>
