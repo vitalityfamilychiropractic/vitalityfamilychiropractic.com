@@ -1,12 +1,9 @@
----
----
 <!DOCTYPE html>
 <html lang="en-US">
 
-<head itemscope itemtype="https://schema.org/WebSite">
+<head>
 	<meta charset="UTF-8" />
-	<title>Vitality Family Chiropractic</title>
-	<meta name="description" content="Chiropractor specializing in family health and wellness in College Station, Texas" />
+	<title>{{ page.title }} – Vitality Family Chiropractic</title>
 	<meta name="robots" content="noodp,noydir" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<style type="text/css">
@@ -32,7 +29,7 @@
 		}
 	</style>
 	<link rel='dns-prefetch' href='https://fonts.googleapis.com/' />
-	<link rel="canonical" href="index.html" />
+	<link rel="canonical" href="/appointment" />
 	<script type="text/javascript">
 		window._wpemojiSettings = {
 			"baseUrl": "https:\/\/s.w.org\/images\/core\/emoji\/2.3\/72x72\/",
@@ -138,113 +135,16 @@
 	<meta name="msapplication-TileImage" content="/wp-content/uploads/2015/05/VFC-Logo-55692b8av1_site_icon.png" />
 </head>
 
-<body class="home blog custom-header header-image full-width-content outreach-pro-blue outreach-pro-home" itemscope itemtype="https://schema.org/WebPage">
+<body class="page-template-default page page-id-2 custom-header header-image content-sidebar outreach-pro-blue" itemscope itemtype="https://schema.org/WebPage">
 	<div class="site-container">
 		{% include header.html %}
 		{% include nav.html %}
 		<div class="site-inner">
 			<div class="wrap">
 				<div class="content-sidebar-wrap">
-					<main class="content">
-						<div class="home-top widget-area">
-							<section id="genesisresponsiveslider-widget-2" class="widget genesis_responsive_slider">
-								<div class="widget-wrap">
-									<div id="genesis-responsive-slider">
-										<div class="flexslider">
-											<ul class="slides">
-												<li>
-													<div class="slide-excerpt slide-16">
-														<div class="slide-background"></div>
-														<div class="slide-excerpt-border ">
-															<h2><a href="our-clinic" rel="bookmark">Premier Wellness Care in B/CS</a></h2>
-															<p>At Vitality Family Chiropractic, we are committed to keeping you and your family healthy for the rest of your life.</p>
-														</div>
-													</div>
-													<div class="slide-image">
-														<a href="our-clinic" rel="bookmark"><img src="wp-content/uploads/2014/12/istock20happy20family-1140x460.jpg" alt="Premier Wellness Care in B/CS" /></a>
-													</div>
-												</li>
-												<li>
-													<div class="slide-excerpt slide-133">
-														<div class="slide-background"></div>
-														<div class="slide-excerpt-border ">
-															<h2><a href="monthly-workshops/index.html" rel="bookmark">Monthly Workshops</a></h2>
-															<p>Visit our events page to learn about our monthly events to help you achieve your health goals.</p>
-														</div>
-													</div>
-													<div class="slide-image">
-														<a href="monthly-workshops/index.html" rel="bookmark"><img src="wp-content/uploads/2014/12/healthy-living-1140x460.jpg" alt="Monthly Workshops" /></a>
-													</div>
-												</li>
-												<li>
-													<div class="slide-excerpt slide-123">
-														<div class="slide-background"></div>
-														<div class="slide-excerpt-border ">
-															<h2><a href="pediatric-care/index.html" rel="bookmark">Pediatric Chiropractic</a></h2>
-															<p>Learn more about how chiropractic can benefit our favorite patients &#8211; your children.</p>
-														</div>
-													</div>
-													<div class="slide-image">
-														<a href="pediatric-care/index.html" rel="bookmark"><img src="wp-content/uploads/2014/12/Healthy-Living-Bckgrnd3-1140x460.jpg" alt="Pediatric Chiropractic" /></a>
-													</div>
-												</li>
-												<li>
-													<div class="slide-excerpt slide-2">
-														<div class="slide-background"></div>
-														<div class="slide-excerpt-border ">
-															<h2><a href="appointment" rel="bookmark">Get Started Today</a></h2>
-															<p>Request an appointment today to take the first step towards your new healthy lifestyle.</p>
-														</div>
-													</div>
-													<div class="slide-image">
-														<a href="appointment" rel="bookmark"><img src="wp-content/uploads/2014/12/family-1140x460.jpg" alt="Get Started Today" /></a>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</section>
-						</div>
-					</main>
+				{{ content }}
+				{% include hours.html %}
 				</div>
-			</div>
-		</div>
-		<div class="home-bottom widget-area">
-			<div class="wrap">
-				<section id="vfc-home-bottom-widget-6" class="widget featured-content vfc-home-bottom-widget">
-					<div class="widget-wrap">
-						<h4 class="widget-title widgettitle">About Our Clinic</h4>
-						<p><img width="285" height="160" src="wp-content/uploads/2015/01/IMG_3037-e1420681732321-285x160.jpg" class="attachment-home-bottom size-home-bottom" alt="" /></p>
-						<p class="vfc-home-bottom-widget-content">Read all about our clinic.</p>
-						<p><a href="/our-clinic"><button>Read About Our Clinic</button></a></p>
-					</div>
-				</section>
-				<section id="vfc-home-bottom-widget-5" class="widget featured-content vfc-home-bottom-widget">
-					<div class="widget-wrap">
-						<h4 class="widget-title widgettitle">Meet Our Staff</h4>
-						<p><img width="285" height="160" src="wp-content/uploads/2015/01/MK_MSMKTHOU_7134195739-285x160.jpg" class="attachment-home-bottom size-home-bottom" alt="" srcset="wp-content/uploads/2015/01/MK_MSMKTHOU_7134195739-285x160.jpg 285w, wp-content/uploads/2015/01/MK_MSMKTHOU_7134195739-300x169.jpg 300w, wp-content/uploads/2015/01/MK_MSMKTHOU_7134195739-1024x575.jpg 1024w"
-							  sizes="(max-width: 285px) 100vw, 285px" /></p>
-						<p class="vfc-home-bottom-widget-content">Meet our staff.</p>
-						<p><a href="/staff"><button>Meet Our Staff</button></a></p>
-					</div>
-				</section>
-				<section id="vfc-home-bottom-widget-2" class="widget featured-content vfc-home-bottom-widget">
-					<div class="widget-wrap">
-						<h4 class="widget-title widgettitle">Upcoming Events</h4>
-						<p><img width="285" height="160" src="wp-content/uploads/2014/12/food-communitydinners1-285x160.jpg" class="attachment-home-bottom size-home-bottom" alt="" /></p>
-						<p class="vfc-home-bottom-widget-content">View our calendar of upcoming events.</p>
-						<p><a href="https://www.facebook.com/pg/vitalityfamilychiropractic/events" target="_blank"><button>View Upcoming Events</button></a></p>
-					</div>
-				</section>
-				<section id="vfc-home-bottom-widget-3" class="widget featured-content vfc-home-bottom-widget">
-					<div class="widget-wrap">
-						<h4 class="widget-title widgettitle">Request An Appointment</h4>
-						<p><img width="285" height="160" src="wp-content/uploads/2014/12/cutcaster-photo-800885385-Doctors-Appointment-285x160.jpg" class="attachment-home-bottom size-home-bottom" alt="" /></p>
-						<p class="vfc-home-bottom-widget-content">The first step to become a patient is scheduling a new patient exam.</p>
-						<p><a href="/appointment"><button>Request An Appointment</button></a></p>
-					</div>
-				</section>
 			</div>
 		</div>
 		{% include footer.html %}
@@ -261,8 +161,10 @@
 			});
 		});
 	</script>
-	<script type='text/javascript' src='wp-content/plugins/genesis-responsive-slider/js/jquery.flexslider.js'></script>
-	<script type='text/javascript' src='wp-includes/js/wp-embed.min.js'></script>
+	<script type='text/javascript' src='/wp-includes/js/jquery/ui/core.min.js'></script>
+	<script type='text/javascript' src='/wp-includes/js/comment-reply.min.js'></script>
+	<script type='text/javascript' src='/wp-content/plugins/genesis-responsive-slider/js/jquery.flexslider.js'></script>
+	<script type='text/javascript' src='/wp-includes/js/wp-embed.min.js'></script>
 </body>
 
 </html>
