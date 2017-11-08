@@ -142,7 +142,16 @@
 		<div class="site-inner">
 			<div class="wrap">
 				<div class="content-sidebar-wrap">
-				{{ content }}
+				<main class="content">
+					<article class="page type-page entry" itemscope itemtype="https://schema.org/CreativeWork">
+						<header class="entry-header">
+							<h1 class="entry-title" itemprop="headline">{{ page.title }}</h1>
+						</header>
+						<div class="entry-content" itemprop="text">
+							{{ content }}
+						</div>
+					</article>
+				</main>
 				{% include hours.html %}
 				</div>
 			</div>

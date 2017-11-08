@@ -1,27 +1,32 @@
 <header class="site-header" itemscope itemtype="https://schema.org/WPHeader">
   <div class="wrap">
     <div class="title-area">
-      <p class="site-title" itemprop="headline"><a href="/">Vitality Family Chiropractic</a></p>
+      <p class="site-title" itemprop="headline"><a href="/">{{ site.data.contacts.name }}</a></p>
       <p class="site-description" itemprop="description">Chiropractor specializing in family health and wellness in College Station, Texas</p>
     </div>
     <div class="widget-area header-widget-area">
       <section id="simple-social-icons-2" class="widget simple-social-icons">
         <div class="widget-wrap">
           <ul class="alignright">
-            <li class="ssi-email"><a href="mailto:info@vitalityfamilychiropractic.com"><svg role="img" class="social-email" aria-labelledby="social-email"><title id="social-email">Email</title><use xlink:href="/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-email"></use></svg></a></li>
-            <li
-              class="ssi-facebook"><a href="https://www.facebook.com/VitalityFamilyChiropractic"><svg role="img" class="social-facebook" aria-labelledby="social-facebook"><title id="social-facebook">Facebook</title><use xlink:href="/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-facebook"></use></svg></a></li>
-              <li
-                class="ssi-gplus"><a href="https://plus.google.com/+VitalityFamilyChiropractic"><svg role="img" class="social-gplus" aria-labelledby="social-gplus"><title id="social-gplus">Google+</title><use xlink:href="/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-gplus"></use></svg></a></li>
-                <li
-                  class="ssi-twitter"><a href="https://www.twitter.com/VitalityChiroCS"><svg role="img" class="social-twitter" aria-labelledby="social-twitter"><title id="social-twitter">Twitter</title><use xlink:href="/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-twitter"></use></svg></a></li>
+            {% if site.data.contacts.email %}
+            <li class="ssi-email"><a href="mailto:{{ site.data.contacts.email }}"><svg role="img" class="social-email" aria-labelledby="social-email"><title id="social-email">Email</title><use xlink:href="/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-email"></use></svg></a></li>
+            {% endif %}
+            {% if site.data.contacts.facebook %}
+            <li class="ssi-facebook"><a href="https://www.facebook.com/{{ site.data.contacts.facebook }}"><svg role="img" class="social-facebook" aria-labelledby="social-facebook"><title id="social-facebook">Facebook</title><use xlink:href="/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-facebook"></use></svg></a></li>
+            {% endif %}
+            {% if site.data.contacts.gplus %}
+            <li class="ssi-gplus"><a href="https://plus.google.com/+{{ site.data.contacts.gplus }}"><svg role="img" class="social-gplus" aria-labelledby="social-gplus"><title id="social-gplus">Google+</title><use xlink:href="/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-gplus"></use></svg></a></li>
+            {% endif %}
+            {% if site.data.contacts.twitter %}
+            <li class="ssi-twitter"><a href="https://www.twitter.com/{{ site.data.contacts.twitter }}"><svg role="img" class="social-twitter" aria-labelledby="social-twitter"><title id="social-twitter">Twitter</title><use xlink:href="/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-twitter"></use></svg></a></li>
+            {% endif %}
           </ul>
         </div>
       </section>
       <section id="text-2" class="widget widget_text">
         <div class="widget-wrap">
           <div class="textwidget">
-            <p>1109 Rock Prairie Road Suite 200 &middot; College Station, Texas 77845<br /> Phone <a href="tel:19797037977">(979) 703-7977</a> &middot; Fax (979) 217-8816</p>
+            <p>{{ site.data.contacts.address }} &middot; {{ site.data.contacts.city }}, {{ site.data.contacts.state }} {{ site.data.contacts.zip }}<br /> Phone <a href="tel:{{ site.data.contacts.phone_country | site.data.contacts.phone_number }}">({{ site.data.contacts.phone_number | slice: 0, 3 }}) {{ site.data.contacts.phone_number | slice: 3, 3 }}-{{ site.data.contacts.phone_number | slice: 6, 4 }}</a> &middot; Fax ({{ site.data.contacts.fax_number | slice: 0, 3 }}) {{ site.data.contacts.fax_number | slice: 3, 3 }}-{{ site.data.contacts.fax_number | slice: 6, 4 }}</p>
           </div>
         </div>
       </section>
