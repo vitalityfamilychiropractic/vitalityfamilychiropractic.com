@@ -1,0 +1,73 @@
+$tagline-color:				#9fa6b1;
+$banner-bg-color:			#cecbc4;
+$banner-font-color-1:		#0a3380;
+$banner-font-color-2:		#54ced4;
+$banner-font-size:			72px;
+$banner-font-weight:		700;
+$banner-height:				820px;
+$banner-image:				url('/assets/img/banner-gray.png');
+$banner-spine-left-offset:	-125px;
+$copyright-font-color:		#aeb6c2;
+$gradient-bg:				linear-gradient(90deg, #4fc9d8 0%, #58a8ec 100%);
+$white:						#fff;
+
+.tagline {
+	color:					$tagline-color;
+}
+
+.banner {
+	background-color:		$banner-bg-color;
+	background-image:		$banner-image;
+	background-position:	right center;
+	background-repeat:		no-repeat;
+	overflow:				hidden;
+	position:				relative;
+
+	.row {
+		height:				$banner-height;
+	}
+
+	.welcome {
+		color:				$banner-font-color-1;
+		font-size:			$banner-font-size;
+		font-weight:		$banner-font-weight;
+		position:			relative;
+	}
+
+	.welcome-color-2 {
+		color:				$banner-font-color-2;
+	}
+
+	button {
+		position:			relative;
+	}
+}
+
+.copyright {
+	color:					$copyright-font-color;
+	text-align:				right;
+}
+
+.description {
+	color:					$white;
+	font-size:				20px;
+	font-weight:			400;
+	text-align:				center;
+}
+
+.gradient {
+	background-image:		$gradient-bg;
+}
+
+.spine {
+	left: 					$banner-spine-left-offset;
+	position: 				absolute;
+	top: 					0;
+
+}
+
+button, button a {
+	color:					$white;
+	font-weight:			bold;
+	text-decoration:		none;
+}

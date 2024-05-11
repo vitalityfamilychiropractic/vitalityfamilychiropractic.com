@@ -1,0 +1,22 @@
+    {% for nav in include.nav %}
+      {% if nav.subcategories != null %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ nav.title }}</a>
+          <ul class="dropdown-menu">
+          {% include nav.html nav=nav.subcategories dropdown=1 %}
+          </ul>
+        </li>
+      {% elsif nav.title == page.title %}
+         <li class="nav-item">
+           <a class="nav-link active" aria-current="page" href="#">{{ nav.title }}</a>
+         </li>
+      {% elsif include.dropdown %}
+        <li>
+          <a class="dropdown-item" href="{{ nav.href }}">{{ nav.title }}</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ nav.href }}">{{ nav.title }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}

@@ -1,0 +1,28 @@
+---
+layout: default
+title: Home
+---
+
+<div class="container-fluid banner">
+	<div class="row">
+		<div class="col align-self-center">
+			<img class="spine z-0" src="/assets/img/spine-2.webp"/>
+			<p class="welcome">
+				<span>Hi, I'm</span> <span class="welcome-color-2">{{ site.welcome_name }}</span>
+			</p>
+			<p>
+				<button type="button" class="btn btn-primary btn-lg"><a href="{{ site.bookingurl }}" target="_blank">Book an Appointment</a></button>
+			</p>
+		</div>
+	</div>
+</div>
+<div class="container-fluid gradient p-5">
+	<div class="row description">
+		<div class="col align-self-center">{{ site.description }}</div>
+	</div>
+	<div class="row">
+		<div class="col-4 offset-8 py-4">
+			<img src="/assets/img/dr-christie-sig.webp" style="height: 52px; width: 387px;"/>
+		</div>
+	</div>
+</div>

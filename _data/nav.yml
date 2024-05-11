@@ -1,0 +1,37 @@
+- title: Home
+  id: home
+  href: /
+
+- title: About Us
+  id: about-us
+  subcategories:
+    - title: Our Values
+      id: our-values
+      href: /our-values
+
+    - title: Team
+      id: team
+      href: /team
+
+    - title: Pricing
+      id: pricing
+      href: /pricing
+
+- title: Specialties
+  id: specialties
+  subcategories:
+    - title: Pregnancy Care
+      id: pregnancy-care
+      href: /specialties/pregnancy-care
+
+    - title: Pediatric Care
+      id: pediatric-care
+      href: /specialties/pediatric-care
+
+    - title: Family Wellness Care
+      id: family-wellness-care
+      href: /specialties/family-wellness-care
+
+- title: Contact Us
+  id: contact-us
+  href: /contacts
