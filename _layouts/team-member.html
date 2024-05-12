@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% for item in site.data.team.members %}
+    {% if page.key == item.key %}{% assign member = item %}{% endif %}
+  {% endfor %}
+  {% include head.html %}
+</head>
+<body>
+  <header>
+    {% include header.html %}
+  </header>
+  <main>
+    <div class="d-flex tagline bg-body-tertiary banner" style="height: 150px;">
+      <h1 class="py-2 px-5 flex-lg-grow-1 align-self-center">Team</h1>
+    </div>
+    <div class="container team-member">
+      <div class="row py-5">
+        <div class="col">
+          <img class="img-fluid rounded" src="/assets/img/team/{{ page.key }}.jpg" alt="{{ member.name }}"/>
+        </div>
+        <div class="col">
+          <h2 class="py-2">{{ member.name }}</h2>
+          {% if member.certifications %}<p><strong>Certifications:</strong> {{ member.certifications }}</p>{% endif %}
+          {% if member.specialty %}<p><strong>Specialty:</strong> {{ member.specialty }}</p>{% endif %}
+          {% if member.length_work %}<p><strong>Length of Work:</strong> {{ member.length_work }}</p>{% endif %}
+          {% if member.email %}<p><strong>Email:</strong> {{ member.email }}</p>{% endif %}
+          {% if member.phone %}<p><strong>Phone:</strong> {{ member.phone }}</p>{% endif %}
+          {% if member.facebook_username %}<p><a href="https://www.facebook.com/{{ member.facebook_username }}" target="_blank"><i class="bi bi-facebook fs-4"></i></a></p>{% endif %}
+        </div>
+      </div>
+      {% if member.biography %}
+      <div class="row">
+        <div class="col">
+          <h3>Biography</h3>
+          {{ member.biography | markdownify }}
+        </div>
+      </div>
+      {% endif %}
+      {% if member.practice_weights or member.whats_important %}
+      <div class="row py-5">
+        {% if member.practice_weights %}
+        <div class="col">
+          <h3>My Practice</h3>
+          {% for item in member.practice_weights %}
+          <h5>{{ item.title }}</h5>
+          <div class="progress" role="progressbar" aria-label="{{ item.title }}" aria-valuenow="{{ item.pct }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" style="width: {{ item.pct }}%;">{{ item.pct }}%</div>
+          </div>
+          <br/>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if member.whats_important %}
+        <div class="col">
+          <h3>What's Important to Me as a Doctor</h3>
+          <ul class="lh-lg">
+            {% for item in member.whats_important %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% if member.in_office_community %}
+      <div class="row">
+        <div class="col">
+          <h3>In the Office and In the Community</h3>
+          {{ member.in_office_community | markdownify }}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </main>
+  <footer>
+    {% include footer.html %}
+  </footer>
+</body>
+</html>

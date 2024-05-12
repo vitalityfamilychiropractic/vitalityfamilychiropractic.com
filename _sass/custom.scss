@@ -5,17 +5,80 @@ $banner-font-color-2:		#54ced4;
 $banner-font-size:			72px;
 $banner-font-weight:		700;
 $banner-height:				820px;
-$banner-image:				url('/assets/img/banner-gray.png');
+$banner-image:				url('/assets/img/banner-gray.jpg');
 $banner-spine-left-offset:	-125px;
+$blue:						#3b4b68;
 $copyright-font-color:		#aeb6c2;
+$features-card-height:		370px;
+$features-card-offset:		-30px;
+$features-card-width:		370px;
+$features-bg-height:		200px;
+$features-height:			440px;
 $gradient-bg:				linear-gradient(90deg, #4fc9d8 0%, #58a8ec 100%);
+$light-blue:				#2ea6f7;
 $white:						#fff;
+$why-me-bg-color:			#cecbc4;
+$why-me-height:				714px;
+$why-me-image:				url('/assets/img/why-me-gray.png');
 
 .tagline {
 	color:					$tagline-color;
 }
 
 .banner {
+	text-align:				center;
+}
+
+.content {
+	color:					#6c757d;
+
+	h1, h2, h3, h4, h5 {
+		margin-bottom:		1em;
+	}
+}
+
+.copyright {
+	color:					$copyright-font-color;
+	text-align:				right;
+}
+
+.description {
+	color:					$white;
+	font-size:				20px;
+	font-weight:			400;
+	text-align:				center;
+}
+
+.features {
+	display:				none !important;
+	height:					$features-height;
+	position:				relative;
+
+	.card {
+		height:				$features-card-height;
+		margin-top:			$features-card-offset;
+		width:				$features-card-width;
+		text-align:			center;
+	}
+
+	.features-button {
+		margin-top:			$features-card-offset;
+	}
+
+	.gradient {
+		height:				$features-bg-height;
+	}
+
+	button, button a {
+		color:				$blue;
+	}
+}
+
+.gradient {
+	background-image:		$gradient-bg;
+}
+
+.home-banner {
 	background-color:		$banner-bg-color;
 	background-image:		$banner-image;
 	background-position:	right center;
@@ -43,22 +106,6 @@ $white:						#fff;
 	}
 }
 
-.copyright {
-	color:					$copyright-font-color;
-	text-align:				right;
-}
-
-.description {
-	color:					$white;
-	font-size:				20px;
-	font-weight:			400;
-	text-align:				center;
-}
-
-.gradient {
-	background-image:		$gradient-bg;
-}
-
 .spine {
 	left: 					$banner-spine-left-offset;
 	position: 				absolute;
@@ -66,8 +113,76 @@ $white:						#fff;
 
 }
 
+.team-member {
+	br {
+		content:			"";
+		display:			block;
+		margin:				12px;
+	}
+}
+
+.why-me {
+	background-color:		$why-me-bg-color;
+	background-image:		$why-me-image;
+	background-position:	left center;
+	background-repeat:		no-repeat;
+	overflow:				hidden;
+	position:				relative;
+
+	.row {
+		height:				$why-me-height;
+	}
+}
+
+#pricingTabsContent {
+	.card {
+		height:				12rem;
+		width:				20rem;
+		text-align:			center;
+
+		.card-text {
+			color:			$light-blue;
+			font-size:		1rem;
+			margin-top:		15px;
+			vertical-align:	bottom;
+
+			.dollar-sign {
+				display:		inline-block;
+				font-size:		1.5rem;
+				line-height:	3.5rem;
+				padding-right:	.5rem;
+				vertical-align:	top;
+			}
+
+			.price {
+				font-size:	5rem;
+			}
+		}
+
+		.card-title {
+			color:			$blue;
+			font-weight:	bold;
+		}
+
+
+
+	}
+}
+
 button, button a {
 	color:					$white;
 	font-weight:			bold;
 	text-decoration:		none;
+}
+
+main {
+	h1, h2, h3, h4, h5 {
+		color:				$blue;
+	}
+}
+
+@media (min-width: 1025px) {
+	.features {
+		display:			block !important;
+	}
 }

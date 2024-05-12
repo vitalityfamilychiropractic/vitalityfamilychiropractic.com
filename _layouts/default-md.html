@@ -14,11 +14,17 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col p-5">
-          <img class="rounded mx-auto d-block" src="{{ page.image_url }}" alt="{{ page.image_alt }}"/>
+          <img class="rounded mx-auto d-block img-fluid" src="{{ page.image_url }}" alt="{{ page.image_alt }}" style="height: 570px;"/>
         </div>
       </div>
     </div>
-    {{ content }}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col px-5 content">
+          {{ content }}
+        </div>
+      </div>
+    </div>
   </main>
   <footer>
     {% include footer.html %}

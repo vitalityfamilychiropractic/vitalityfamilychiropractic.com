@@ -6,14 +6,18 @@
           {% include nav.html nav=nav.subcategories dropdown=1 %}
           </ul>
         </li>
-      {% elsif nav.title == page.title %}
-         <li class="nav-item">
-           <a class="nav-link active" aria-current="page" href="#">{{ nav.title }}</a>
-         </li>
+      {% elsif include.dropdown and nav.title == page.title %}
+        <li>
+          <a class="dropdown-item active" aria-current="page" href="#">{{ nav.title }}</a>
+        </li>
       {% elsif include.dropdown %}
         <li>
           <a class="dropdown-item" href="{{ nav.href }}">{{ nav.title }}</a>
         </li>
+      {% elsif nav.title == page.title %}
+         <li class="nav-item">
+           <a class="nav-link active" aria-current="page" href="#">{{ nav.title }}</a>
+         </li>
       {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{{ nav.href }}">{{ nav.title }}</a>

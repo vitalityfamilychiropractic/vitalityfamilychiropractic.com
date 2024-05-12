@@ -1,0 +1,53 @@
+- name: Celebration
+  street_address: 64 Riley Road
+  city: Celebration
+  state: Florida
+  zip_code: 34747
+  phone_number: (407) 584-7900
+  email: info@vitalityfamilychiropractic.com
+  google_maps_url: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d877.9832184971128!2d-81.52856564807155!3d28.33063304836255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88dd7f451db8e08d%3A0xb65319c4e9cb9bde!2s64%20Riley%20Rd%2C%20Kissimmee%2C%20FL%2034747!5e0!3m2!1sen!2sus!4v1715477991468!5m2!1sen!2sus
+  hours:
+    - day: Mon
+      hours: 8:30am - 4pm
+
+    - day: Tue
+      hours: 8:30am - 4pm
+
+    - day: Wed
+      hours: 8:30am - 6pm
+
+    - day: Thu
+      hours: 8:30am - 1pm
+
+    - day: Fri
+      hours: By Appointment
+
+    - day: Sat/Sun
+      hours: Closed
+
+- name: College Station
+  street_address: 4519 Mills Park Circle Suite 300
+  city: College Station
+  state: Texas
+  zip_code: 77845
+  phone_number: (979) 703-7977
+  email: info@vitalityfamilychiropractic.com
+  google_maps_url: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3435.8844803388324!2d-96.26429582421402!3d30.55256769431711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86469ac8f975be93%3A0x116cb8e9472307c!2s4519%20Mills%20Park%20Cir%2C%20College%20Station%2C%20TX%2077845!5e0!3m2!1sen!2sus!4v1715478324876!5m2!1sen!2sus
+  hours:
+    - day: Mon
+      hours: 8:30am - 4pm
+
+    - day: Tue
+      hours: 8:30am - 4pm
+
+    - day: Wed
+      hours: 8:30am - 6pm
+
+    - day: Thu
+      hours: 8:30am - 1pm
+
+    - day: Fri
+      hours: By Appointment
+
+    - day: Sat/Sun
+      hours: Closed
