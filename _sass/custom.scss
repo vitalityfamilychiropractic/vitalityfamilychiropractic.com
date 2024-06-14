@@ -15,6 +15,9 @@ $features-card-width:		370px;
 $features-bg-height:		200px;
 $features-height:			440px;
 $gradient-bg:				linear-gradient(90deg, #4fc9d8 0%, #58a8ec 100%);
+$landing-page-celebration-image:		url('/assets/img/celebration-water-tower.png');
+$landing-page-college-station-image:	url('/assets/img/college-station-water-tower.png');
+$landing-page-height:		700px;
 $light-blue:				#2ea6f7;
 $white:						#fff;
 $why-me-bg-color:			#cecbc4;
@@ -27,6 +30,12 @@ $why-me-image:				url('/assets/img/why-me-gray.png');
 
 .banner {
 	text-align:				center;
+}
+
+.contact {
+	h4 a {
+		text-decoration:	none;
+	}
 }
 
 .content {
@@ -83,6 +92,7 @@ $why-me-image:				url('/assets/img/why-me-gray.png');
 	background-image:		$banner-image;
 	background-position:	right center;
 	background-repeat:		no-repeat;
+	display:				none !important;
 	overflow:				hidden;
 	position:				relative;
 
@@ -106,11 +116,41 @@ $why-me-image:				url('/assets/img/why-me-gray.png');
 	}
 }
 
+.landing-page {
+	.landing-page-celebration {
+		background-image:		$landing-page-celebration-image;
+		background-position:	center;
+		background-repeat:		no-repeat;
+		height:					$landing-page-height;
+		padding-top:			calc($landing-page-height / 2);
+	}
+
+	.landing-page-college-station {
+		background-image:		$landing-page-college-station-image;
+		background-position:	center;
+		background-repeat:		no-repeat;
+		height:					$landing-page-height;
+		padding-top:			calc($landing-page-height / 2);
+	}
+
+	.row {
+		height:				$landing-page-height;
+	}
+}
+
+.nav-link.active {
+	border-bottom:			3px solid $blue;
+}
+
 .spine {
 	left: 					$banner-spine-left-offset;
 	position: 				absolute;
 	top: 					0;
 
+}
+
+.tagline {
+	display:				none !important;
 }
 
 .team-member {
@@ -123,15 +163,10 @@ $why-me-image:				url('/assets/img/why-me-gray.png');
 
 .why-me {
 	background-color:		$why-me-bg-color;
-	background-image:		$why-me-image;
 	background-position:	left center;
 	background-repeat:		no-repeat;
 	overflow:				hidden;
 	position:				relative;
-
-	.row {
-		height:				$why-me-height;
-	}
 }
 
 #pricingTabsContent {
@@ -181,7 +216,34 @@ main {
 	}
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 606px) {		// more than small breakpoint + some extra
+	.home-banner {
+		display:			block !important;
+	}
+
+	.tagline {
+		display:			block !important;
+	}
+}
+
+@media (max-width: 768px) {		// less than medium breakpoint
+	.landing-page {
+		.row {
+			height:			calc($landing-page-height * 2);
+		}
+	}
+}
+
+@media (min-width: 992px) {		// more than large breakpoint
+	.why-me {
+		background-image:	$why-me-image;
+		.row {
+			height:				$why-me-height;
+		}
+	}
+}
+
+@media (min-width: 1200px) {	// more than x-large breakpoint
 	.features {
 		display:			block !important;
 	}
