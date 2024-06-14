@@ -11,17 +11,17 @@
     </div>
     <div class="row justify-content-evenly">
         {% for item in site.data.locations %}
-        <div class="col-4 py-3">
-            <h4><i class="bi bi-geo-alt-fill text-primary"></i> {{ item.name }}</h4>
-            <p class="px-5">
+        <div class="col-lg-4 px-5 px-lg-0 py-3">
+            <h4><i class="bi bi-geo-alt-fill text-primary"></i> <a href="{{ item.url }}">{{ item.name }}</a></h4>
+            <p class="px-3">
                 {% if item.street_address %}{{ item.street_address }}<br />{% endif %}
                 {% if item.city and item.state and item.zip_code %}{{ item.city }}, {{ item.state }} {{ item.zip_code }}<br />{% endif %}
             </p>
-            <p class="px-5"><i class="bi bi-telephone-fill text-primary"></i> {{ item.phone_number }}</p>
-            <p class="px-5"><i class="bi bi-envelope-fill text-primary"></i> {{ item.email }}</p>
+            <p class="px-3"><i class="bi bi-telephone-fill text-primary"></i> {{ item.phone_number }}</p>
+            <p class="px-3"><i class="bi bi-envelope-fill text-primary"></i> {{ item.email }}</p>
 
-            <h5 class="px-5"><i class="bi bi-clock-fill text-primary"></i> Open Hours</h5>
-            <div class="px-5">
+            <h5 class="px-3"><i class="bi bi-clock-fill text-primary"></i> Open Hours</h5>
+            <div class="px-3">
                 <table class="table" style="width: 350px;">
                     {% for hours in item.hours %}
                     <tr>
@@ -32,7 +32,7 @@
                 </table>
             </div>
 
-            <iframe src="{{ item.google_maps_url }}" style="margin-left: 3rem; width: 350px; height: 350px; border: 0px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="{{ item.google_maps_url }}" style="margin-left: 1rem; width: 350px; height: 350px; border: 0px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         {% endfor %}
     </div>
