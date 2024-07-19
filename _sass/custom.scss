@@ -5,9 +5,10 @@ $banner-font-color-2:		#54ced4;
 $banner-font-size:			72px;
 $banner-font-weight:		700;
 $banner-height:				820px;
-$banner-image:				url('/assets/img/banner-gray.jpg');
 $banner-spine-left-offset:	-125px;
 $blue:						#3b4b68;
+$celebration-banner-image:		url('/assets/img/celebration-banner-gray.jpg');
+$college-station-banner-image:	url('/assets/img/college-station-banner-gray.jpg');
 $copyright-font-color:		#aeb6c2;
 $features-card-height:		370px;
 $features-card-offset:		-30px;
@@ -89,7 +90,6 @@ $why-me-image:				url('/assets/img/why-me-gray.png');
 
 .home-banner {
 	background-color:		$banner-bg-color;
-	background-image:		$banner-image;
 	background-position:	right center;
 	background-repeat:		no-repeat;
 	display:				none !important;
@@ -114,6 +114,14 @@ $why-me-image:				url('/assets/img/why-me-gray.png');
 	button {
 		position:			relative;
 	}
+}
+
+.celebration-home-banner {
+	background-image:		$celebration-banner-image;
+}
+
+.college-station-home-banner {
+	background-image:		$college-station-banner-image;
 }
 
 .landing-page {
