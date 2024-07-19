@@ -6,7 +6,7 @@
 <div class="container-fluid contact">
     <div class="row">
         <div class="col-12 px-5">
-            <h3>Our Locations</h3>
+            <h3>Our Location</h3>
         </div>
     </div>
     <div class="row justify-content-evenly">
@@ -31,7 +31,8 @@
                     {% endfor %}
                 </table>
             </div>
-
+        </div>
+        <div class="col-lg-4 px-5 px-lg-0 py-3">
             <iframe src="{{ item.google_maps_url }}" style="margin-left: 1rem; width: 350px; height: 350px; border: 0px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         {% endfor %}
