@@ -1,0 +1,78 @@
+---
+layout: default
+---
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+			{{ content }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col">
+			<ul class="nav nav-underline" id="pricingTabs" role="tablist">
+				{% for item in site.data.celebration.pricing %}
+				<li class="nav-item" role="presentation">
+					<button class="nav-link {% if item.id == site.data.celebration.pricing[0].id %}active{% endif %}" id="{{ item.id }}-tab" data-bs-toggle="tab" data-bs-target="#{{ item.id }}-tab-pane" type="button" role="tab" aria-controls="{{ item.id }}-tab-pane" aria-seleced="true">{{ item.title }}</button>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="my-3 tab-content" id="pricingTabsContent">
+		{% for item in site.data.celebration.pricing %}
+		<div class="tab-pane fade {% if item.id == site.data.celebration.pricing[0].id %}show active{% endif %}" id="{{ item.id }}-tab-pane" role="tabpanel" aria-labelledby="{{ item.id }}-tab" tabindex="0">
+			<div class="row my-5 justify-content-around">
+				<div class="col-3 p-0">
+					<div class="card shadow">
+						<div class="card-body">
+							<h5 class="card-title">Per Visit</h5>
+							<p class="card-text"><span class="dollar-sign">$</span><span class="price">{{ item.per_visit }}</span>/visit</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-3 p-0">
+					<div class="card shadow">
+						<div class="card-body">
+							<h5 class="card-title">Weekly Visits</h5>
+							<p class="card-text"><span class="dollar-sign">$</span><span class="price">{{ item.weekly }}</span>/month</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-3 p-0">
+					<div class="card shadow">
+						<div class="card-body">
+							<h5 class="card-title">Biweekly Visits</h5>
+							<p class="card-text"><span class="dollar-sign">$</span><span class="price">{{ item.biweekly }}</span>/month</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row justify-content-around">
+				<div class="col-3 p-0">
+					<div class="card shadow">
+						<div class="card-body">
+							<h5 class="card-title">Weekly Prepaid Visits</h5>
+							<p class="card-text"><span class="dollar-sign">$</span><span class="price">{{ item.weekly_prepaid }}</span>/year</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-3 p-0">
+					<div class="card shadow">
+						<div class="card-body">
+							<h5 class="card-title">Biweekly Prepaid Visits</h5>
+							<p class="card-text"><span class="dollar-sign">$</span><span class="price">{{ item.biweekly_prepaid }}</span>/year</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>

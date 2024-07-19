@@ -1,5 +1,5 @@
 ---
-layout: pricing
+layout: college-station-pricing
 title: Pricing
 ---
 
