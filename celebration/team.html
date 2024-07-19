@@ -1,11 +1,13 @@
 ---
 layout: default
 title: Team
+subsite: celebration
 ---
 
 <div class="container">
 	<div class="row justify-content-evenly" style="margin-top: -4rem;">
-		{% for member in site.data.celebration.team.members %}
+		{% for member in site.data.team.members %}
+		{% if member.subsites contains page.subsite %}
 		<div class="card" style="width: 18rem;">
 			<img class="card-img-top card-img-bottom my-2" alt="{{ member.name }}" src="/assets/img/team/{{ member.key }}.jpg"/>
 			<div class="card-body">
@@ -13,6 +15,7 @@ title: Team
 				<a class="btn btn-primary" href="/celebration/team/{{ member.key }}">Read More</a>
 			</div>
 		</div>
+		{% endif %}
 		{% endfor %}
 	</div>
 </div>

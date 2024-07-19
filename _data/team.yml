@@ -1,5 +1,37 @@
 members:
+  - key: ashley-harmon
+    subsites: [ 'college-station' ]
+    name: Ashley Harmon, DC
+    #certifications: CACCP, Webster Technique
+    specialty: Prenatal, Pediatric, and Family Wellness Care
+    length_work: 11 Years
+    email: drashley@vitalityfamilychiropractic.com
+    phone: (979) 703-7977
+    #facebook_username: drchristiemclarty
+    biography: >-
+      Dr. Ashley ...
+    practice_weights:
+      - title: Prenatal
+        pct: 40
+
+      - title: Pediatric
+        pct: 30
+
+      - title: Family Wellness
+        pct: 30
+    whats_important:
+      - Helping you live life to the fullest 
+      - Supporting families through their healthcare decisions 
+      - Special needs populations 
+      - Birth, breast-feeding, and intentional parenting 
+      - Creating a welcoming, loving experience for your family
+    in_office_community: >-
+      Dr. Ashley's favorite part of being a chiropractor is ...
+      
+      Please reach out if you feel we could be of service in any way.  
+
   - key: christie-mclarty
+    subsites: [ 'celebration', 'college-station' ]
     name: Christie McLarty, DC
     certifications: CACCP, Webster Technique
     specialty: Prenatal, Pediatric, and Family Wellness Care
