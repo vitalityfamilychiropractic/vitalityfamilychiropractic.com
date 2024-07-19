@@ -19,8 +19,7 @@
     <div class="d-flex px-5" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if include.nonav != "true" %}
-        {% assign subsite = page.url | split: "/" | slice: 1 %}
-        {% include nav.html subsite=subsite nav=site.data.nav %}
+        {% include nav.html nav=site.data.nav %}
         {% endif %}
       </ul>
     </div>
