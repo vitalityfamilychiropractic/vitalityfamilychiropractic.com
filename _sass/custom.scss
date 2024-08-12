@@ -23,7 +23,7 @@ $light-blue:				#2ea6f7;
 $white:						#fff;
 $why-me-bg-color:			#cecbc4;
 $why-me-height:				714px;
-$why-me-celebration-image:	url('/assets/img/why-me-christie-gray.png');
+$why-me-celebration-image:		url('/assets/img/why-me-christie-gray.png');
 $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 
 .tagline {
@@ -78,6 +78,19 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 	}
 }
 
+.features-mobile {
+	margin-top:				1em;
+	max-width:				75%;
+
+	button, button a {
+		color:				$blue;
+	}
+
+	.card {
+		border:				0px;
+	}
+}
+
 .gradient {
 	background-image:		$gradient-bg;
 }
@@ -111,11 +124,11 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 }
 
 .home-banner-celebration {
-	background-image:	$banner-celebration-image;
+	background-image:		$banner-celebration-image;
 }
 
 .home-banner-college-station {
-	background-image:	$banner-college-station-image;
+	background-image:		$banner-college-station-image;
 }
 
 .home-description {
@@ -127,7 +140,7 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 	}
 
 	.signature {
-		height:					75px;
+		height:					52px;
 	}
 }
 
@@ -268,5 +281,9 @@ main {
 @media (min-width: 1200px) {	// more than x-large breakpoint
 	.features {
 		display:			block !important;
+	}
+
+	.features-mobile {
+		display:			none;
 	}
 }

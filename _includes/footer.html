@@ -11,7 +11,7 @@
     </div>
     <div class="row justify-content-evenly">
         {% for item in site.data.locations %}
-        <div class="col-lg-4 px-5 px-lg-0 py-3">
+        <div class="col-md-4 px-lg-0 py-3">
             <h4><i class="bi bi-geo-alt-fill text-primary"></i> <a href="{{ item.url }}">{{ item.name }}</a></h4>
             <p class="px-3">
                 {% if item.street_address %}{{ item.street_address }}<br />{% endif %}

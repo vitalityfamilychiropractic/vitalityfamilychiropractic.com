@@ -1,5 +1,6 @@
 welcome-name: Dr Ashley
 lead-doctor: ashley-harmon
-description: >- # this means to ignore newlines until "baseurl:"
+description: >-
   Vitality Family Chiropractic is a community based wellness center in College Station, Texas 
   focused on helping families achieve a better quality of life through premier chiropractic care.
+signature: /assets/img/dr-ashley-sig.png

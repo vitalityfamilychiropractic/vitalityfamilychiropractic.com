@@ -23,11 +23,26 @@ title: Home
 	</div>
 	<div class="row">
 		<div class="col-4 offset-2 offset-sm-4 offset-md-6 offset-lg-8 py-4">
-			<img class="signature" src="/assets/img/dr-christie-sig.webp"/>
+			<img class="signature" src="{{ site.data.[page.location].general.signature-url }}"/>
 		</div>
 	</div>
 </div>
-<div class="container-fluid features">
+<div class="container-fluid features-mobile features-{{ page.location }} offset-md-3">
+	{% capture features_index %}{{ 12 | divided_by: site.data.[page.location].features.size | round }}{% endcapture %}
+	{% for feature in site.data.[page.location].features %}
+	<div class="card mb-3">
+		<div class="row g-0">
+			<div class="col-md-4">
+				<img class="card-img-top" src="{{ feature.img }}"/>
+			</div>
+			<div class="col-md-5 align-self-center">
+				<button type="button" class="btn btn-light shadow p-5"><a href="{{ feature.href }}">{{ feature.title }}</a></button>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+<div class="container-fluid features features-{{ page.location }}">
 	<div class="row justify-content-evenly">
 		{% capture features_index %}{{ 12 | divided_by: site.data.[page.location].features.size | round }}{% endcapture %}
 		{% for feature in site.data.[page.location].features %}
@@ -70,7 +85,7 @@ title: Home
 					</ul>
 				</div>
 			</div>
-			<div class="mx-5 my-3"><a class="fw-bold link-primary link-underline-opacity-0" href="/{{ page.location }}/team/{{ site.data.[page.location].general.lead-doctor }}">Read More &gt;</a></div>
+			<div class="mx-5 my-3"><a class="fw-bold link-primary link-underline-opacity-0" href="/team/{{ site.data.[page.location].general.lead-doctor }}">Read More &gt;</a></div>
 		</div>
 	</div>
 </div>
