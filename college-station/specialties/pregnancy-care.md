@@ -1,7 +1,7 @@
 ---
 layout: default-md
 title: Pregnancy Care
-image_url: /assets/img/pregnancy-care-page.jpg
+image_url: /assets/img/pregnancy-care-page-ashley.jpg
 ---
 
 ## Pregnancy Care

@@ -1,14 +1,16 @@
 ---
 layout: home
+location: college-station
+signature-url: /assets/img/dr-ashley-sig.png
 title: Home
 ---
 
-<div class="container-fluid home-banner college-station-home-banner">
+<div class="container-fluid home-banner home-banner-{{ page.location }}">
 	<div class="row">
 		<div class="col align-self-center">
 			<img class="spine z-0" src="/assets/img/spine-2.webp"/>
 			<p class="welcome">
-				<span>Hi, I'm</span> <span class="welcome-color-2">{{ site.data.college-station.general.welcome_name }}</span>
+				<span>Hi, I'm</span> <span class="welcome-color-2">{{ site.data.[page.location].general.welcome-name }}</span>
 			</p>
 			<p>
 				<button type="button" class="btn btn-primary btn-lg"><a href="{{ site.bookingurl }}" target="_blank">Book an Appointment</a></button>
@@ -16,20 +18,20 @@ title: Home
 		</div>
 	</div>
 </div>
-<div class="container-fluid gradient p-5">
+<div class="container-fluid home-description home-description-{{ page.location }} gradient p-5">
 	<div class="row description">
-		<div class="col align-self-center">{{ site.data.college-station.general.description }}</div>
+		<div class="col align-self-center">{{ site.data.[page.location].general.description }}</div>
 	</div>
 	<div class="row">
 		<div class="col-4 offset-2 offset-sm-4 offset-md-6 offset-lg-8 py-4">
-			<img src="/assets/img/dr-christie-sig.webp" style="height: 52px; width: 387px;"/>
+			<img class="signature" src="{{ page.signature-url }}"/>
 		</div>
 	</div>
 </div>
 <div class="container-fluid features">
 	<div class="row justify-content-evenly">
-		{% capture features_index %}{{ 12 | divided_by: site.data.college-station.features.size | round }}{% endcapture %}
-		{% for feature in site.data.college-station.features %}
+		{% capture features_index %}{{ 12 | divided_by: site.data.[page.location].features.size | round }}{% endcapture %}
+		{% for feature in site.data.[page.location].features %}
 		<div class="col-4">
 			<div class="card mx-auto rounded-3">
 				<img class="card-img-top" src="{{ feature.img }}"/>
@@ -41,7 +43,7 @@ title: Home
 		{% endfor %}
 	</div>
 </div>
-<div class="container-fluid why-me">
+<div class="container-fluid why-me why-me-{{ page.location }}">
 	<div class="row justify-content-lg-end">
 		<div class="col-10 col-lg-6 card m-5 rounded-3">
 			<h1 class="m-5">Why Choose Me?</h1>
@@ -56,20 +58,20 @@ title: Home
 			<div class="mx-5 my-3 tab-content" id="whyMeTabsContent">
 				<div class="tab-pane fade show active" id="experience-tab-pane" role="tabpanel" aria-labelledby="experience-tab" tabindex="0">
 					<ul class="lh-lg">
-						{% for item in site.data.college-station.why-me.experience %}
+						{% for item in site.data.[page.location].why-me.experience %}
 						<li>{{ item }}</li>
 						{% endfor %}
 					</ul>
 				</div>
 				<div class="tab-pane fade" id="passions-tab-pane" role="tabpanel" aria-labelledby="passions-tab" tabindex="0">
 					<ul class="lh-lg">
-						{% for item in site.data.college-station.why-me.passions %}
+						{% for item in site.data.[page.location].why-me.passions %}
 						<li>{{ item }}</li>
 						{% endfor %}
 					</ul>
 				</div>
 			</div>
-			<div class="mx-5 my-3"><a class="fw-bold link-primary link-underline-opacity-0" href="/college-station/team/ashley-harmon">Read More &gt;</a></div>
+			<div class="mx-5 my-3"><a class="fw-bold link-primary link-underline-opacity-0" href="/{{ page.location }}/team/{{ site.data.[page.location].general.lead-doctor }}">Read More &gt;</a></div>
 		</div>
 	</div>
 </div>

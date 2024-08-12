@@ -1,7 +1,7 @@
 ---
 layout: default-md
 title: Pediatric Care
-image_url: /assets/img/pediatric-care-page.jpg
+image_url: /assets/img/pediatric-care-page-christie.jpg
 ---
 
 ## Pediatric Care

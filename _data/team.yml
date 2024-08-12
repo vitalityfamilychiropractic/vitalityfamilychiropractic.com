@@ -2,14 +2,28 @@ members:
   - key: ashley-harmon
     subsites: [ 'college-station' ]
     name: Ashley Harmon, DC
-    #certifications: CACCP, Webster Technique
+    certifications: Webster Technique, Activator Certified, cAVCA
     specialty: Prenatal, Pediatric, and Family Wellness Care
-    length_work: 11 Years
+    length_work: 1 Year
     email: drashley@vitalityfamilychiropractic.com
     phone: (979) 703-7977
     #facebook_username: drchristiemclarty
     biography: >-
-      Dr. Ashley ...
+      Dr. Ashley received her Doctor of Chiropractic Degree from Parker University in Dallas, TX in 2023.
+      She also holds a bachelors degree in Health and Wellness and Anatomy as well as a Masters degree in Strength and
+      Human Performance from Parker University.  
+
+      Dr. Ashley has a passion for taking care of families with children of all ages. This passion resulted from her
+      experience of growing up as the oldest of 6 children. She also has a passion for taking care of athletes. Her 15
+      years of dedication to the sport of swimming as well as 2 years as a coach has had a profound impact on how she
+      views the importance of recovery while pushing the body to its limit on a daily basis. Her goal is to provide
+      patient centered care while educating families on the importance of overall health and wellness.  
+
+      Dr. Ashley is a member of the ICPA, is certified in Webster Technique, and is actively pursuing her board
+      certification from The Council of Chiropractic Pediatrics of The Academy of Chiropractic Family Practice (CACCP).  
+
+      Dr. Ashley is from Richmond, TX. In her free time, she likes to exercise, play pickleball, quilt, swim, coach, and
+      spend time with her family. 
     practice_weights:
       - title: Prenatal
         pct: 40
@@ -20,14 +34,12 @@ members:
       - title: Family Wellness
         pct: 30
     whats_important:
-      - Helping you live life to the fullest 
-      - Supporting families through their healthcare decisions 
-      - Special needs populations 
-      - Birth, breast-feeding, and intentional parenting 
-      - Creating a welcoming, loving experience for your family
+      - Serving and educating families about the benefits of wellness care
+      - Creating a welcoming experience for your family
+      - Cultivating relationships with patients
     in_office_community: >-
-      Dr. Ashley's favorite part of being a chiropractor is ...
-      
+      Dr. Ashley's favorite part of being a chiropractor is ...  
+
       Please reach out if you feel we could be of service in any way.  
 
   - key: christie-mclarty
@@ -53,7 +65,7 @@ members:
       Practice (CACCP).  She has had advanced training in chiropractic cranial corrections and is actively pursuing her Pediatric 
       SOT certification.  
 
-      [*Revise this paragraph*]
+      [*Revise this paragraph*]  
 
       Dr. Christie moved to the Brazos Valley in 2011 and enjoys life here with her husband Nick and daughter Mackenzie.  Her husband 
       Nick serves as the Deputy Chief Information Security Officer for the Texas A&M University System and Mackenzie is in third grade. 

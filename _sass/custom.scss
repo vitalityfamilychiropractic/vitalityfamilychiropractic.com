@@ -5,10 +5,10 @@ $banner-font-color-2:		#54ced4;
 $banner-font-size:			72px;
 $banner-font-weight:		700;
 $banner-height:				820px;
+$banner-celebration-image:		url('/assets/img/banner-christie-gray.jpg');
+$banner-college-station-image:	url('/assets/img/banner-ashley-gray.jpg');
 $banner-spine-left-offset:	-125px;
 $blue:						#3b4b68;
-$celebration-banner-image:		url('/assets/img/celebration-banner-gray.jpg');
-$college-station-banner-image:	url('/assets/img/college-station-banner-gray.jpg');
 $copyright-font-color:		#aeb6c2;
 $features-card-height:		370px;
 $features-card-offset:		-30px;
@@ -23,7 +23,8 @@ $light-blue:				#2ea6f7;
 $white:						#fff;
 $why-me-bg-color:			#cecbc4;
 $why-me-height:				714px;
-$why-me-image:				url('/assets/img/why-me-gray.png');
+$why-me-celebration-image:	url('/assets/img/why-me-christie-gray.png');
+$why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 
 .tagline {
 	color:					$tagline-color;
@@ -50,13 +51,6 @@ $why-me-image:				url('/assets/img/why-me-gray.png');
 .copyright {
 	color:					$copyright-font-color;
 	text-align:				right;
-}
-
-.description {
-	color:					$white;
-	font-size:				20px;
-	font-weight:			400;
-	text-align:				center;
 }
 
 .features {
@@ -116,12 +110,25 @@ $why-me-image:				url('/assets/img/why-me-gray.png');
 	}
 }
 
-.celebration-home-banner {
-	background-image:		$celebration-banner-image;
+.home-banner-celebration {
+	background-image:	$banner-celebration-image;
 }
 
-.college-station-home-banner {
-	background-image:		$college-station-banner-image;
+.home-banner-college-station {
+	background-image:	$banner-college-station-image;
+}
+
+.home-description {
+	.description {
+		color:					$white;
+		font-size:				20px;
+		font-weight:			400;
+		text-align:				center;
+	}
+
+	.signature {
+		height:					75px;
+	}
 }
 
 .landing-page {
@@ -244,10 +251,17 @@ main {
 
 @media (min-width: 992px) {		// more than large breakpoint
 	.why-me {
-		background-image:	$why-me-image;
 		.row {
-			height:				$why-me-height;
+			height:			$why-me-height;
 		}
+	}
+
+	.why-me-celebration {
+		background-image:	$why-me-celebration-image;
+	}
+
+	.why-me-college-station {
+		background-image:	$why-me-college-station-image;
 	}
 }
 
