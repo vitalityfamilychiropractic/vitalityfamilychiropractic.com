@@ -12,7 +12,7 @@ title: Home
 				<span>Hi, I'm</span> <span class="welcome-color-2">{{ site.data.[page.location].general.welcome-name }}</span>
 			</p>
 			<p>
-				<button type="button" class="btn btn-primary btn-lg"><a href="{{ site.bookingurl }}" target="_blank">Book an Appointment</a></button>
+				<a href="{{ site.bookingurl }}" target="_blank"><button type="button" class="btn btn-primary btn-lg">Book an Appointment</button></a>
 			</p>
 		</div>
 	</div>
@@ -36,7 +36,7 @@ title: Home
 				<img class="card-img-top" src="{{ feature.img }}"/>
 			</div>
 			<div class="col-md-5 align-self-center">
-				<button type="button" class="btn btn-light shadow p-5"><a href="{{ feature.href }}">{{ feature.title }}</a></button>
+				<a href="{{ feature.href }}"><button type="button" class="btn btn-light shadow p-5">{{ feature.title }}</button></a>
 			</div>
 		</div>
 	</div>
@@ -50,7 +50,7 @@ title: Home
 			<div class="card mx-auto rounded-3">
 				<img class="card-img-top" src="{{ feature.img }}"/>
 				<div class="features-button">
-					<button type="button" class="btn btn-light shadow p-3"><a href="{{ feature.href }}">{{ feature.title }}</a></button>
+					<a href="{{ feature.href }}"><button type="button" class="btn btn-light shadow p-3">{{ feature.title }}</button></a>
 				</div>
 			</div>
 		</div>

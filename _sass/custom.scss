@@ -26,6 +26,12 @@ $why-me-height:				714px;
 $why-me-celebration-image:		url('/assets/img/why-me-christie-gray.png');
 $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 
+.btn {
+	color:					$white;
+	font-weight:			bold;
+	text-decoration:		none;
+}
+
 .tagline {
 	color:					$tagline-color;
 }
@@ -58,6 +64,12 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 	height:					$features-height;
 	position:				relative;
 
+	.btn {
+		color:				$blue;
+		height:				72px;
+		padding:			0 30px;
+	}
+
 	.card {
 		height:				$features-card-height;
 		margin-top:			$features-card-offset;
@@ -72,19 +84,13 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 	.gradient {
 		height:				$features-bg-height;
 	}
-
-	button, button a {
-		color:				$blue;
-		height:				72px;
-		padding:			0 30px;
-	}
 }
 
 .features-mobile {
 	margin-top:				1em;
 	max-width:				75%;
 
-	button, button a {
+	.btn {
 		color:				$blue;
 	}
 
@@ -105,6 +111,12 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 	overflow:				hidden;
 	position:				relative;
 
+	.btn {
+		position:			relative;
+		height:				96px;
+		padding:			0 30px;
+	}
+
 	.row {
 		height:				$banner-height;
 	}
@@ -118,12 +130,6 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 
 	.welcome-color-2 {
 		color:				$banner-font-color-2;
-	}
-
-	button {
-		position:			relative;
-		height:				96px;
-		padding:			0 30px;
 	}
 }
 
@@ -163,6 +169,11 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 		background-repeat:		no-repeat;
 		height:					$landing-page-height;
 		padding-top:			calc($landing-page-height / 2);
+	}
+
+	.btn {
+		height:				96px;
+		padding:			0 30px;
 	}
 
 	.row {
@@ -234,12 +245,6 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 
 
 	}
-}
-
-button, button a {
-	color:					$white;
-	font-weight:			bold;
-	text-decoration:		none;
 }
 
 main {
