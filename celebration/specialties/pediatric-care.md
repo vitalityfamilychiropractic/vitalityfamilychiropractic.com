@@ -1,5 +1,6 @@
 ---
 layout: default-md
+location: celebration
 title: Pediatric Care
 image_url: /assets/img/pediatric-care-page-christie.jpg
 ---

@@ -1,5 +1,6 @@
 ---
 layout: default-md
+location: celebration
 title: Pregnancy Care
 image_url: /assets/img/pregnancy-care-page-christie.jpg
 ---

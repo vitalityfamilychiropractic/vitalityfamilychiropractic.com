@@ -1,5 +1,6 @@
 ---
 layout: default-md
+location: college-station
 title: Pregnancy Care
 image_url: /assets/img/pregnancy-care-page-ashley.jpg
 ---

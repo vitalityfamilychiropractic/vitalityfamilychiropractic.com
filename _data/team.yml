@@ -1,6 +1,6 @@
 members:
   - key: ashley-harmon
-    subsites: [ 'college-station' ]
+    locations: [ 'college-station' ]
     name: Ashley Harmon, DC
     certifications: Webster Technique, Activator Certified, cAVCA
     specialty: Prenatal, Pediatric, and Family Wellness Care
@@ -46,7 +46,7 @@ members:
         patients and their ventures.
 
   - key: christie-mclarty
-    subsites: [ 'celebration', 'college-station' ]
+    locations: [ 'celebration', 'college-station' ]
     name: Christie McLarty, DC
     certifications: CACCP, Webster Technique
     specialty: Prenatal, Pediatric, and Family Wellness Care

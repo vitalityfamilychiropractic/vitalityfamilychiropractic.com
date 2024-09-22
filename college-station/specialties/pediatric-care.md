@@ -1,5 +1,6 @@
 ---
 layout: default-md
+location: college-station
 title: Pediatric Care
 image_url: /assets/img/pediatric-care-page-ashley.jpg
 ---

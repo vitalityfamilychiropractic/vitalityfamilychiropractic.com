@@ -1,18 +1,18 @@
 ---
 layout: default
+location: celebration
 title: Team
-subsite: celebration
 ---
 
 <div class="container">
 	<div class="row justify-content-evenly" style="margin-top: -4rem;">
 		{% for member in site.data.team.members %}
-		{% if member.subsites contains page.subsite %}
+		{% if member.locations contains page.location %}
 		<div class="card" style="width: 18rem;">
 			<img class="card-img-top card-img-bottom my-2" alt="{{ member.name }}" src="/assets/img/team/{{ member.key }}.jpg"/>
 			<div class="card-body">
 				<h5 class="card-title">{{ member.name }}</h5>
-				<a class="btn btn-primary" href="/celebration/team/{{ member.key }}">Read More</a>
+				<a class="btn btn-primary" href="/{{ page.location }}/team/{{ member.key }}">Read More</a>
 			</div>
 		</div>
 		{% endif %}

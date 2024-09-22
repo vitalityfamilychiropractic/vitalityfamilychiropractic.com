@@ -1,7 +1,9 @@
 <div class="d-flex topbar bg-body-tertiary" style="height: 50px;">
   <div class="py-2 px-5 flex-lg-grow-1 tagline align-self-center">{{ site.tagline }}</div>
   <div class="p-2 flex-lg align-self-center"><a href="https://www.facebook.com/{{ site.facebook_username }}" target="_blank"><i class="bi bi-facebook fs-4"></i></a></div>
-  <div class="py-2 px-5 align-self-center"><a href="{{ site.bookingurl }}" target="_blank"><button type="button" class="btn btn-warning">Book an Appointment</button></a></div>
+  {% if site.data.[page.location].bookingurl %}
+    <div class="py-2 px-5 align-self-center"><a href="{{ site.data.[page.location].bookingurl }}" target="_blank"><button type="button" class="btn btn-warning">Book an Appointment</button></a></div>
+  {% endif %}
 </div>
 
 {% if include.landing_page == "true" %}
@@ -19,8 +21,7 @@
     <div class="d-flex px-5" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if include.nonav != "true" %}
-        {% assign subsite = page.url | split: "/" | slice: 1 %}
-        {% include nav.html subsite=subsite nav=site.data.nav %}
+        {% include nav.html subsite=page.location nav=site.data.nav %}
         {% endif %}
       </ul>
     </div>

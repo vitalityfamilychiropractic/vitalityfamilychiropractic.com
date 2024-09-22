@@ -1,5 +1,6 @@
 ---
 layout: default-md
+location: college-station
 title: Our Values
 image_url: /assets/img/our-values.jpg
 image_alt: A chiropractor treating a patient laying on a chiropractic table.

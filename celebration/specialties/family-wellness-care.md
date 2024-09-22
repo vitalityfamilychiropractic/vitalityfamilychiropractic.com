@@ -1,5 +1,6 @@
 ---
 layout: default-md
+location: celebration
 title: Family Wellness Care
 image_url: /assets/img/family-wellness-care-page-christie.jpg
 ---
