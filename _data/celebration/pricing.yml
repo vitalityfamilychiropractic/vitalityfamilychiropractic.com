@@ -1,39 +1,39 @@
 - title: 1 Person
   id: 1p
-  per_visit: 65
-  weekly: 175
-  biweekly: 115
-  weekly_prepaid: 1680
-  biweekly_prepaid: 1104
+  per_visit: 70
+  weekly: 180
+  biweekly: 120
+  weekly_prepaid: 1836
+  biweekly_prepaid: 1173
 
 - title: 1 Adult & 1-2 Kids
   id: 1a2k
-  per_visit: 90
-  weekly: 250
-  biweekly: 145
-  weekly_prepaid: 2400
-  biweekly_prepaid: 1392
+  per_visit: 100
+  weekly: 260
+  biweekly: 165
+  weekly_prepaid: 2652
+  biweekly_prepaid: 1683
 
 - title: 1 Adult & 3+ Kids
   id: 1a3k
-  per_visit: 115
-  weekly: 290
-  biweekly: 165
-  weekly_prepaid: 2784
-  biweekly_prepaid: 1584
+  per_visit: 125
+  weekly: 325
+  biweekly: 205
+  weekly_prepaid: 3315
+  biweekly_prepaid: 2091
 
 - title: 2 Adults
   id: 2a
-  per_visit: 115
-  weekly: 290
-  biweekly: 165
-  weekly_prepaid: 2784
-  biweekly_prepaid: 1584
+  per_visit: 125
+  weekly: 325
+  biweekly: 205
+  weekly_prepaid: 3315
+  biweekly_prepaid: 2091
 
 - title: 2 Adults & Kids
   id: 2ak
-  per_visit: 140
-  weekly: 375
-  biweekly: 205
-  weekly_prepaid: 3600
-  biweekly_prepaid: 1968
+  per_visit: 150
+  weekly: 390
+  biweekly: 245
+  weekly_prepaid: 3978
+  biweekly_prepaid: 2499
