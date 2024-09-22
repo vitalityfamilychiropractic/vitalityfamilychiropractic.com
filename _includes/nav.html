@@ -3,7 +3,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ nav.title }}</a>
           <ul class="dropdown-menu">
-          {% include nav.html subsite=subsite nav=nav.subcategories dropdown=1 %}
+          {% include nav.html nav=nav.subcategories dropdown=1 %}
           </ul>
         </li>
       {% elsif include.dropdown and nav.title == page.title %}
@@ -12,7 +12,7 @@
         </li>
       {% elsif include.dropdown %}
         <li>
-          <a class="dropdown-item" href="/{{ include.subsite }}{{ nav.href }}">{{ nav.title }}</a>
+          <a class="dropdown-item" href="/{{ page.location }}{{ nav.href }}">{{ nav.title }}</a>
         </li>
       {% elsif nav.title == page.title %}
          <li class="nav-item">
@@ -20,7 +20,7 @@
          </li>
       {% else %}
         <li class="nav-item">
-          <a class="nav-link" href="/{{ include.subsite }}{{ nav.href }}">{{ nav.title }}</a>
+          <a class="nav-link" href="/{{ page.location }}{{ nav.href }}">{{ nav.title }}</a>
         </li>
       {% endif %}
     {% endfor %}
