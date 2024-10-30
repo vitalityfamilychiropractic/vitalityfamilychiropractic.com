@@ -197,10 +197,8 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 }
 
 .team-member {
-	br {
-		content:			"";
-		display:			block;
-		margin:				12px;
+	p {
+		white-space: pre-wrap;
 	}
 }
 

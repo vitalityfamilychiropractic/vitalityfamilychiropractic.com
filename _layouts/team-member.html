@@ -14,7 +14,7 @@
     <div class="d-flex title-banner bg-body-tertiary banner align-items-center" style="height: 150px;">
       <h1 class="py-2 px-5 flex-lg-grow-1">Team</h1>
     </div>
-    <div class="container team-member">
+    <div class="container content team-member">
       <div class="row py-5">
         <div class="col">
           <img class="img-fluid rounded" src="/assets/img/team/{{ page.key }}.jpg" alt="{{ member.name }}"/>
@@ -31,7 +31,7 @@
       </div>
       {% if member.biography %}
       <div class="row">
-        <div class="col">
+        <div class="col biography">
           <h3>Biography</h3>
           {{ member.biography | markdownify }}
         </div>
