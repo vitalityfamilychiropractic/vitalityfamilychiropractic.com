@@ -26,7 +26,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Vitality Family Chiropractic is a community based wellness center focused on helping
   families achieve a better quality of life through premier chiropractic care.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://www.vitalityfamilychiropractic.com" # the base hostname & protocol for your site, e.g. http://example.com
 facebook_username: vitalityfamilychiropractic
 
 # Build settings
