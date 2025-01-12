@@ -1,0 +1,34 @@
+<script type="application/ld+json">
+{% capture hours %}{% for day in site.data.[page.location].general.hours %}
+			{
+				"@type": "OpeningHoursSpecification",
+				"dayOfWeek": "{{ day.day }}",
+				"opens": "{{ day.opens }}",
+				"closes": "{{ day.closes }}"
+			}, {% endfor %}{% endcapture %}{% assign hoursLength = hours | size | minus: 2 %}
+	{
+		"@context": "https://schema.org",
+		"@type": "Chiropractor",
+		"image": [
+			"https://www.vitalityfamilychiropractic.com/assets/img/logo.png"
+		],
+		"name": "{{ site.title }}",
+		"address": {
+			"@type": "PhysicalAddress",
+			"streetAddress": "{{ site.data.[page.location].general.street_address }}",
+			"addressLocality": "{{ site.data.[page.location].general.city }}",
+			"addressRegion": "{{ site.data.[page.location].general.state }}",
+			"postalCode": "{{ site.data.[page.location].general.zip_code }}",
+			"addressCountry": "US"
+		},
+		"geo": {
+			"@type": "GeoCoordinates",
+			"latitude": {{ site.data.[page.location].general.latitude }},
+			"longitude": {{ site.data.[page.location].general.longitude }}
+		},
+		"url": "{{ site.url }}{{ site.data.[page.location].general.url }}",
+		"telephone": "{{ site.data.[page.location].general.phone_number }}",
+		"openingHoursSpecification": [ {{ hours | slice: 0, hoursLength }} 
+		]
+	}
+</script>

@@ -1,3 +1,49 @@
+name: College Station
+url: /college-station
+street_address: 4519 Mills Park Circle Suite 300
+city: College Station
+state: Texas
+zip_code: 77845
+phone_number: (979) 703-7977
+email: info@vitalityfamilychiropractic.com
+google_maps_url: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3435.8844803388324!2d-96.26429582421402!3d30.55256769431711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86469ac8f975be93%3A0x116cb8e9472307c!2s4519%20Mills%20Park%20Cir%2C%20College%20Station%2C%20TX%2077845!5e0!3m2!1sen!2sus!4v1715478324876!5m2!1sen!2sus
+latitude: 30.55256769431711
+longitude: -96.26429582421402
+hours:
+  - day: Monday
+    hours: 8:30am - 4pm
+    opens: "08:30"
+    closes: "16:00"
+
+  - day: Tuesday
+    hours: 8:30am - 4pm
+    opens: "08:30"
+    closes: "16:00"
+
+  - day: Wednesday
+    hours: 8:30am - 6pm
+    opens: "08:30"
+    closes: "18:00"
+
+  - day: Thursday
+    hours: 8:30am - 1pm
+    opens: "08:30"
+    closes: "13:00"
+
+  - day: Friday
+    hours: By Appointment
+    opens: "00:00"
+    closes: "00:00"
+
+  - day: Saturday
+    hours: Closed
+    opens: "00:00"
+    closes: "00:00"
+
+  - day: Sunday
+    hours: Closed
+    opens: "00:00"
+    closes: "00:00"
 bookingurl: https://vfc.janeapp.com/
 welcome-name: Dr Ashley
 lead-doctor: ashley-harmon
