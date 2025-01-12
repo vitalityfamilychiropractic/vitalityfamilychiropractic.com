@@ -1,3 +1,4 @@
+<!-- Google Rich Result Data -->
 <script type="application/ld+json">
 {% capture hours %}{% for day in site.data.[page.location].general.hours %}
 			{
@@ -6,15 +7,24 @@
 				"opens": "{{ day.opens }}",
 				"closes": "{{ day.closes }}"
 			}, {% endfor %}{% endcapture %}{% assign hoursLength = hours | size | minus: 2 %}
+{% capture areasServed %}{% for area in site.data.[page.location].general.area_served %}
+			{
+				"@type": "AdministrativeArea",
+				"name": "{{ area }}"
+			}, {% endfor %}{% endcapture %}{% assign areasLength = areasServed | size | minus: 2 %}
 	{
 		"@context": "https://schema.org",
-		"@type": "Chiropractor",
+		"@type": "Physiotherapy",
+		"naics": "621310",
 		"image": [
 			"https://www.vitalityfamilychiropractic.com/assets/img/logo.png"
 		],
+		"logo": [
+			"https://www.vitalityfamilychiropractic.com/assets/img/logo-square.png"
+		],
 		"name": "{{ site.title }}",
 		"address": {
-			"@type": "PhysicalAddress",
+			"@type": "PostalAddress",
 			"streetAddress": "{{ site.data.[page.location].general.street_address }}",
 			"addressLocality": "{{ site.data.[page.location].general.city }}",
 			"addressRegion": "{{ site.data.[page.location].general.state }}",
@@ -26,8 +36,12 @@
 			"latitude": {{ site.data.[page.location].general.latitude }},
 			"longitude": {{ site.data.[page.location].general.longitude }}
 		},
+		"areaServed": [ {{ areasServed | slice: 0, areasLength }}
+		],
+		"email": "{{ site.data.[page.location].general.email }}",
 		"url": "{{ site.url }}{{ site.data.[page.location].general.url }}",
 		"telephone": "{{ site.data.[page.location].general.phone_number }}",
+		"priceRange": "${{ site.data.[page.location].pricing[0].per_visit }} - ${{ site.data[page.location].pricing[4].per_visit }}",
 		"openingHoursSpecification": [ {{ hours | slice: 0, hoursLength }} 
 		]
 	}

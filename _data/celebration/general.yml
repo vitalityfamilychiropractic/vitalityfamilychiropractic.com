@@ -9,6 +9,16 @@ email: info@vitalityfamilychiropractic.com
 google_maps_url: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3512.3001767516566!2d-81.54208688774355!3d28.31951619812341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88dd7f350e428b29%3A0xf28b8b30b1a951c1!2s605%20Celebration%20Ave%2C%20Kissimmee%2C%20FL%2034747!5e0!3m2!1sen!2sus!4v1727038409753!5m2!1sen!2sus
 latitude: 28.31951619812341
 longitude: -81.54208688774355
+area_served:
+  - Celebration
+  - Davenport
+  - Lake Buena Vista
+  - Orlando
+  - Windermere
+  - Winter Garden
+  - Winter Park
+  - Orange County
+  - Osceola County
 hours:
   - day: Monday
     hours: 8:30am - 4pm

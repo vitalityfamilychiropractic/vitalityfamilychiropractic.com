@@ -9,6 +9,20 @@ email: info@vitalityfamilychiropractic.com
 google_maps_url: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3435.8844803388324!2d-96.26429582421402!3d30.55256769431711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86469ac8f975be93%3A0x116cb8e9472307c!2s4519%20Mills%20Park%20Cir%2C%20College%20Station%2C%20TX%2077845!5e0!3m2!1sen!2sus!4v1715478324876!5m2!1sen!2sus
 latitude: 30.55256769431711
 longitude: -96.26429582421402
+area_served:
+  - College Station
+  - Bryan
+  - Anderson
+  - Brenham
+  - Caldwell
+  - Franklin
+  - Lexington
+  - Navasota
+  - Brazos County
+  - Burleson County
+  - Grimes County
+  - Robertson County
+  - Brazos Valley
 hours:
   - day: Monday
     hours: 8:30am - 4pm
