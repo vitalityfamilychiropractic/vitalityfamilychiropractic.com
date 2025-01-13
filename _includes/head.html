@@ -34,12 +34,12 @@ integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEw
 <link rel="manifest" href="/assets/img/site.webmanifest"/>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.data.[page.location].general.google_id }}">
+<script async src="https://www.googletagmanager.com/gtag/js?id={% if site.data.[page.location].general.google_id %}{{ site.data.[page.location].general.google_id }}{% else %}{{ site.google_id }}{% endif %}">
 </script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '{{ site.data.[page.location].general.google_id }}');
+  gtag('config', '{% if site.data.[page.location].general.google_id %}{{ site.data.[page.location].general.google_id }}{% else %}{{ site.google_id }}{% endif %}');
 </script>
