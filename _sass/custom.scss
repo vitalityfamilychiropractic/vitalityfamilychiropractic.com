@@ -57,6 +57,10 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 .copyright {
 	color:					$copyright-font-color;
 	text-align:				right;
+
+	a {
+		color:				inherit;
+	}
 }
 
 .features {
