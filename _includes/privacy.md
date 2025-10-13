@@ -1,8 +1,3 @@
----
-layout:	default-md
-title:	Privacy Policy
----
-
 **Effective Date:** October 1, 2025
 
 ## **1. Introduction**
