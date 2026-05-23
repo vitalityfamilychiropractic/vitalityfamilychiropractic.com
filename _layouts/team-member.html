@@ -9,6 +9,17 @@
 <body>
   <header>
     {% include header.html %}
+    {% assign start = member.start_date | date: "%s" | plus: 0 %}
+    {% assign now = site.time | date: "%s" | plus: 0 %}
+
+    {% assign diff_seconds = now | minus: start %}
+    {% assign diff_years = diff_seconds | divided_by: 31557600 %}   <!-- 365.25 * 24 * 60 * 60 -->
+
+    {% if diff_years < 1 %}
+      {% assign display_years = 1 %}
+    {% else %}
+      {% assign display_years = diff_years %}
+    {% endif %}
   </header>
   <main>
     <div class="d-flex title-banner bg-body-tertiary banner align-items-center" style="height: 150px;">
@@ -23,7 +34,7 @@
           <h2 class="py-2">{{ member.name }}</h2>
           {% if member.certifications %}<p><strong>Certifications:</strong> {{ member.certifications }}</p>{% endif %}
           {% if member.specialty %}<p><strong>Specialty:</strong> {{ member.specialty }}</p>{% endif %}
-          {% if member.length_work %}<p><strong>Length of Work:</strong> {{ member.length_work }}</p>{% endif %}
+          {% if member.start_date %}<p><strong>Length of Work:</strong> <span id="years-service" data-start-date="{{ member.start_date }}">{{ display_years }} Year{% if display_years > 1 %}s{% endif %}</span></p>{% endif %}
           {% if member.email %}<p><strong>Email:</strong> {{ member.email }}</p>{% endif %}
           {% if member.phone %}<p><strong>Phone:</strong> {{ member.phone }}</p>{% endif %}
           {% if member.facebook_username %}<p><a href="https://www.facebook.com/{{ member.facebook_username }}" target="_blank"><i class="bi bi-facebook fs-4"></i></a></p>{% endif %}
@@ -74,6 +85,36 @@
     </div>
   </main>
   <footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const el = document.getElementById('years-service');
+      if (!el) return;
+
+      const startDateStr = el.dataset.startDate;
+      if (!startDateStr) return;
+
+      function updateYears() {
+        const start = new Date(startDateStr);
+        const now = new Date();
+
+        let years = now.getFullYear() - start.getFullYear();
+        const monthDiff = now.getMonth() - start.getMonth();
+
+        // Adjust if birthday/anniversary hasn't occurred yet this year
+        if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < start.getDate())) {
+          years--;
+        }
+
+        const finalYears = Math.max(years, 1);
+
+        el.textContent = finalYears + (finalYears > 1 ? ' Years' : ' Year');
+      }
+
+      // Initial update + refresh every 24 hours (in case user stays on page long time)
+      updateYears();
+      setInterval(updateYears, 86400000); // 24 hours
+    });
+    </script>
     {% include footer.html %}
   </footer>
 </body>
