@@ -2,7 +2,7 @@
 <title>{% if page.title != "Home" %}{{ page.title }} | {% endif %}{{ site.title }}</title>
 
 <!-- For Google -->
-<meta name="description" content="{% if page.description %}{{ page.description }}{% else if site.data.[page.location].general.description %}{{ site.data.[page.location].general.description }}{% else %}{{ site.description }}{% endif %}" />
+<meta name="description" content="{% if page.description %}{{ page.description }}{% else if site.data[page.location].general.description %}{{ site.data[page.location].general.description }}{% else %}{{ site.description }}{% endif %}" />
 <meta name="keywords" content="{{ site.keywords }}" />
 <meta name="author" content="{{ site.title }}" />
 <meta name="copyright" content="{{ site.copyright }}" />
@@ -12,12 +12,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
 <meta property="og:image" content="{{ site.url }}/assets/img/logo.png" />
-<meta property="og:description" content="{% if page.description %}{{ page.description }}{% else if site.data.[page.location].general.description %}{{ site.data.[page.location].general.description }}{% else %}{{ site.description }}{% endif %}" />
+<meta property="og:description" content="{% if page.description %}{{ page.description }}{% else if site.data[page.location].general.description %}{{ site.data[page.location].general.description }}{% else %}{{ site.description }}{% endif %}" />
 
 <!-- For Twitter -->
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="{% if page.title != 'Home' %}{{ page.title }} | {% endif %}{{ site.title }}" />
-<meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else if site.data.[page.location].general.description %}{{ site.data.[page.location].general.description }}{% else %}{{ site.description }}{% endif %}" />
+<meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else if site.data[page.location].general.description %}{{ site.data[page.location].general.description }}{% else %}{{ site.description }}{% endif %}" />
 <meta name="twitter:image" content="{{ site.url }}/assets/img/logo.png" />
 
 <!-- Stylesheet links -->
@@ -35,13 +35,13 @@ integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEw
 
 <!-- Google tag (gtag.js) -->
 <!--
-<script async src="https://www.googletagmanager.com/gtag/js?id={% if site.data.[page.location].general.google_id %}{{ site.data.[page.location].general.google_id }}{% else %}{{ site.google_id }}{% endif %}">
+<script async src="https://www.googletagmanager.com/gtag/js?id={% if site.data[page.location].general.google_id %}{{ site.data[page.location].general.google_id }}{% else %}{{ site.google_id }}{% endif %}">
 </script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '{% if site.data.[page.location].general.google_id %}{{ site.data.[page.location].general.google_id }}{% else %}{{ site.google_id }}{% endif %}');
+  gtag('config', '{% if site.data[page.location].general.google_id %}{{ site.data[page.location].general.google_id }}{% else %}{{ site.google_id }}{% endif %}');
 </script>
 -->

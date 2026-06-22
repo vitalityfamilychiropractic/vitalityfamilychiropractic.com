@@ -9,27 +9,27 @@ title: Home
 		<div class="col align-self-center">
 			<img class="spine z-0" src="/assets/img/spine-2.webp"/>
 			<p class="welcome">
-				<span>Hi, I'm</span> <span class="welcome-color-2">{{ site.data.[page.location].general.welcome-name }}</span>
+				<span>Hi, I'm</span> <span class="welcome-color-2">{{ site.data[page.location].general.welcome-name }}</span>
 			</p>
 			<p>
-				<a href="{{ site.data.[page.location].general.bookingurl }}" target="_blank"><button type="button" class="btn btn-primary btn-lg">Book an Appointment</button></a>
+				<a href="{{ site.data[page.location].general.bookingurl }}" target="_blank"><button type="button" class="btn btn-primary btn-lg">Book an Appointment</button></a>
 			</p>
 		</div>
 	</div>
 </div>
 <div class="container-fluid home-description home-description-{{ page.location }} gradient p-5">
 	<div class="row description">
-		<div class="col align-self-center">{{ site.data.[page.location].general.description }}</div>
+		<div class="col align-self-center">{{ site.data[page.location].general.description }}</div>
 	</div>
 	<div class="row">
 		<div class="col-4 offset-2 offset-sm-4 offset-md-6 offset-lg-8 py-4">
-			<img class="signature" src="{{ site.data.[page.location].general.signature-url }}"/>
+			<img class="signature" src="{{ site.data[page.location].general.signature-url }}"/>
 		</div>
 	</div>
 </div>
 <div class="container-fluid features-mobile features-{{ page.location }} offset-md-3">
-	{% capture features_index %}{{ 12 | divided_by: site.data.[page.location].features.size | round }}{% endcapture %}
-	{% for feature in site.data.[page.location].features %}
+	{% capture features_index %}{{ 12 | divided_by: site.data[page.location].features.size | round }}{% endcapture %}
+	{% for feature in site.data[page.location].features %}
 	<div class="card mb-3">
 		<div class="row g-0">
 			<div class="col-md-4">
@@ -44,8 +44,8 @@ title: Home
 </div>
 <div class="container-fluid features features-{{ page.location }}">
 	<div class="row justify-content-evenly">
-		{% capture features_index %}{{ 12 | divided_by: site.data.[page.location].features.size | round }}{% endcapture %}
-		{% for feature in site.data.[page.location].features %}
+		{% capture features_index %}{{ 12 | divided_by: site.data[page.location].features.size | round }}{% endcapture %}
+		{% for feature in site.data[page.location].features %}
 		<div class="col-4">
 			<div class="card mx-auto rounded-3">
 				<img class="card-img-top" src="{{ feature.img }}"/>
@@ -72,20 +72,20 @@ title: Home
 			<div class="mx-5 my-3 tab-content" id="whyMeTabsContent">
 				<div class="tab-pane fade show active" id="experience-tab-pane" role="tabpanel" aria-labelledby="experience-tab" tabindex="0">
 					<ul class="lh-lg">
-						{% for item in site.data.[page.location].why-me.experience %}
+						{% for item in site.data[page.location].why-me.experience %}
 						<li>{{ item }}</li>
 						{% endfor %}
 					</ul>
 				</div>
 				<div class="tab-pane fade" id="passions-tab-pane" role="tabpanel" aria-labelledby="passions-tab" tabindex="0">
 					<ul class="lh-lg">
-						{% for item in site.data.[page.location].why-me.passions %}
+						{% for item in site.data[page.location].why-me.passions %}
 						<li>{{ item }}</li>
 						{% endfor %}
 					</ul>
 				</div>
 			</div>
-			<div class="mx-5 my-3"><a class="fw-bold link-primary link-underline-opacity-0" href="/{{ page.location }}/team/{{ site.data.[page.location].general.lead-doctor }}">Read More &gt;</a></div>
+			<div class="mx-5 my-3"><a class="fw-bold link-primary link-underline-opacity-0" href="/{{ page.location }}/team/{{ site.data[page.location].general.lead-doctor }}">Read More &gt;</a></div>
 		</div>
 	</div>
 </div>
