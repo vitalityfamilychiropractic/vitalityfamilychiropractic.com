@@ -22,39 +22,47 @@ area_served:
   - Osceola County
 hours:
   - day: Monday
-    hours: 8:30am - 4pm
-    opens: "08:30"
-    closes: "16:00"
+    hours:
+    - hours: 8:30am - 4pm
+      opens: "08:30"
+      closes: "16:00"
 
   - day: Tuesday
-    hours: 8:30am - 4pm
-    opens: "08:30"
-    closes: "16:00"
+    hours:
+    - hours: 8:30am - 4pm
+      opens: "08:30"
+      closes: "16:00"
 
   - day: Wednesday
-    hours: 8:30am - 6pm
-    opens: "08:30"
-    closes: "18:00"
+    hours:
+    - hours: 8:30am - 6pm
+      opens: "08:30"
+      closes: "18:00"
 
   - day: Thursday
-    hours: 8:30am - 1pm
-    opens: "08:30"
-    closes: "13:00"
+    hours:
+    - hours: 8:30am - 1pm
+      opens: "08:30"
+      closes: "13:00"
 
   - day: Friday
-    hours: By Appointment
-    opens: "00:00"
-    closes: "00:00"
+    hours:
+    - hours: By Appointment
+      opens: "00:00"
+      closes: "00:00"
 
   - day: Saturday
-    hours: Closed
-    opens: "00:00"
-    closes: "00:00"
+    hours:
+    - hours: Closed
+      opens: "00:00"
+      closes: "00:00"
 
   - day: Sunday
-    hours: Closed
-    opens: "00:00"
-    closes: "00:00"
+    hours:
+    - hours: Closed
+      opens: "00:00"
+      closes: "00:00"
+
 bookingurl: https://vfccelebration.janeapp.com/
 welcome-name: Dr Christie
 lead-doctor: christie-mclarty
