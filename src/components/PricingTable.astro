@@ -1,0 +1,149 @@
+---
+import type { Pricing } from '../config/types';
+
+interface Props {
+  pricing: Pricing;
+  caption: string;
+}
+
+const { pricing, caption } = Astro.props;
+
+// A row whose values array is short would silently render blank cells, so fail
+// the build instead — a pricing page with a missing number is worse than none.
+for (const row of pricing.rows) {
+  if (row.values.length !== pricing.tiers.length) {
+    throw new Error(
+      `Pricing row "${row.label}" has ${row.values.length} values but there are ${pricing.tiers.length} tiers. Check src/config/locations.ts.`,
+    );
+  }
+}
+
+const money = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
+---
+
+{/*
+  A real data table rather than a tab set: every price stays visible and
+  comparable, it prints correctly, and screen readers get proper row/column
+  associations. Narrow viewports scroll the table sideways inside a focusable
+  region, which WCAG 1.4.10 explicitly permits for tabular data.
+*/}
+<div
+  class="table-scroll pricing__scroll"
+  tabindex="0"
+  role="region"
+  aria-label={caption}
+>
+  <table class="pricing">
+    <caption class="visually-hidden">{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="pricing__corner">
+          <span class="visually-hidden">Visit frequency</span>
+        </th>
+        {
+          pricing.tiers.map((tier) => (
+            <th scope="col" class="pricing__tier">
+              {tier}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        pricing.rows.map((row) => (
+          <tr>
+            <th scope="row" class="pricing__row">
+              {row.label}
+            </th>
+            {row.values.map((value) => (
+              <td class="pricing__cell">
+                <span class="pricing__amount">{money.format(value)}</span>
+                <span class="pricing__unit">{row.unit}</span>
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .pricing__scroll {
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-m);
+    background: var(--surface);
+  }
+
+  .pricing {
+    width: 100%;
+    min-width: 46rem;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .pricing__corner,
+  .pricing__row {
+    /* Keep the row label in view while the prices scroll past it. */
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--surface);
+    min-width: 11rem;
+  }
+
+  .pricing__corner {
+    background: var(--vfc-blue-soft);
+    border-start-start-radius: var(--radius-l);
+  }
+
+  .pricing__tier {
+    background: var(--vfc-blue-soft);
+    padding: var(--space-s) var(--space-m);
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    font-weight: 650;
+    color: var(--vfc-blue-ink);
+    vertical-align: bottom;
+  }
+
+  .pricing__tier:last-child {
+    border-start-end-radius: var(--radius-l);
+  }
+
+  .pricing__row {
+    padding: var(--space-s) var(--space-m);
+    font-weight: 650;
+    color: var(--ink);
+    border-block-start: 1px solid var(--border);
+  }
+
+  .pricing__cell {
+    padding: var(--space-s) var(--space-m);
+    border-block-start: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .pricing__amount {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
+  .pricing__unit {
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  tbody tr:nth-child(even) .pricing__row,
+  tbody tr:nth-child(even) .pricing__cell {
+    background: var(--vfc-blue-mist);
+  }
+</style>

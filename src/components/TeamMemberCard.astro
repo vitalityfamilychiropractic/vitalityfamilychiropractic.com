@@ -1,0 +1,154 @@
+---
+import PracticeYears from './PracticeYears.astro';
+import { displayName } from '../config/team';
+import type { TeamMember, Location } from '../config/types';
+
+interface Props {
+  member: TeamMember;
+  location: Location;
+}
+
+const { member, location } = Astro.props;
+const href = `/${location.slug}/team/${member.slug}/`;
+const name = displayName(member);
+---
+
+<article class="card member">
+  <img
+    class="member__photo"
+    src={member.photo}
+    width="600"
+    height="600"
+    loading="lazy"
+    decoding="async"
+    alt={`Portrait of ${name}`}
+  />
+  <div class="member__body">
+    <h3 class="member__name">
+      <a href={href}>{name}</a>
+    </h3>
+    <p class="member__specialty">{member.specialty}</p>
+    <dl class="member__meta">
+      <div>
+        <dt>Certifications</dt>
+        <dd>{member.certifications}</dd>
+      </div>
+      <div>
+        <dt>In practice</dt>
+        <dd><PracticeYears startDate={member.practiceStartDate} /></dd>
+      </div>
+    </dl>
+    {/*
+      A visual affordance only — the heading link already covers the whole card
+      (see `.member__name a::after`), so making this a second link would add a
+      redundant tab stop to the same destination.
+    */}
+    <span class="member__more" aria-hidden="true">
+      Read more <span>&rarr;</span>
+    </span>
+  </div>
+</article>
+
+<style>
+  .member {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: box-shadow var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+
+  .member:hover {
+    box-shadow: var(--shadow-l);
+    transform: translateY(-2px);
+  }
+
+  /* The card's only focusable child is the stretched heading link, so lift the
+     ring out to the card edge where it reads as one control. */
+  .member:focus-within {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .member__name a:focus-visible {
+    outline: none;
+  }
+
+  .member__photo {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: var(--surface-sunk);
+  }
+
+  .member__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: var(--space-m);
+  }
+
+  .member__name {
+    font-size: var(--step-2);
+  }
+
+  .member__name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Stretch the title link over the whole card so the card is one big target,
+     while the accessible name stays just the person's name. */
+  .member__name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .member:hover .member__name a,
+  .member:focus-within .member__name a {
+    color: var(--vfc-blue-ink);
+  }
+
+  .member__specialty {
+    margin-block-start: var(--space-3xs);
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .member__meta {
+    margin-block-start: var(--space-s);
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .member__meta dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--vfc-gray-ink);
+  }
+
+  .member__meta dd {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--ink);
+  }
+
+  .member__more {
+    margin-block-start: auto;
+    padding-block-start: var(--space-m);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 650;
+    color: var(--vfc-blue-ink);
+  }
+
+  .member:hover .member__more,
+  .member:focus-within .member__more {
+    text-decoration: underline;
+  }
+</style>

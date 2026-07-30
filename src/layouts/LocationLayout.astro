@@ -1,0 +1,60 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getMember } from '../config/team';
+import { localBusinessSchema, breadcrumbSchema } from '../lib/schema';
+import { getSpecialtiesFor } from '../lib/specialties';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  title: string;
+  description: string;
+  /** Absolute path of this page, e.g. '/celebration/pricing/'. */
+  path: string;
+  /** Breadcrumb trail; also emitted as BreadcrumbList structured data. */
+  crumbs?: Array<{ name: string; href: string }>;
+  ogImage?: string;
+  /** Set false on pages that provide their own closing call to action. */
+  showCta?: boolean;
+  /** Extra JSON-LD for this page. */
+  schemas?: unknown[];
+}
+
+const {
+  location,
+  title,
+  description,
+  path,
+  crumbs = [],
+  ogImage,
+  showCta = true,
+  schemas = [],
+} = Astro.props;
+
+const teamMembers = location.team.map(getMember);
+const services = (await getSpecialtiesFor(location)).map((s) => s.title);
+
+const allSchemas = [
+  localBusinessSchema(location, teamMembers, services),
+  ...(crumbs.length > 1 ? [breadcrumbSchema(crumbs)] : []),
+  ...schemas,
+];
+---
+
+<BaseLayout
+  title={`${title} | ${location.name}`}
+  description={description}
+  path={path}
+  ogImage={ogImage ?? location.images.portraitStudio}
+  schemas={allSchemas}
+>
+  <Header location={location} pathname={path} />
+  <main id="main">
+    <slot />
+    {showCta && <CtaBand location={location} />}
+  </main>
+  <Footer location={location} />
+</BaseLayout>

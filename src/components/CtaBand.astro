@@ -1,0 +1,73 @@
+---
+import { telHref } from '../config/locations';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  heading?: string;
+  body?: string;
+}
+
+const {
+  location,
+  heading = 'Ready when you are',
+  body = `New patients are welcome at our ${location.name} office. Book online in a couple of minutes, or call and we will find a time that works.`,
+} = Astro.props;
+---
+
+<section class="cta on-dark" aria-labelledby="cta-heading">
+  <div class="container cta__inner">
+    <div>
+      <h2 class="cta__heading" id="cta-heading">{heading}</h2>
+      <p class="cta__body">{body}</p>
+    </div>
+    <div class="cta__actions">
+      <a
+        class="btn btn--onDark"
+        href={location.bookingUrl}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Book an Appointment
+        <span class="visually-hidden"> (opens in a new tab)</span>
+      </a>
+      <a class="btn btn--ghostOnDark" href={`tel:${telHref(location.phone)}`}>
+        Call {location.phone}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    /* Deep enough that white body text clears 4.5:1 across the whole band. */
+    background: linear-gradient(115deg, #32498a 0%, #3f5eab 55%, #47617a 100%);
+    color: #fff;
+    padding-block: var(--space-2xl);
+  }
+
+  .cta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-l);
+  }
+
+  .cta__heading {
+    color: #fff;
+    font-size: var(--step-3);
+  }
+
+  .cta__body {
+    margin-block-start: var(--space-2xs);
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 46ch;
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+</style>

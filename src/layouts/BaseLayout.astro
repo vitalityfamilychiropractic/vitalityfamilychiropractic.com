@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+
+interface Props {
+  /** Page title, without the site-name suffix. */
+  title: string;
+  description: string;
+  /** Absolute path for the canonical URL, e.g. '/celebration/pricing/'. */
+  path: string;
+  /** Site-relative path to the social share image. */
+  ogImage?: string;
+  /** JSON-LD blocks to embed in <head>. */
+  schemas?: unknown[];
+  /** Set true on pages that should not be indexed. */
+  noindex?: boolean;
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description,
+  path,
+  ogImage = site.logo,
+  schemas = [],
+  noindex = false,
+  bodyClass = '',
+} = Astro.props;
+
+const canonical = new URL(path, site.url).href;
+const fullTitle = `${title} | ${site.name}`;
+const ogImageUrl = new URL(ogImage, site.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#6788cf" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    {/* Self-hosted fonts: preload so the display face is ready for the H1. */}
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/fraunces-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {/*
+      Marks the document as scripting-enabled before first paint. The header's
+      collapsible menu is only *collapsed* under `.js`, so with scripting off
+      the navigation stays fully expanded and usable rather than disappearing
+      behind a button that can never be pressed.
+    */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    {
+      schemas.map((schema) => (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(schema)}
+        />
+      ))
+    }
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <slot />
+  </body>
+</html>

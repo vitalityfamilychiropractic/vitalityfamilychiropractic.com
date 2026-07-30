@@ -1,0 +1,69 @@
+---
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import TeamMemberCard from '../../../components/TeamMemberCard.astro';
+import { locations } from '../../../config/locations';
+import { getMember } from '../../../config/team';
+import type { Location } from '../../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const team = location.team.map(getMember);
+const path = `/${location.slug}/team/`;
+---
+
+<LocationLayout
+  location={location}
+  title="Team"
+  description={`Meet the team at our ${location.name} office: ${team
+    .map((m) => (m.credentials ? `${m.name}, ${m.credentials}` : m.name))
+    .join('; ')}.`}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Team', href: path },
+  ]}
+>
+  <PageHeader
+    eyebrow="About us"
+    title="Our Team"
+    standfirst={`The people caring for families at our ${location.name} office.`}
+    crumbs={[
+      { name: 'Home', href: `/${location.slug}/` },
+      { name: 'Team', href: path },
+    ]}
+  />
+
+  <section class="section" aria-labelledby="team-heading">
+    <div class="container">
+      <h2 class="visually-hidden" id="team-heading">
+        Team at our {location.name} office
+      </h2>
+      <div class="team">
+        {team.map((member) => <TeamMemberCard member={member} location={location} />)}
+      </div>
+    </div>
+  </section>
+</LocationLayout>
+
+<style>
+  /* `1fr` rather than a fixed max so a one- or two-person office fills its row
+     instead of leaving a wide gap; the container cap stops the cards growing
+     past a comfortable width. */
+  .team {
+    display: grid;
+    gap: var(--space-m);
+    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+    max-width: 58rem;
+  }
+</style>

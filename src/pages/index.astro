@@ -1,0 +1,364 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import HoursTable from '../components/HoursTable.astro';
+import { site } from '../config/site';
+import { locations, formatAddress, telHref } from '../config/locations';
+import { getMember, displayName } from '../config/team';
+import { organizationSchema } from '../lib/schema';
+import { getOfferedSpecialties } from '../lib/specialties';
+
+// The union across offices, since this page belongs to no single one.
+const specialties = await getOfferedSpecialties(locations);
+
+/**
+ * The brand-level entry point. Every office below is a self-contained site;
+ * this page's only job is to get a visitor into the right one quickly.
+ */
+const offices = locations.map((location) => ({
+  location,
+  lead: getMember(location.lead),
+}));
+---
+
+<BaseLayout
+  title="Chiropractic care for growing families"
+  description={site.description}
+  path="/"
+  schemas={[organizationSchema(locations)]}
+  bodyClass="chooser"
+>
+  <header class="masthead">
+    <div class="container masthead__inner">
+      <img
+        class="masthead__logo"
+        src={site.logo}
+        width="421"
+        height="150"
+        alt={site.name}
+      />
+      <a
+        class="masthead__facebook"
+        href={site.social.facebook}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Facebook<span class="visually-hidden"> (opens in a new tab)</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="intro">
+      <div class="container">
+        <p class="eyebrow">{site.tagline}</p>
+        <h1 class="intro__title">Chiropractic care for growing families</h1>
+        <p class="lede intro__lede">{site.description}</p>
+
+        <ul class="intro__specialties">
+          {
+            specialties.map((specialty) => (
+              <li class="intro__pill">{specialty.title}</li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="choose-heading">
+      <div class="container">
+        <h2 class="choose__title" id="choose-heading">Choose your office</h2>
+        <p class="lede choose__lede">
+          Each office has its own team, hours and pricing. Pick the one nearest
+          you to see the details.
+        </p>
+
+        <ul class="offices">
+          {
+            offices.map(({ location, lead }) => (
+              <li class="card office">
+                <div class="office__figure">
+                  <img
+                    class="office__portrait"
+                    src={location.images.portraitCutout}
+                    width="720"
+                    height="720"
+                    loading="lazy"
+                    decoding="async"
+                    alt={location.images.portraitCutoutAlt}
+                  />
+                </div>
+
+                <div class="office__body">
+                  <h3 class="office__name">
+                    <a href={`/${location.slug}/`}>
+                      {location.name}, {location.address.stateAbbr}
+                    </a>
+                  </h3>
+
+                  <p class="office__lead">
+                    with {displayName(lead)}
+                  </p>
+
+                  <address class="office__address">
+                    {formatAddress(location)}
+                  </address>
+
+                  <p class="office__phone">
+                    <a href={`tel:${telHref(location.phone)}`}>{location.phone}</a>
+                  </p>
+
+                  <details class="office__hours">
+                    <summary>Opening hours</summary>
+                    <HoursTable
+                      hours={location.hours}
+                      caption={`Opening hours — ${location.name}`}
+                    />
+                  </details>
+
+                  <span class="office__cta" aria-hidden="true">
+                    Visit this office <span>&rarr;</span>
+                  </span>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .masthead {
+    padding-block: var(--space-m);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .masthead__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Wraps rather than overflows once the wordmark takes the full width. */
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-m);
+  }
+
+  /*
+   * Deliberately larger than the header logo elsewhere: this is the brand's
+   * front door and the wordmark has the row to itself.
+   *
+   * Sized by width rather than height. The artwork is 421 × 150, so 281px wide
+   * is exactly 100px tall — and `min()` scales it down proportionally on
+   * phones too narrow to fit 281px, instead of squashing it or pushing the page
+   * sideways.
+   */
+  .masthead__logo {
+    width: min(281px, 100%);
+    height: auto;
+  }
+
+  .masthead__facebook {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .masthead__facebook:hover {
+    text-decoration: underline;
+  }
+
+  .intro {
+    background: linear-gradient(
+      165deg,
+      var(--vfc-blue-mist) 0%,
+      var(--vfc-blue-soft) 100%
+    );
+    padding-block: var(--space-3xl);
+  }
+
+  .intro__title {
+    max-width: 16ch;
+  }
+
+  .intro__lede {
+    margin-block-start: var(--space-m);
+  }
+
+  .intro__specialties {
+    list-style: none;
+    margin: var(--space-l) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .intro__pill {
+    padding: 0.4rem 0.95rem;
+    background: var(--surface);
+    border: 1px solid var(--vfc-blue);
+    border-radius: var(--radius-pill);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--vfc-blue-ink);
+  }
+
+  .choose__title {
+    font-size: var(--step-3);
+  }
+
+  .choose__lede {
+    margin-block-start: var(--space-s);
+  }
+
+  .offices {
+    list-style: none;
+    margin: var(--space-xl) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-l);
+    /* `min(19rem, 100%)`: a bare 19rem track is wider than the content column
+       on a 320px phone and would push the page sideways. */
+    grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+  }
+
+  .office {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+
+  .office:hover {
+    box-shadow: var(--shadow-l);
+    transform: translateY(-3px);
+  }
+
+  .office:focus-within {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* A fixed height, not an aspect ratio: the portraits are cut out at different
+     ratios, and letting them size the panel leaves the card bodies below out of
+     line across the row. */
+  .office__figure {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex: none;
+    height: 16rem;
+    padding-block-start: var(--space-m);
+    background: linear-gradient(
+      165deg,
+      var(--vfc-blue-soft) 0%,
+      var(--vfc-gray-soft) 100%
+    );
+  }
+
+  .office__portrait {
+    width: auto;
+    max-width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+
+  .office__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: var(--space-m);
+  }
+
+  .office__name {
+    font-size: var(--step-2);
+  }
+
+  .office__name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* One stretched link per card: whole-card click, single tab stop. The hours
+     disclosure below sits above it so it stays independently clickable. */
+  .office__name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .office__name a:focus-visible {
+    outline: none;
+  }
+
+  .office:hover .office__name a,
+  .office:focus-within .office__name a {
+    color: var(--vfc-blue-ink);
+  }
+
+  .office__lead {
+    margin-block-start: 0.2rem;
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .office__address {
+    margin-block-start: var(--space-s);
+    font-style: normal;
+    color: var(--ink-muted);
+  }
+
+  .office__phone {
+    margin-block-start: var(--space-2xs);
+    font-weight: 650;
+  }
+
+  .office__phone a {
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+  }
+
+  .office__phone a:hover {
+    text-decoration: underline;
+  }
+
+  .office__hours {
+    position: relative;
+    z-index: 1;
+    margin-block-start: var(--space-m);
+    border-block-start: 1px solid var(--border);
+    padding-block-start: var(--space-s);
+  }
+
+  .office__hours summary {
+    cursor: pointer;
+    padding-block: 0.4rem;
+    font-size: var(--step--1);
+    font-weight: 650;
+    color: var(--vfc-blue-ink);
+  }
+
+  .office__cta {
+    margin-block-start: auto;
+    padding-block-start: var(--space-m);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 650;
+    color: var(--vfc-blue-ink);
+  }
+
+  .office:hover .office__cta,
+  .office:focus-within .office__cta {
+    text-decoration: underline;
+  }
+</style>

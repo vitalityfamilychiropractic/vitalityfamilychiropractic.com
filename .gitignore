@@ -1,7 +1,24 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# bun.lock IS committed — it pins the exact dependency tree for reproducible
+# builds. Only these belong in .gitignore.
+.bun/
+bun-debug.log
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS
 .DS_Store
-*/.DS_Store
-vendor

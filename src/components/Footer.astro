@@ -1,0 +1,198 @@
+---
+import LocationDetails from './LocationDetails.astro';
+import { site } from '../config/site';
+import { locations } from '../config/locations';
+import { getSpecialtiesFor } from '../lib/specialties';
+import type { Location } from '../config/types';
+
+interface Props {
+  /** Omitted on the root location chooser, which belongs to no single office. */
+  location?: Location;
+}
+
+const { location } = Astro.props;
+const base = location ? `/${location.slug}` : '';
+const specialties = location ? await getSpecialtiesFor(location) : [];
+const year = new Date().getFullYear();
+const copyrightYears =
+  year > site.copyrightStart ? `${site.copyrightStart}–${year}` : `${year}`;
+---
+
+<footer class="footer">
+  <div class="container">
+    <section class="footer__locations" aria-labelledby="footer-locations">
+      <h2 class="footer__heading" id="footer-locations">Our Locations</h2>
+      <div class="footer__grid">
+        {
+          locations.map((office) => (
+            <LocationDetails
+              location={office}
+              current={office.slug === location?.slug}
+              headingLevel={3}
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      location && (
+        <nav class="footer__nav" aria-label="Footer">
+          <div class="footer__col">
+            <h2 class="footer__heading footer__heading--small">About Us</h2>
+            <ul>
+              <li>
+                <a href={`${base}/our-values/`}>Our Values</a>
+              </li>
+              <li>
+                <a href={`${base}/team/`}>Team</a>
+              </li>
+              <li>
+                <a href={`${base}/pricing/`}>Pricing</a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h2 class="footer__heading footer__heading--small">Specialties</h2>
+            <ul>
+              {specialties.map((specialty) => (
+                <li>
+                  <a href={`${base}/specialties/${specialty.slug}/`}>
+                    {specialty.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h2 class="footer__heading footer__heading--small">Visit</h2>
+            <ul>
+              <li>
+                <a href={`${base}/contact/`}>Contact Us</a>
+              </li>
+              <li>
+                <a
+                  href={location.bookingUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Book an Appointment
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={site.social.facebook}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Facebook
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      )
+    }
+
+    <div class="footer__base">
+      <p class="footer__legal">
+        <a href={location ? `${base}/privacy/` : '/privacy/'}>Privacy Policy</a>
+        <span aria-hidden="true">·</span>
+        <span>&copy; {copyrightYears} {site.legalName}</span>
+      </p>
+      <p class="footer__disclaimer">
+        The information on this site is for general education and is not medical
+        advice. Please speak with your chiropractor about your individual care.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-block-start: auto;
+    background: var(--surface-tint);
+    border-block-start: 1px solid var(--border);
+    padding-block: var(--space-2xl) var(--space-l);
+  }
+
+  .footer__heading {
+    font-size: var(--step-2);
+    margin-block-end: var(--space-m);
+  }
+
+  .footer__heading--small {
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--vfc-gray-ink);
+    margin-block-end: var(--space-xs);
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  }
+
+  .footer__nav {
+    display: grid;
+    gap: var(--space-l);
+    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+    margin-block-start: var(--space-2xl);
+    padding-block-start: var(--space-l);
+    border-block-start: 1px solid var(--border);
+  }
+
+  .footer__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+
+  .footer__nav a:hover {
+    color: var(--vfc-blue-ink);
+    text-decoration: underline;
+  }
+
+  .footer__base {
+    margin-block-start: var(--space-l);
+    padding-block-start: var(--space-m);
+    border-block-start: 1px solid var(--border);
+  }
+
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    max-width: none;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  .footer__legal a {
+    min-height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .footer__disclaimer {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step--1);
+    color: var(--ink-subtle);
+    max-width: 62ch;
+  }
+</style>

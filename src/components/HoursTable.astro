@@ -1,0 +1,80 @@
+---
+import type { HoursEntry } from '../config/types';
+
+interface Props {
+  hours: HoursEntry[];
+  /** Accessible caption. Visually hidden unless `showCaption` is set. */
+  caption: string;
+  showCaption?: boolean;
+  class?: string;
+}
+
+const { hours, caption, showCaption = false, class: className = '' } = Astro.props;
+---
+
+<table class:list={['hours', className]}>
+  <caption class:list={[!showCaption && 'visually-hidden']}>{caption}</caption>
+  <tbody>
+    {
+      hours.map((entry) => (
+        <tr>
+          <th scope="row">{entry.day}</th>
+          <td>
+            {entry.blocks.length > 0 ? (
+              entry.blocks.map((block) => <span class="hours__block">{block}</span>)
+            ) : (
+              <span class="hours__note">{entry.note ?? 'Closed'}</span>
+            )}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  .hours {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--step--1);
+  }
+
+  caption {
+    text-align: left;
+    font-weight: 700;
+    padding-block-end: var(--space-2xs);
+  }
+
+  th,
+  td {
+    padding: 0.35rem 0;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  th {
+    width: 3.5rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  td {
+    color: var(--ink-muted);
+  }
+
+  .hours__block {
+    display: block;
+    /* Tabular figures keep the time columns aligned down the list. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hours__note {
+    display: block;
+    font-style: italic;
+  }
+
+  tr:not(:last-child) th,
+  tr:not(:last-child) td {
+    border-block-end: 1px solid var(--border);
+  }
+</style>

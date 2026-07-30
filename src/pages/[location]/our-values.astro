@@ -1,0 +1,179 @@
+---
+import LocationLayout from '../../layouts/LocationLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { locations } from '../../config/locations';
+import { getMember } from '../../config/team';
+import { values, valuesHeadline } from '../../config/values';
+import type { Location } from '../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const lead = getMember(location.lead);
+const path = `/${location.slug}/our-values/`;
+---
+
+<LocationLayout
+  location={location}
+  title="Our Values"
+  description={`What matters to us at our ${location.name} office — ${valuesHeadline}`}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Our Values', href: path },
+  ]}
+>
+  <PageHeader
+    eyebrow="About us"
+    title="Our Values"
+    standfirst={valuesHeadline}
+    crumbs={[
+      { name: 'Home', href: `/${location.slug}/` },
+      { name: 'Our Values', href: path },
+    ]}
+  />
+
+  <section class="section" aria-labelledby="values-heading">
+    <div class="container">
+      <h2 class="visually-hidden" id="values-heading">What we believe</h2>
+      <ul class="values">
+        {
+          values.map((value) => (
+            <li class="values__item">
+              <p class="values__label">{value.label}</p>
+              <p class="values__body">{value.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--mist" aria-labelledby="promise-heading">
+    <div class="container promise">
+      <div class="promise__figure">
+        <img
+          class="promise__photo"
+          src={location.images.portraitStudio}
+          width="552"
+          height="820"
+          loading="lazy"
+          decoding="async"
+          alt={location.images.portraitStudioAlt}
+        />
+      </div>
+      <div>
+        <p class="eyebrow">Our promise</p>
+        <h2 class="promise__title" id="promise-heading">
+          You are part of our family
+        </h2>
+        <p class="promise__body">
+          {lead.shortName} and the team at our {location.name} office keep the
+          practice small enough to know you by name, and specialised enough to
+          take on the things families really come to us for — pregnancy, birth,
+          feeding, sleep, and growing up well.
+        </p>
+        <a class="btn btn--secondary" href={`/${location.slug}/team/`}>
+          Meet the team
+        </a>
+      </div>
+    </div>
+  </section>
+</LocationLayout>
+
+<style>
+  /*
+   * Flex rather than grid, and fixed thirds rather than `auto-fit`.
+   *
+   * `auto-fit` packed as many cards per row as would fit — four at desktop —
+   * leaving the fifth stranded alone on a second row. Fixed thirds give a
+   * deliberate three-per-row rhythm, and `justify-content: center` centres a
+   * trailing row that is not full, so this stays tidy for any number of values
+   * rather than only the five there are today.
+   */
+  .values {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-m);
+  }
+
+  .values__item {
+    flex: 0 1 100%;
+    padding: var(--space-m);
+    background: var(--vfc-blue-mist);
+    border-radius: var(--radius-l);
+    border-block-start: 3px solid var(--vfc-blue);
+  }
+
+  @media (min-width: 40rem) {
+    .values__item {
+      /* Two per row: full width less the one gap between them. */
+      flex-basis: calc((100% - var(--space-m)) / 2);
+    }
+  }
+
+  @media (min-width: 62rem) {
+    .values__item {
+      /* Three per row: full width less the two gaps between them. */
+      flex-basis: calc((100% - 2 * var(--space-m)) / 3);
+    }
+  }
+
+  .values__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--vfc-gray-ink);
+    margin-block-end: var(--space-2xs);
+  }
+
+  .values__body {
+    font-size: var(--step-0);
+    color: var(--ink);
+  }
+
+  .promise {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .promise__photo {
+    width: 100%;
+    max-width: 24rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-l);
+  }
+
+  .promise__title {
+    font-size: var(--step-3);
+  }
+
+  .promise__body {
+    margin-block: var(--space-m) var(--space-l);
+    font-size: var(--step-1);
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+
+  @media (min-width: 56rem) {
+    .promise {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

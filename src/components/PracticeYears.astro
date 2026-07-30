@@ -1,0 +1,56 @@
+---
+import { yearsOfPractice, formatYears } from '../lib/practice';
+
+interface Props {
+  /** ISO date the person began practising, `YYYY-MM-DD`. */
+  startDate: string;
+}
+
+const { startDate } = Astro.props;
+
+// Rendered into the HTML so the figure is right for crawlers and for visitors
+// with scripting disabled. The script below re-derives it on load.
+const built = formatYears(yearsOfPractice(startDate));
+---
+
+<span data-practice-start={startDate}>{built}</span>
+
+<script>
+  /**
+   * Refresh every "years in practice" figure against today's date.
+   *
+   * The build already wrote a correct number, but a static page can be served
+   * for a long time — from a CDN edge, the bfcache, or simply a site that has
+   * not been rebuilt in a year — and the figure would silently drift. This
+   * costs a few hundred bytes and keeps it honest.
+   *
+   * Astro emits this once no matter how many times the component is used.
+   */
+  function yearsOfPractice(startDate: string, now: Date): number {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(startDate);
+    if (!match) return NaN;
+
+    const start = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+
+    let years = now.getFullYear() - start.getFullYear();
+    const month = now.getMonth() - start.getMonth();
+    if (month < 0 || (month === 0 && now.getDate() < start.getDate())) years -= 1;
+
+    return Math.max(0, years);
+  }
+
+  const now = new Date();
+
+  for (const el of document.querySelectorAll<HTMLElement>('[data-practice-start]')) {
+    const start = el.dataset.practiceStart;
+    if (!start) continue;
+
+    const years = yearsOfPractice(start, now);
+    // A malformed date at runtime should leave the build-time text alone
+    // rather than replace it with "NaN years".
+    if (!Number.isFinite(years)) continue;
+
+    const text = `${years} ${years === 1 ? 'year' : 'years'}`;
+    if (el.textContent !== text) el.textContent = text;
+  }
+</script>

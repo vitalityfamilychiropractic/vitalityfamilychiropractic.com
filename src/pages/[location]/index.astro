@@ -1,0 +1,334 @@
+---
+import LocationLayout from '../../layouts/LocationLayout.astro';
+import Hero from '../../components/Hero.astro';
+import SpecialtyGrid from '../../components/SpecialtyGrid.astro';
+import HoursTable from '../../components/HoursTable.astro';
+import { locations, formatAddress, telHref } from '../../config/locations';
+import { getMember } from '../../config/team';
+import { values, valuesHeadline } from '../../config/values';
+import type { Location } from '../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const lead = getMember(location.lead);
+const path = `/${location.slug}/`;
+---
+
+<LocationLayout
+  location={location}
+  title="Home"
+  description={location.intro}
+  path={path}
+  crumbs={[{ name: location.name, href: path }]}
+>
+  <Hero location={location} />
+
+  {/* ---- Specialties ---- */}
+  <section class="section" aria-labelledby="specialties-heading">
+    <div class="container">
+      <p class="eyebrow">What we do</p>
+      <h2 class="section__title" id="specialties-heading">
+        Care for every stage of family life
+      </h2>
+      <p class="lede section__lede">
+        From the first weeks of pregnancy through childhood and into adulthood,
+        {' '}{lead.shortName} works with your whole family.
+      </p>
+      <div class="section__body">
+        <SpecialtyGrid location={location} headingId="specialties-heading" />
+      </div>
+    </div>
+  </section>
+
+  {/* ---- Why choose me ---- */}
+  <section class="section section--mist" aria-labelledby="why-heading">
+    <div class="container why">
+      <div class="why__figure">
+        <img
+          class="why__photo"
+          src={location.images.portraitStudio}
+          width="552"
+          height="820"
+          loading="lazy"
+          decoding="async"
+          alt={location.images.portraitStudioAlt}
+        />
+      </div>
+
+      <div class="why__copy">
+        <p class="eyebrow">Why choose {lead.shortName}</p>
+        <h2 class="section__title" id="why-heading">
+          Experience your family can lean on
+        </h2>
+
+        <h3 class="why__subhead">Experience</h3>
+        <ul class="ticks">
+          {location.highlights.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <h3 class="why__subhead">Passions</h3>
+        <ul class="pills">
+          {location.passions.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <a class="why__link" href={`/${location.slug}/team/${lead.slug}/`}>
+          Read {lead.shortName}’s full story
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ---- Values ---- */}
+  <section class="section" aria-labelledby="values-heading">
+    <div class="container">
+      <p class="eyebrow">Our values</p>
+      <h2 class="section__title values__headline" id="values-heading">
+        {valuesHeadline}
+      </h2>
+      <ul class="values">
+        {
+          values.slice(0, 3).map((value) => (
+            <li class="values__item">
+              <p class="values__label">{value.label}</p>
+              <p class="values__body">{value.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="why__link" href={`/${location.slug}/our-values/`}>
+        All of our values
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  {/* ---- Visit us ---- */}
+  <section class="section section--tint" aria-labelledby="visit-heading">
+    <div class="container visit">
+      <div>
+        <p class="eyebrow">Visit us</p>
+        <h2 class="section__title" id="visit-heading">
+          Our {location.name} office
+        </h2>
+        <address class="visit__address">
+          <a
+            href={location.mapUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {formatAddress(location)}
+            <span class="visually-hidden">
+              {' '}— open in Google Maps (opens in a new tab)
+            </span>
+          </a>
+          <a class="visit__strong" href={`tel:${telHref(location.phone)}`}>
+            {location.phone}
+          </a>
+          <a class="visit__strong" href={`mailto:${location.email}`}>
+            {location.email}
+          </a>
+        </address>
+        <a class="btn btn--secondary" href={`/${location.slug}/contact/`}>
+          Contact us
+        </a>
+      </div>
+
+      <div class="visit__hours card">
+        <HoursTable
+          hours={location.hours}
+          caption="Opening hours"
+          showCaption
+        />
+      </div>
+    </div>
+  </section>
+</LocationLayout>
+
+<style>
+  .section__title {
+    font-size: var(--step-3);
+    margin-block-start: 0;
+  }
+
+  .section__lede {
+    margin-block-start: var(--space-s);
+  }
+
+  .section__body {
+    margin-block-start: var(--space-xl);
+  }
+
+  /* ---- Why ---- */
+  .why {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .why__photo {
+    width: 100%;
+    max-width: 28rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-l);
+  }
+
+  .why__subhead {
+    margin-block-start: var(--space-l);
+    margin-block-end: var(--space-xs);
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--vfc-gray-ink);
+  }
+
+  .ticks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .ticks li {
+    position: relative;
+    padding-inline-start: 1.9rem;
+    color: var(--ink);
+  }
+
+  .ticks li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.42em;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: var(--vfc-blue) center / 0.7rem no-repeat
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m5 13 4 4L19 7' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+
+  .pills {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .pills li {
+    padding: 0.4rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--vfc-blue);
+    border-radius: var(--radius-pill);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--vfc-blue-ink);
+  }
+
+  .why__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    margin-block-start: var(--space-l);
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .why__link:hover {
+    text-decoration: underline;
+  }
+
+  /* ---- Values ---- */
+  .values__headline {
+    max-width: 24ch;
+  }
+
+  .values {
+    list-style: none;
+    margin: var(--space-xl) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-m);
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  }
+
+  .values__item {
+    padding: var(--space-m);
+    background: var(--vfc-blue-mist);
+    border-radius: var(--radius-l);
+    border-block-start: 3px solid var(--vfc-blue);
+  }
+
+  .values__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--vfc-gray-ink);
+    margin-block-end: var(--space-2xs);
+  }
+
+  .values__body {
+    color: var(--ink);
+  }
+
+  /* ---- Visit ---- */
+  .visit {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .visit__address {
+    font-style: normal;
+    margin-block: var(--space-m) var(--space-l);
+  }
+
+  .visit__address a {
+    display: block;
+    padding-block: 0.35rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+
+  .visit__address a:hover {
+    color: var(--vfc-blue-ink);
+    text-decoration: underline;
+  }
+
+  .visit__strong {
+    font-weight: 650;
+    color: var(--vfc-blue-ink) !important;
+  }
+
+  .visit__hours {
+    padding: var(--space-m);
+    max-width: 24rem;
+  }
+
+  @media (min-width: 56rem) {
+    .why {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: var(--space-2xl);
+    }
+
+    .visit {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+  }
+</style>

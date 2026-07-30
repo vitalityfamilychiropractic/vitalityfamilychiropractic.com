@@ -1,0 +1,112 @@
+---
+interface Crumb {
+  name: string;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  standfirst?: string;
+  /** Trail shown above the title. The final entry is the current page. */
+  crumbs?: Crumb[];
+}
+
+const { title, eyebrow, standfirst, crumbs = [] } = Astro.props;
+---
+
+<div class="pageHeader">
+  <div class="container">
+    {
+      crumbs.length > 0 && (
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            {crumbs.map((crumb, i) => {
+              const last = i === crumbs.length - 1;
+              return (
+                <li>
+                  {last ? (
+                    <span aria-current="page">{crumb.name}</span>
+                  ) : (
+                    <a href={crumb.href}>{crumb.name}</a>
+                  )}
+                  {!last && (
+                    <span class="crumbs__sep" aria-hidden="true">
+                      /
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      )
+    }
+
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1 class="pageHeader__title">{title}</h1>
+    {standfirst && <p class="lede pageHeader__standfirst">{standfirst}</p>}
+  </div>
+</div>
+
+<style>
+  .pageHeader {
+    background: linear-gradient(
+      180deg,
+      var(--vfc-blue-mist) 0%,
+      var(--surface) 100%
+    );
+    padding-block: var(--space-xl) var(--space-2xl);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .crumbs {
+    margin-block-end: var(--space-m);
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--step--1);
+  }
+
+  .crumbs li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .crumbs a {
+    color: var(--vfc-gray-ink);
+    text-decoration: none;
+    padding-block: 0.35rem;
+  }
+
+  .crumbs a:hover {
+    color: var(--vfc-blue-ink);
+    text-decoration: underline;
+  }
+
+  .crumbs [aria-current='page'] {
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+
+  .crumbs__sep {
+    color: var(--border-strong);
+  }
+
+  .pageHeader__title {
+    font-size: var(--step-4);
+    max-width: 20ch;
+  }
+
+  .pageHeader__standfirst {
+    margin-block-start: var(--space-m);
+  }
+</style>

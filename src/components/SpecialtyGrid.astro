@@ -1,0 +1,189 @@
+---
+import { getSpecialtiesFor, specialtyImage } from '../lib/specialties';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  /** Slug to leave out — used on a specialty page to show only the others. */
+  exclude?: string;
+  headingId: string;
+}
+
+const { location, exclude, headingId } = Astro.props;
+
+const shown = (await getSpecialtiesFor(location)).filter(
+  (s) => s.slug !== exclude,
+);
+
+const cards = shown.map((specialty) => ({
+  ...specialty,
+  href: `/${location.slug}/specialties/${specialty.slug}/`,
+  image: specialtyImage(location, specialty.slug),
+}));
+---
+
+<ul class="specialties" aria-labelledby={headingId}>
+  {
+    cards.map((card) => (
+      <li class="card specialty">
+        {card.image ? (
+          <img
+            class="specialty__image"
+            src={card.image.src}
+            width="800"
+            height="600"
+            loading="lazy"
+            decoding="async"
+            alt={card.image.alt}
+          />
+        ) : (
+          /* No photo for this service yet — a tinted panel keeps the card the
+             same shape as its neighbours instead of collapsing the grid. */
+          <div class="specialty__placeholder" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <rect
+                x="3"
+                y="5"
+                width="18"
+                height="14"
+                rx="2.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <circle cx="8.5" cy="10" r="1.6" fill="currentColor" />
+              <path
+                d="M4 16.5 9 12l3.5 3 3-2.5L20 17"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        )}
+
+        <div class="specialty__body">
+          <h3 class="specialty__title">
+            <a href={card.href}>{card.title}</a>
+          </h3>
+          <p class="specialty__summary">{card.summary}</p>
+          <span class="specialty__more" aria-hidden="true">
+            Learn more <span>&rarr;</span>
+          </span>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .specialties {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-m);
+    /* See `.offices` in src/pages/index.astro — the `min()` stops a wide track
+       from overflowing a narrow phone. */
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  }
+
+  .specialty {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+
+  .specialty:hover {
+    box-shadow: var(--shadow-l);
+    transform: translateY(-3px);
+  }
+
+  .specialty:focus-within {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .specialty__image,
+  .specialty__placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: var(--surface-sunk);
+  }
+
+  .specialty__placeholder {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(
+      165deg,
+      var(--vfc-blue-soft) 0%,
+      var(--vfc-gray-soft) 100%
+    );
+    color: var(--vfc-blue);
+  }
+
+  .specialty__placeholder svg {
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.6;
+  }
+
+  .specialty__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: var(--space-m);
+  }
+
+  .specialty__title {
+    font-size: var(--step-2);
+  }
+
+  .specialty__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* One stretched link makes the whole card clickable without adding a second
+     tab stop to the same page. */
+  .specialty__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .specialty__title a:focus-visible {
+    outline: none;
+  }
+
+  .specialty:hover .specialty__title a,
+  .specialty:focus-within .specialty__title a {
+    color: var(--vfc-blue-ink);
+  }
+
+  .specialty__summary {
+    margin-block-start: var(--space-2xs);
+    color: var(--ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .specialty__more {
+    margin-block-start: auto;
+    padding-block-start: var(--space-m);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 650;
+    color: var(--vfc-blue-ink);
+  }
+
+  .specialty:hover .specialty__more,
+  .specialty:focus-within .specialty__more {
+    text-decoration: underline;
+  }
+</style>

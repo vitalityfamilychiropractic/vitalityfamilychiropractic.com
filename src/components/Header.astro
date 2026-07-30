@@ -1,0 +1,810 @@
+---
+import { site } from '../config/site';
+import { locations, formatAddress, telHref } from '../config/locations';
+import { buildNav, isCurrent, isAncestor } from '../lib/nav';
+import { getSpecialtiesFor } from '../lib/specialties';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  /** Current pathname, used to mark the active nav item. */
+  pathname: string;
+}
+
+const { location, pathname } = Astro.props;
+const nav = buildNav(location, await getSpecialtiesFor(location));
+const others = locations.filter((l) => l.slug !== location.slug);
+---
+
+{/*
+  The banner landmark. The main navigation below is deliberately a sibling
+  rather than a child: it is `position: sticky`, and a sticky element can only
+  travel within its own parent's box — nested here it would unstick as soon as
+  this bar scrolled away.
+*/}
+<header class="topbar">
+  {
+    location.announcement && (
+      <div class="announce">
+        <p class="announce__text">{location.announcement}</p>
+      </div>
+    )
+  }
+
+  <div class="utility">
+    <div class="container utility__inner">
+      <p class="utility__tagline">{site.tagline}</p>
+      <div class="utility__right">
+        <a class="utility__link" href={`tel:${telHref(location.phone)}`}>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"
+              fill="currentColor"></path>
+          </svg>
+          <span>{location.phone}</span>
+        </a>
+        <a
+          class="utility__link"
+          href={site.social.facebook}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.45 2.89h-2.33v6.99A10 10 0 0 0 22 12z"
+              fill="currentColor"></path>
+          </svg>
+          <span>Facebook<span class="visually-hidden"> (opens in a new tab)</span></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+{/*
+  Everything in the sticky bar — brand link, section menus, office switcher and
+  the booking link — is navigation, so the bar itself carries the landmark. That
+  also keeps every element on the page inside one, which a bare <div> wrapper
+  would not.
+*/}
+<nav class="header" aria-label="Main">
+  <div class="container header__inner">
+    <a class="header__brand" href={`/${location.slug}/`}>
+      <img
+        class="header__logo"
+        src={site.logo}
+        width="421"
+        height="150"
+        alt={site.name}
+      />
+      <span class="header__place">{location.name}</span>
+    </a>
+
+    {/*
+      Only rendered as a control when scripting is available (see the `.js`
+      gate in the styles below). Without JS the panel it controls is simply
+      always open, so nothing is unreachable.
+    */}
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-menu"
+    >
+      <span class="menu-toggle__bars" aria-hidden="true"></span>
+      <span class="menu-toggle__label">Menu</span>
+    </button>
+
+    <div class="panel" id="site-menu">
+      {/* The landmark is on the wrapping <nav class="header"> above. */}
+      <div class="nav">
+        <ul class="nav__list">
+          {
+            nav.map((item) =>
+              item.children ? (
+                <li class="nav__item">
+                  <details class="navGroup js-menu">
+                    <summary
+                      class="nav__link nav__link--toggle"
+                      data-current={isAncestor(item, pathname) ? 'true' : undefined}
+                    >
+                      <span>{item.label}</span>
+                      <svg
+                        class="chevron"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          d="m6 9 6 6 6-6"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.25"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </summary>
+                    <ul class="navGroup__list">
+                      {item.children.map((child) => (
+                        <li>
+                          <a
+                            class="navGroup__link"
+                            href={child.href}
+                            aria-current={
+                              isCurrent(child.href, pathname) ? 'page' : undefined
+                            }
+                          >
+                            {child.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              ) : (
+                <li class="nav__item">
+                  <a
+                    class="nav__link"
+                    href={item.href}
+                    aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}
+                  >
+                    <span>{item.label}</span>
+                  </a>
+                </li>
+              ),
+            )
+          }
+        </ul>
+      </div>
+
+      <div class="actions">
+        {
+          others.length > 0 && (
+            <details class="switcher js-menu">
+              <summary class="switcher__toggle">
+                <svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <circle
+                    cx="12"
+                    cy="10"
+                    r="2.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+                <span>
+                  <span class="visually-hidden">Current location: </span>
+                  {location.name}
+                </span>
+                <svg
+                  class="chevron"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="m6 9 6 6 6-6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.25"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </summary>
+              <div class="switcher__panel">
+                <p class="switcher__heading" id="switcher-heading">
+                  Our other {others.length === 1 ? 'office' : 'offices'}
+                </p>
+                <ul class="switcher__list" aria-labelledby="switcher-heading">
+                  {others.map((other) => (
+                    <li>
+                      <a class="switcher__link" href={`/${other.slug}/`}>
+                        <span class="switcher__name">{other.name}</span>
+                        <span class="switcher__address">{formatAddress(other)}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
+          )
+        }
+
+        <a
+          class="btn btn--primary actions__book"
+          href={location.bookingUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Book an Appointment
+          <span class="visually-hidden">
+            {' '}at our {location.name} office (opens in a new tab)
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* ---- Announcement ---------------------------------------------------- */
+  .announce {
+    background: var(--vfc-blue-ink);
+    color: #fff;
+    text-align: center;
+  }
+
+  .announce__text {
+    max-width: none;
+    margin: 0 auto;
+    padding: 0.6rem var(--gutter);
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+
+  /* ---- Utility bar ----------------------------------------------------- */
+  .utility {
+    background: var(--vfc-blue-mist);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .utility__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    min-height: 2.75rem;
+  }
+
+  .utility__tagline {
+    margin: 0;
+    max-width: none;
+    font-size: var(--step--1);
+    color: var(--vfc-gray-ink);
+    font-weight: 500;
+  }
+
+  .utility__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    margin-inline-start: auto;
+  }
+
+  .utility__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.25rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--vfc-blue-ink);
+    text-decoration: none;
+  }
+
+  .utility__link:hover {
+    text-decoration: underline;
+  }
+
+  .icon {
+    width: 1.05em;
+    height: 1.05em;
+    flex: none;
+  }
+
+  @media (max-width: 46rem) {
+    .utility__tagline {
+      display: none;
+    }
+
+    .utility__right {
+      margin-inline: auto;
+    }
+  }
+
+  /* ---- Header shell ---------------------------------------------------- */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-m);
+    min-height: 4.75rem;
+  }
+
+  .header__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    flex: none;
+  }
+
+  .header__logo {
+    width: auto;
+    height: var(--logo-height);
+  }
+
+  /* The office name beside the shared logo — each location reads as its own
+     site without a separate brand mark. */
+  .header__place {
+    padding-inline-start: 0.75rem;
+    border-inline-start: 2px solid var(--vfc-blue);
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--vfc-gray-ink);
+  }
+
+  /* The office name is what makes each location read as its own site, so it
+     stays at every width; the logo gives up the room instead. */
+  @media (max-width: 30rem) {
+    .header__logo {
+      height: var(--logo-height-sm);
+    }
+
+    .header__place {
+      padding-inline-start: 0.55rem;
+      font-size: var(--step--1);
+    }
+
+    .header__brand {
+      gap: 0.55rem;
+    }
+  }
+
+  /* ---- Menu toggle ----------------------------------------------------- */
+  /* Hidden by default: with no JS the panel below is permanently open, so a
+     toggle would be a dead control. The `.js` class is set in <head>. */
+  .menu-toggle {
+    display: none;
+  }
+
+  :global(html.js) .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.95rem;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--vfc-blue-ink);
+    cursor: pointer;
+  }
+
+  .menu-toggle:hover {
+    border-color: var(--vfc-blue);
+  }
+
+  .menu-toggle__bars,
+  .menu-toggle__bars::before,
+  .menu-toggle__bars::after {
+    display: block;
+    width: 1.05rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .menu-toggle__bars {
+    position: relative;
+  }
+
+  .menu-toggle__bars::before,
+  .menu-toggle__bars::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+
+  .menu-toggle__bars::before {
+    top: -6px;
+  }
+
+  .menu-toggle__bars::after {
+    top: 6px;
+  }
+
+  .menu-toggle[aria-expanded='true'] .menu-toggle__bars {
+    background: transparent;
+  }
+
+  .menu-toggle[aria-expanded='true'] .menu-toggle__bars::before {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded='true'] .menu-toggle__bars::after {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* ---- Collapsible panel -----------------------------------------------
+     Visible by default. It is collapsed only under `.js` — where a toggle
+     exists to reopen it — and the open state is driven straight off the
+     button's `aria-expanded`, so the collapsed state applies on the first
+     paint with no flash of an expanded menu. */
+  .panel {
+    flex-basis: 100%;
+    padding-block-end: var(--space-s);
+  }
+
+  :global(html.js) .panel {
+    display: none;
+  }
+
+  :global(html.js) .menu-toggle[aria-expanded='true'] ~ .panel {
+    display: block;
+  }
+
+  /* ---- Nav ------------------------------------------------------------- */
+  .nav__list,
+  .navGroup__list,
+  .switcher__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem;
+    width: 100%;
+    min-height: 2.9rem;
+    padding: 0.6rem 0;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .nav__link[aria-current='page'],
+  .nav__link[data-current='true'] {
+    color: var(--vfc-blue-ink);
+  }
+
+  .nav__link:hover {
+    color: var(--vfc-blue-ink);
+  }
+
+  /* Native disclosure marker replaced by the chevron. */
+  summary {
+    list-style: none;
+  }
+
+  /*
+   * Modern Chrome hides closed <details> content with `content-visibility`
+   * rather than `display: none`, which leaves the absolutely-positioned
+   * dropdown panels below still contributing to the header's height. Hide them
+   * outright so the closed state is the same everywhere.
+   */
+  details:not([open]) > .navGroup__list,
+  details:not([open]) > .switcher__panel {
+    display: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .chevron {
+    width: 1em;
+    height: 1em;
+    flex: none;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  details[open] > summary .chevron {
+    transform: rotate(180deg);
+  }
+
+  .navGroup__list {
+    padding-inline-start: var(--space-s);
+    border-inline-start: 2px solid var(--vfc-blue-soft);
+    margin-block-end: var(--space-2xs);
+  }
+
+  .navGroup__link {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 0;
+    color: var(--ink-muted);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .navGroup__link:hover,
+  .navGroup__link[aria-current='page'] {
+    color: var(--vfc-blue-ink);
+  }
+
+  /* ---- Actions --------------------------------------------------------- */
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-block-start: var(--space-s);
+    padding-block-start: var(--space-s);
+    border-block-start: 1px solid var(--border);
+  }
+
+  .switcher__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.9rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--vfc-gray-ink);
+    background: var(--surface);
+    cursor: pointer;
+  }
+
+  .switcher__toggle:hover {
+    border-color: var(--vfc-blue);
+    color: var(--vfc-blue-ink);
+  }
+
+  .switcher__panel {
+    padding: var(--space-xs) 0 0;
+  }
+
+  .switcher__heading {
+    margin: 0 0 0.4rem;
+    max-width: none;
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--vfc-gray-ink);
+  }
+
+  .switcher__link {
+    display: block;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-s);
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .switcher__link:hover {
+    background: var(--vfc-blue-soft);
+  }
+
+  .switcher__name {
+    display: block;
+    font-weight: 650;
+    color: var(--vfc-blue-ink);
+  }
+
+  .switcher__address {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  .actions__book {
+    width: 100%;
+  }
+
+  /* =====================================================================
+     Desktop — panel flattens into a horizontal bar, section menus become
+     floating cards.
+     ===================================================================== */
+  /*
+   * 70rem, not 64rem. The horizontal bar — brand, office name, four nav items,
+   * office switcher and the booking button — measures out at just under 1060px,
+   * so at 1024px it pushed the page ~27px wider than the viewport. The extra
+   * headroom also covers offices whose name runs longer than "College Station",
+   * since that name appears in both the brand block and the switcher.
+   *
+   * Keep in step with the `matchMedia` query in the script below.
+   */
+  @media (min-width: 70rem) {
+    :global(html.js) .menu-toggle {
+      display: none;
+    }
+
+    .header__inner {
+      flex-wrap: nowrap;
+    }
+
+    .panel,
+    :global(html.js) .panel,
+    :global(html.js) .menu-toggle[aria-expanded='true'] ~ .panel {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--space-m);
+      flex-basis: auto;
+      flex: 1;
+      padding-block-end: 0;
+    }
+
+    .nav__list {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3xs);
+    }
+
+    .nav__item {
+      position: relative;
+    }
+
+    .nav__link {
+      width: auto;
+      padding: 0.5rem 0.65rem;
+      border-radius: var(--radius-s);
+      white-space: nowrap;
+      font-size: var(--step--1);
+    }
+
+    /* Active underline drawn as a pseudo-element so nothing shifts. */
+    .nav__link[aria-current='page']::after,
+    .nav__link[data-current='true']::after {
+      content: '';
+      position: absolute;
+      left: 0.65rem;
+      right: 0.65rem;
+      bottom: 0.1rem;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--vfc-blue);
+    }
+
+    .navGroup__list {
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      left: 0;
+      z-index: 10;
+      min-width: 14rem;
+      padding: 0.4rem;
+      margin: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-m);
+      box-shadow: var(--shadow-l);
+    }
+
+    .navGroup__link {
+      padding: 0.55rem 0.75rem;
+      border-radius: var(--radius-s);
+      white-space: nowrap;
+    }
+
+    .navGroup__link:hover {
+      background: var(--vfc-blue-soft);
+    }
+
+    .actions {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-2xs);
+      margin: 0;
+      padding: 0;
+      border: 0;
+      flex: none;
+    }
+
+    .switcher {
+      position: relative;
+    }
+
+    .switcher__panel {
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      right: 0;
+      z-index: 10;
+      width: 18rem;
+      padding: 0.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-m);
+      box-shadow: var(--shadow-l);
+    }
+
+    .actions__book {
+      width: auto;
+      min-height: 2.9rem;
+      padding-inline: 1.35rem;
+      font-size: var(--step--1);
+    }
+  }
+</style>
+
+<script>
+  /* ---- Collapsible menu ------------------------------------------------
+   * The panel starts expanded in the markup. This collapses it at narrow
+   * widths, which is safe because reaching this code proves scripting works.
+   */
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  // Must match the desktop media query in the styles above.
+  const wide = window.matchMedia('(min-width: 70rem)');
+
+  function setExpanded(expanded: boolean) {
+    // Visibility is a pure CSS consequence of this attribute, so there is a
+    // single source of truth for the open state.
+    toggle?.setAttribute('aria-expanded', String(expanded));
+  }
+
+  toggle?.addEventListener('click', () => {
+    setExpanded(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Leaving the panel open while shrinking back to mobile would drop the user
+  // into an expanded menu they never opened.
+  wide.addEventListener('change', () => setExpanded(false));
+
+  /* ---- Section disclosures --------------------------------------------
+   * These are native <details>, so they already open, close and respond to
+   * the keyboard without help. Everything here is polish.
+   */
+  const menus = Array.from(
+    document.querySelectorAll<HTMLDetailsElement>('details.js-menu'),
+  );
+
+  function closeMenus(except?: HTMLDetailsElement) {
+    for (const menu of menus) {
+      if (menu !== except) menu.open = false;
+    }
+  }
+
+  for (const menu of menus) {
+    menu.addEventListener('toggle', () => {
+      if (menu.open) closeMenus(menu);
+    });
+  }
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as Node;
+    if (!menus.some((menu) => menu.contains(target))) closeMenus();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+
+    const openMenu = menus.find((menu) => menu.open);
+    if (openMenu) {
+      openMenu.open = false;
+      openMenu.querySelector('summary')?.focus();
+      return;
+    }
+
+    // Otherwise close the whole mobile panel, if it is open.
+    if (!wide.matches && toggle?.getAttribute('aria-expanded') === 'true') {
+      setExpanded(false);
+      toggle.focus();
+    }
+  });
+</script>

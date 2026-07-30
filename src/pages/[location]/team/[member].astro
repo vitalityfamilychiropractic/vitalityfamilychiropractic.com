@@ -1,0 +1,304 @@
+---
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import PracticeYears from '../../../components/PracticeYears.astro';
+import { locations, telHref } from '../../../config/locations';
+import { getMember, displayName } from '../../../config/team';
+import { site } from '../../../config/site';
+import type { TeamMember, Location } from '../../../config/types';
+
+/**
+ * One page per team member per office. Someone who works at two locations gets
+ * a page under each, so the phone number, booking link and surrounding nav all
+ * belong to the office the visitor is browsing — from a single bio record.
+ */
+export function getStaticPaths() {
+  return locations.flatMap((location) =>
+    location.team.map((slug) => ({
+      params: { location: location.slug, member: slug },
+      props: { location, member: getMember(slug) },
+    })),
+  );
+}
+
+interface Props {
+  location: Location;
+  member: TeamMember;
+}
+
+const { location, member } = Astro.props;
+const path = `/${location.slug}/team/${member.slug}/`;
+const fullName = displayName(member);
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  // `Physician` only for licensed clinicians — see `schemaType` in team.ts.
+  '@type': member.schemaType,
+  name: fullName,
+  jobTitle: member.role,
+  url: `${site.url}${path}`,
+  image: `${site.url}${member.photo}`,
+  email: member.email,
+  telephone: location.phone,
+  ...(member.schemaType === 'Physician'
+    ? { medicalSpecialty: 'Chiropractic' }
+    : {}),
+  description: member.bio[0],
+  worksFor: { '@id': `${site.url}/${location.slug}/` },
+};
+---
+
+<LocationLayout
+  location={location}
+  title={fullName}
+  description={member.bio[0]}
+  path={path}
+  ogImage={member.photo}
+  schemas={[personSchema]}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Team', href: `/${location.slug}/team/` },
+    { name: fullName, href: path },
+  ]}
+>
+  <PageHeader
+    eyebrow="About us"
+    title={fullName}
+    standfirst={member.specialty}
+    crumbs={[
+      { name: 'Home', href: `/${location.slug}/` },
+      { name: 'Team', href: `/${location.slug}/team/` },
+      { name: member.name, href: path },
+    ]}
+  />
+
+  <section class="section" aria-labelledby="bio-heading">
+    <div class="container profile">
+      <aside class="profile__side" aria-label={`Contact details for ${member.name}`}>
+        <img
+          class="profile__photo"
+          src={member.photo}
+          width="600"
+          height="600"
+          decoding="async"
+          alt={`Portrait of ${fullName}`}
+        />
+
+        <dl class="facts">
+          <div class="facts__row">
+            <dt>Certifications</dt>
+            <dd>{member.certifications}</dd>
+          </div>
+          <div class="facts__row">
+            <dt>Specialty</dt>
+            <dd>{member.specialty}</dd>
+          </div>
+          <div class="facts__row">
+            <dt>In practice</dt>
+            <dd><PracticeYears startDate={member.practiceStartDate} /></dd>
+          </div>
+          <div class="facts__row">
+            <dt>Email</dt>
+            <dd><a href={`mailto:${member.email}`}>{member.email}</a></dd>
+          </div>
+          <div class="facts__row">
+            <dt>Phone</dt>
+            <dd>
+              <a href={`tel:${telHref(location.phone)}`}>{location.phone}</a>
+            </dd>
+          </div>
+        </dl>
+
+        <a
+          class="btn btn--primary profile__book"
+          href={location.bookingUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Book with {member.shortName}
+          <span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      </aside>
+
+      <div class="profile__main">
+        <h2 class="profile__heading" id="bio-heading">Biography</h2>
+        <div class="prose">
+          {member.bio.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+
+        <h2 class="profile__heading">My practice</h2>
+        <ul class="mix">
+          {
+            member.practiceMix.map((item) => (
+              <li class="mix__item">
+                <div class="mix__head">
+                  <span class="mix__label">{item.label}</span>
+                  <span class="mix__value">{item.percent}%</span>
+                </div>
+                {/*
+                  A meter, not a decorative bar: assistive tech reads the value
+                  rather than guessing at a coloured rectangle.
+                */}
+                <div
+                  class="mix__track"
+                  role="meter"
+                  aria-valuenow={item.percent}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-label={`${item.label}: ${item.percent} percent of practice`}
+                >
+                  <div class="mix__fill" style={`width: ${item.percent}%`}></div>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <h2 class="profile__heading">What's important to me</h2>
+        <ul class="ticks">
+          {member.priorities.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <h2 class="profile__heading">In the office and in the community</h2>
+        <div class="prose">
+          {member.community.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+</LocationLayout>
+
+<style>
+  .profile {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .profile__photo {
+    width: 100%;
+    max-width: 22rem;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-l);
+  }
+
+  .facts {
+    margin-block: var(--space-l) var(--space-m);
+    display: grid;
+    gap: var(--space-s);
+    max-width: 22rem;
+  }
+
+  .facts__row:not(:last-child) {
+    padding-block-end: var(--space-s);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .facts dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--vfc-gray-ink);
+    margin-block-end: 0.2rem;
+  }
+
+  .facts dd {
+    margin: 0;
+    font-size: var(--step--1);
+    /* Long email addresses would otherwise blow out the sidebar. */
+    overflow-wrap: anywhere;
+  }
+
+  .profile__book {
+    max-width: 22rem;
+    width: 100%;
+  }
+
+  .profile__heading {
+    font-size: var(--step-2);
+    margin-block-start: var(--space-xl);
+    margin-block-end: var(--space-m);
+  }
+
+  .profile__main > .profile__heading:first-child {
+    margin-block-start: 0;
+  }
+
+  /* ---- Practice mix ---- */
+  .mix {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-m);
+    max-width: 32rem;
+  }
+
+  .mix__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-block-end: 0.4rem;
+  }
+
+  .mix__label {
+    font-weight: 650;
+  }
+
+  .mix__value {
+    font-family: var(--font-display);
+    font-weight: 650;
+    color: var(--vfc-blue-ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mix__track {
+    height: 0.6rem;
+    background: var(--vfc-blue-soft);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+
+  .mix__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--vfc-blue) 0%, var(--vfc-blue-ink) 100%);
+    border-radius: var(--radius-pill);
+  }
+
+  /* ---- Priorities ---- */
+  .ticks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2xs);
+    max-width: var(--measure);
+  }
+
+  .ticks li {
+    position: relative;
+    padding-inline-start: 1.9rem;
+  }
+
+  .ticks li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.42em;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: var(--vfc-blue) center / 0.7rem no-repeat
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m5 13 4 4L19 7' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+
+  @media (min-width: 56rem) {
+    .profile {
+      grid-template-columns: 22rem 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

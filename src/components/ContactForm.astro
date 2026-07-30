@@ -1,0 +1,398 @@
+---
+import { site } from '../config/site';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+
+// Each office posts to its own access key so enquiries reach the right inbox.
+const { endpoint, accessKey } = location.form;
+const configured = !accessKey.startsWith('REPLACE_WITH');
+---
+
+<div class="formWrap">
+  {
+    !configured && (
+      <p class="formWrap__warning" role="note">
+        <strong>Setup needed:</strong> this office has no form access key yet, so
+        submissions will not be delivered. Add one to{' '}
+        <code>src/config/locations.ts</code> — see the README. Until then, please
+        email{' '}
+        <a href={`mailto:${location.email}`}>{location.email}</a>.
+      </p>
+    )
+  }
+
+  {/*
+    A plain POST form. With scripting off it submits natively to the form
+    service and the browser's own validation applies; the script below takes
+    over to give inline messages and keep the visitor on the page.
+  */}
+  <form
+    class="form"
+    id="contact-form"
+    method="POST"
+    action={endpoint}
+    data-fallback-email={location.email}
+  >
+    <input type="hidden" name="access_key" value={accessKey} />
+    <input
+      type="hidden"
+      name="subject"
+      value={`Appointment request — ${location.name} (${site.name})`}
+    />
+    <input type="hidden" name="from_name" value={`${site.name} website`} />
+    <input type="hidden" name="location" value={location.name} />
+
+    {/*
+      Honeypot: a real person never sees this field, so anything filled in came
+      from a bot. `tabindex="-1"` and `aria-hidden` keep it out of the keyboard
+      order and off the accessibility tree.
+    */}
+    <div class="form__honeypot" aria-hidden="true">
+      <label for="botcheck">Leave this field empty</label>
+      <input id="botcheck" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="form__grid">
+      <p class="form__field">
+        <label class="form__label" for="name">
+          Name <span class="form__req" aria-hidden="true">*</span>
+        </label>
+        <input
+          class="form__input"
+          id="name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          required
+          aria-describedby="name-error"
+          data-error-label="Your name"
+        />
+        <span class="form__error" id="name-error" data-error-for="name"></span>
+      </p>
+
+      <p class="form__field">
+        <label class="form__label" for="email">
+          Email <span class="form__req" aria-hidden="true">*</span>
+        </label>
+        <input
+          class="form__input"
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          aria-describedby="email-error"
+          data-error-label="Your email address"
+        />
+        <span class="form__error" id="email-error" data-error-for="email"></span>
+      </p>
+
+      <p class="form__field">
+        <label class="form__label" for="phone">Phone number</label>
+        <input
+          class="form__input"
+          id="phone"
+          name="phone"
+          type="tel"
+          autocomplete="tel"
+          aria-describedby="phone-hint phone-error"
+          data-error-label="Your phone number"
+        />
+        <span class="form__hint" id="phone-hint">
+          Needed only if you would like us to call you.
+        </span>
+        <span class="form__error" id="phone-error" data-error-for="phone"></span>
+      </p>
+
+      <p class="form__field">
+        <label class="form__label" for="contact_method">
+          Preferred contact method
+        </label>
+        <select class="form__input" id="contact_method" name="contact_method">
+          <option value="Email">Email</option>
+          <option value="Phone call">Phone call</option>
+          <option value="Text message">Text message</option>
+        </select>
+      </p>
+
+      <p class="form__field form__field--wide">
+        <label class="form__label" for="comments">
+          How can we help? <span class="form__req" aria-hidden="true">*</span>
+        </label>
+        <textarea
+          class="form__input form__textarea"
+          id="comments"
+          name="comments"
+          rows="5"
+          required
+          aria-describedby="comments-hint comments-error"
+          data-error-label="A short message"></textarea>
+        <span class="form__hint" id="comments-hint">
+          Tell us what is going on and when you would like to come in. Please do
+          not include sensitive medical details.
+        </span>
+        <span class="form__error" id="comments-error" data-error-for="comments"></span>
+      </p>
+    </div>
+
+    <p class="form__required-note">
+      Fields marked <span aria-hidden="true">*</span>
+      <span class="visually-hidden">with an asterisk</span> are required.
+    </p>
+
+    <button class="btn btn--primary form__submit" type="submit">
+      Send request
+    </button>
+
+    {/*
+      Present in the DOM from the start so assistive tech is already observing
+      it when the first message lands.
+    */}
+    <div class="form__status" id="form-status" role="status" aria-live="polite"></div>
+  </form>
+</div>
+
+<style>
+  .formWrap__warning {
+    max-width: none;
+    margin-block-end: var(--space-m);
+    padding: var(--space-s) var(--space-m);
+    background: #fff8e6;
+    border: 1px solid #e0b95a;
+    border-radius: var(--radius-m);
+    color: #5c4405;
+    font-size: var(--step--1);
+  }
+
+  .formWrap__warning code {
+    font-size: 0.9em;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+  }
+
+  .form__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* Capped at two columns: three short fields on one row and a lone fourth on
+     the next reads as a mistake, and a form this size does not need the width. */
+  .form__grid {
+    display: grid;
+    gap: var(--space-m);
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    max-width: 40rem;
+  }
+
+  .form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-width: none;
+    margin: 0;
+  }
+
+  .form__field--wide {
+    grid-column: 1 / -1;
+  }
+
+  .form__label {
+    font-weight: 650;
+    font-size: var(--step--1);
+  }
+
+  .form__req {
+    color: var(--error-ink);
+  }
+
+  .form__input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-s);
+    color: var(--ink);
+    transition: border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .form__input:hover {
+    border-color: var(--vfc-gray);
+  }
+
+  .form__input:focus-visible {
+    border-color: var(--vfc-blue-ink);
+  }
+
+  .form__textarea {
+    resize: vertical;
+    min-height: 8rem;
+    line-height: 1.6;
+  }
+
+  .form__hint {
+    font-size: var(--step--1);
+    color: var(--ink-subtle);
+  }
+
+  .form__error {
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--error-ink);
+  }
+
+  .form__error:empty {
+    display: none;
+  }
+
+  .form__input[aria-invalid='true'] {
+    border-color: var(--error-ink);
+    border-width: 2px;
+  }
+
+  .form__required-note {
+    margin-block-start: var(--space-s);
+    font-size: var(--step--1);
+    color: var(--ink-subtle);
+  }
+
+  .form__submit {
+    margin-block-start: var(--space-s);
+  }
+
+  .form__status {
+    margin-block-start: var(--space-m);
+    font-weight: 600;
+  }
+
+  .form__status:not(:empty) {
+    padding: var(--space-s) var(--space-m);
+    border-radius: var(--radius-m);
+  }
+
+  .form__status[data-state='success'] {
+    background: var(--success-soft);
+    color: var(--success-ink);
+    border: 1px solid var(--success-ink);
+  }
+
+  .form__status[data-state='error'] {
+    background: var(--error-soft);
+    color: var(--error-ink);
+    border: 1px solid var(--error-ink);
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+  const status = document.querySelector<HTMLElement>('#form-status');
+
+  if (form && status) {
+    // Suppress the browser's own bubbles now that we can render inline errors.
+    // Set here rather than in the markup so no-JS visitors keep native
+    // validation.
+    form.noValidate = true;
+
+    const fields = Array.from(
+      form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+        'input[required], textarea[required], input[type="email"], input[type="tel"]',
+      ),
+    );
+
+    function errorNode(field: HTMLElement) {
+      return form!.querySelector<HTMLElement>(`[data-error-for="${field.id}"]`);
+    }
+
+    /** Show or clear the message for one field. Returns true when valid. */
+    function validate(field: HTMLInputElement | HTMLTextAreaElement) {
+      const node = errorNode(field);
+      const valid = field.checkValidity();
+
+      field.setAttribute('aria-invalid', valid ? 'false' : 'true');
+      if (node) {
+        node.textContent = valid ? '' : messageFor(field);
+      }
+      return valid;
+    }
+
+    function messageFor(field: HTMLInputElement | HTMLTextAreaElement) {
+      // `data-error-label` rather than the visible label: "How can we help?"
+      // works as a question above the box but not inside a sentence.
+      const label = field.dataset.errorLabel ?? 'This field';
+
+      if (field.validity.valueMissing) return `${label} is required.`;
+      if (field.validity.typeMismatch && field.type === 'email') {
+        return 'Please enter a complete email address, like name@example.com.';
+      }
+      return field.validationMessage || `Please check ${label.toLowerCase()}.`;
+    }
+
+    for (const field of fields) {
+      // Only nag after the user has left the field once — validating on every
+      // keystroke from the start is hostile.
+      field.addEventListener('blur', () => validate(field));
+      field.addEventListener('input', () => {
+        if (field.getAttribute('aria-invalid') === 'true') validate(field);
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const results = fields.map(validate);
+      if (results.includes(false)) {
+        status.dataset.state = 'error';
+        status.textContent = 'Please fix the highlighted fields and try again.';
+        form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+        return;
+      }
+
+      const submit = form.querySelector<HTMLButtonElement>('.form__submit');
+      const originalLabel = submit?.textContent ?? '';
+      if (submit) {
+        submit.disabled = true;
+        submit.textContent = 'Sending…';
+      }
+
+      status.dataset.state = '';
+      status.textContent = 'Sending your request…';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+
+        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+
+        status.dataset.state = 'success';
+        status.textContent =
+          'Thank you — your request has been sent. We will be in touch shortly.';
+        form.reset();
+        for (const field of fields) field.setAttribute('aria-invalid', 'false');
+      } catch {
+        const mailto = form.dataset.fallbackEmail;
+        status.dataset.state = 'error';
+        status.textContent = mailto
+          ? `Sorry, we could not send that. Please email us at ${mailto} or give us a call.`
+          : 'Sorry, we could not send that. Please give us a call and we will get you booked in.';
+      } finally {
+        if (submit) {
+          submit.disabled = false;
+          submit.textContent = originalLabel;
+        }
+      }
+    });
+  }
+</script>

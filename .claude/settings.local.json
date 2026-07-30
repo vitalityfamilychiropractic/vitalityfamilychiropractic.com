@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.vitalityfamilychiropractic.com)",
+      "Bash(npm -v)"
+    ]
+  }
+}

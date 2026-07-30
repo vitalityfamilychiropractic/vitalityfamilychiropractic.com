@@ -1,0 +1,182 @@
+---
+import LocationLayout from '../../layouts/LocationLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import { locations, telHref } from '../../config/locations';
+import type { Location } from '../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/pricing/`;
+---
+
+<LocationLayout
+  location={location}
+  title="Pricing"
+  description={`${location.pricingIntro} Up-front pricing for chiropractic care at our ${location.name} office.`}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Pricing', href: path },
+  ]}
+>
+  <PageHeader
+    eyebrow="About us"
+    title="Pricing"
+    standfirst={location.pricingIntro}
+    crumbs={[
+      { name: 'Home', href: `/${location.slug}/` },
+      { name: 'Pricing', href: path },
+    ]}
+  />
+
+  <section class="section" aria-labelledby="fees-heading">
+    <div class="container">
+      <div class="lead">
+        <div class="insurance">
+          <h2 class="insurance__title" id="fees-heading">Insurance</h2>
+          <p class="insurance__body">{location.insuranceNote}</p>
+        </div>
+
+        <ul class="fees">
+          {
+            location.fees.map((fee) => (
+              <li class="fees__item">
+                <span class="fees__label">{fee.label}</span>
+                <span class="fees__amount">{fee.amount}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="table-heading">
+    <div class="container">
+      <h2 class="table__title" id="table-heading">Ongoing care</h2>
+      <p class="lede table__lede">
+        Choose the family size and visit frequency that fits you. Prepaid plans
+        are billed once for the year.
+      </p>
+      <p class="table__hint">
+        On a narrow screen, scroll the table sideways to see every family size.
+      </p>
+
+      <div class="table__wrap">
+        <PricingTable
+          pricing={location.pricing}
+          caption={`Ongoing chiropractic care pricing — ${location.name} office`}
+        />
+      </div>
+
+      <p class="table__note">
+        Prices shown are for our {location.name} office and may differ at our
+        other locations. Please call us on{' '}
+        <a href={`tel:${telHref(location.phone)}`}>{location.phone}</a>
+        {' '}if you have a question about which plan suits your family.
+      </p>
+    </div>
+  </section>
+</LocationLayout>
+
+<style>
+  .lead {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .insurance__title {
+    font-size: var(--step-2);
+    margin-block-end: var(--space-s);
+  }
+
+  .insurance__body {
+    color: var(--ink-muted);
+  }
+
+  .fees {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-m);
+    background: var(--vfc-blue-mist);
+    border-radius: var(--radius-l);
+    border-block-start: 3px solid var(--vfc-blue);
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .fees__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2xs);
+  }
+
+  .fees__item:not(:last-child) {
+    padding-block-end: var(--space-s);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .fees__label {
+    font-weight: 600;
+    max-width: 26ch;
+  }
+
+  /* No `nowrap`: most amounts are short, but a ranged one like
+     "$30 (1-2 kids) and $45 (3+ kids)" is far wider than a phone screen. */
+  .fees__amount {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 650;
+    color: var(--vfc-blue-ink);
+  }
+
+  .table__title {
+    font-size: var(--step-3);
+  }
+
+  .table__lede {
+    margin-block-start: var(--space-s);
+  }
+
+  .table__hint {
+    margin-block-start: var(--space-s);
+    font-size: var(--step--1);
+    color: var(--ink-subtle);
+  }
+
+  .table__wrap {
+    margin-block-start: var(--space-m);
+  }
+
+  .table__note {
+    margin-block-start: var(--space-m);
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+    max-width: 62ch;
+  }
+
+  @media (min-width: 56rem) {
+    .lead {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-2xl);
+    }
+
+    .table__hint {
+      display: none;
+    }
+  }
+</style>

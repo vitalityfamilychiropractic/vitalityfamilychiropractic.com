@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config/site';
+import { locations, formatAddress } from '../config/locations';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="We could not find that page. Choose an office to carry on."
+  path="/404/"
+  noindex
+>
+  <header class="masthead">
+    <div class="container">
+      <a href="/">
+        <img
+          class="masthead__logo"
+          src={site.logo}
+          width="421"
+          height="150"
+          alt={site.name}
+        />
+      </a>
+    </div>
+  </header>
+
+  <main id="main" class="section">
+    <div class="container container--narrow">
+      <p class="eyebrow">Error 404</p>
+      <h1>We couldn't find that page</h1>
+      <p class="lede notfound__lede">
+        The link may be out of date. Pick an office below, or head back to the
+        home page.
+      </p>
+
+      <ul class="notfound__list">
+        {
+          locations.map((location) => (
+            <li>
+              <a class="notfound__link" href={`/${location.slug}/`}>
+                <span class="notfound__name">
+                  {location.name}, {location.address.stateAbbr}
+                </span>
+                <span class="notfound__address">{formatAddress(location)}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a class="btn btn--secondary" href="/">Back to home</a>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .masthead {
+    padding-block: var(--space-m);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .masthead__logo {
+    width: auto;
+    height: var(--logo-height);
+  }
+
+  .notfound__lede {
+    margin-block-start: var(--space-m);
+  }
+
+  .notfound__list {
+    list-style: none;
+    margin: var(--space-xl) 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .notfound__link {
+    display: block;
+    padding: var(--space-m);
+    background: var(--vfc-blue-mist);
+    border-radius: var(--radius-m);
+    text-decoration: none;
+  }
+
+  .notfound__link:hover {
+    background: var(--vfc-blue-soft);
+  }
+
+  .notfound__name {
+    display: block;
+    font-weight: 700;
+    color: var(--vfc-blue-ink);
+  }
+
+  .notfound__address {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+</style>

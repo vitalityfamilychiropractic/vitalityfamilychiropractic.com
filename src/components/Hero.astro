@@ -1,0 +1,182 @@
+---
+import { site } from '../config/site';
+import { telHref } from '../config/locations';
+import { getMember } from '../config/team';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const lead = getMember(location.lead);
+---
+
+<section class="hero">
+  {/* Decorative spine motif carried over from the current site. */}
+  <img class="hero__spine" src={site.spineGraphic} alt="" aria-hidden="true" />
+
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <p class="hero__greeting">
+        Hi, I'm <span class="hero__lead">{lead.shortName}</span>
+      </p>
+
+      <h1 class="hero__title">
+        Chiropractic care for growing families in {location.address.city}
+      </h1>
+
+      <p class="hero__intro">{location.intro}</p>
+
+      <div class="hero__actions">
+        <a
+          class="btn btn--primary"
+          href={location.bookingUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Book an Appointment
+          <span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+        <a class="btn btn--secondary" href={`tel:${telHref(location.phone)}`}>
+          Call {location.phone}
+        </a>
+      </div>
+
+      <img
+        class="hero__signature"
+        src={lead.signature}
+        alt={lead.signatureAlt}
+        width="387"
+        height="52"
+        loading="eager"
+      />
+    </div>
+
+    <div class="hero__figure">
+      <img
+        class="hero__portrait"
+        src={location.images.portraitCutout}
+        alt={location.images.portraitCutoutAlt}
+        width="720"
+        height="720"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+      165deg,
+      var(--vfc-blue-mist) 0%,
+      var(--vfc-blue-soft) 48%,
+      var(--vfc-gray-soft) 100%
+    );
+    padding-block: var(--space-2xl) 0;
+  }
+
+  /* The asset is a white line drawing. Full opacity on the pale wash reads as
+     a soft embossed watermark; any less and it disappears entirely. */
+  .hero__spine {
+    position: absolute;
+    top: -3rem;
+    left: -3.5rem;
+    /* Small on phones — at full size it dominates a 375px screen and competes
+       with the headline instead of sitting behind it. */
+    width: 9rem;
+    opacity: 0.6;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 3px rgba(63, 94, 171, 0.12));
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    gap: var(--space-l);
+    align-items: end;
+  }
+
+  .hero__copy {
+    padding-block-end: var(--space-xl);
+  }
+
+  .hero__greeting {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--vfc-gray-ink);
+    margin-block-end: var(--space-xs);
+  }
+
+  .hero__lead {
+    color: var(--vfc-blue-ink);
+  }
+
+  .hero__title {
+    font-size: var(--step-4);
+    max-width: 18ch;
+  }
+
+  .hero__intro {
+    margin-block-start: var(--space-m);
+    font-size: var(--step-1);
+    line-height: 1.55;
+    color: var(--ink-muted);
+    max-width: 46ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-block-start: var(--space-l);
+  }
+
+  /* Both signature assets are near-white (they were drawn for a dark banner).
+     `brightness(0)` collapses every colour to black while keeping the alpha
+     channel, so the strokes read as ink on the pale wash. */
+  .hero__signature {
+    width: auto;
+    height: 2.75rem;
+    margin-block-start: var(--space-l);
+    filter: brightness(0);
+    opacity: 0.55;
+  }
+
+  .hero__figure {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero__portrait {
+    width: min(100%, 26rem);
+    height: auto;
+    object-fit: contain;
+    object-position: bottom center;
+    filter: drop-shadow(0 24px 48px rgba(20, 32, 51, 0.18));
+  }
+
+  @media (min-width: 56rem) {
+    .hero {
+      padding-block-start: var(--space-3xl);
+    }
+
+    .hero__inner {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-2xl);
+    }
+
+    .hero__spine {
+      top: -4rem;
+      left: -5rem;
+      width: 22rem;
+      opacity: 0.7;
+    }
+  }
+</style>

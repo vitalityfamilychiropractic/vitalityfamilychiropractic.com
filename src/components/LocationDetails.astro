@@ -1,0 +1,133 @@
+---
+import HoursTable from './HoursTable.astro';
+import { telHref } from '../config/locations';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  /** Marks the office the visitor is currently browsing. */
+  current?: boolean;
+  /** Heading level for the office name, so this fits any page outline. */
+  headingLevel?: 2 | 3 | 4;
+  /** Link the office name through to its home page. */
+  linked?: boolean;
+}
+
+const {
+  location,
+  current = false,
+  headingLevel = 3,
+  linked = true,
+} = Astro.props;
+
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+const { address } = location;
+---
+
+<div class:list={['office', current && 'office--current']}>
+  <Heading class="office__name">
+    {
+      linked ? (
+        <a href={`/${location.slug}/`}>{location.name}</a>
+      ) : (
+        location.name
+      )
+    }
+    {current && <span class="office__badge">You are here</span>}
+  </Heading>
+
+  <address class="office__address">
+    <a
+      class="office__map"
+      href={location.mapUrl}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {address.street}{address.street2 && <>{' '}{address.street2}</>}<br />
+      {address.city}, {address.state} {address.zip}
+      <span class="visually-hidden"> — open in Google Maps (opens in a new tab)</span>
+    </a>
+
+    <a class="office__line" href={`tel:${telHref(location.phone)}`}>
+      {location.phone}
+    </a>
+
+    <a class="office__line" href={`mailto:${location.email}`}>
+      {location.email}
+    </a>
+  </address>
+
+  <div class="office__hours">
+    <HoursTable
+      hours={location.hours}
+      caption={`Opening hours — ${location.name}`}
+      showCaption
+    />
+  </div>
+</div>
+
+<style>
+  .office__name {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-2xs);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .office__name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .office__name a:hover {
+    color: var(--vfc-blue-ink);
+    text-decoration: underline;
+  }
+
+  .office__badge {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--vfc-blue-ink);
+    background: var(--vfc-blue-soft);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-pill);
+  }
+
+  .office__address {
+    font-style: normal;
+    margin-block-end: var(--space-m);
+  }
+
+  .office__map,
+  .office__line {
+    display: block;
+    padding-block: 0.3rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .office__map {
+    font-style: normal;
+  }
+
+  .office__map:hover,
+  .office__line:hover {
+    color: var(--vfc-blue-ink);
+    text-decoration: underline;
+  }
+
+  .office__line {
+    font-weight: 600;
+    color: var(--vfc-blue-ink);
+  }
+
+  .office__hours {
+    max-width: 20rem;
+  }
+</style>
