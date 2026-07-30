@@ -144,10 +144,11 @@ export interface Location {
   lead: string;
   /** Opening paragraph on the office home page. */
   intro: string;
-  /** "Experience" bullets — credentials that set this office apart. */
-  highlights: string[];
-  /** "Passions" list — what this office cares about. */
-  passions: string[];
+  /*
+   * "Experience" and "Passions" are not here: they describe a person, not a
+   * building, so they live on the team member — see `TeamMember.highlights`
+   * and `TeamMember.passions`. The office home page shows its `lead`'s.
+   */
   /** Intro paragraph above the pricing grid. */
   pricingIntro: string;
   /** Insurance situation — differs meaningfully between offices. */
@@ -169,15 +170,17 @@ export interface PracticeMix {
 }
 
 /**
- * Anyone who appears on a team page — chiropractors today, but massage
- * therapists, assistants and front-desk staff fit the same shape.
+ * What everyone in `team.ts` has, whatever their job.
+ *
+ * A team member is a discriminated union on `schemaType` — see `TeamMember`
+ * below. The clinical fields (bio, practice mix, photo…) are required of a
+ * `Physician`, because they get a full profile page, and optional for a
+ * `Person`, who may only ever be named on a specialty card.
  */
-export interface TeamMember {
+interface TeamMemberBase {
   slug: string;
   /** Full name without credentials, e.g. 'Christie McLarty'. */
   name: string;
-  /** Post-nominals, e.g. 'DC'. Empty string when there are none. */
-  credentials: string;
   /** Informal name used in body copy, e.g. 'Dr. Christie'. */
   shortName: string;
   /**
@@ -188,24 +191,45 @@ export interface TeamMember {
    */
   role: string;
   /**
-   * How search engines should read this person. Only use `Physician` for
-   * licensed clinicians; everyone else is a `Person`.
-   */
-  schemaType: 'Physician' | 'Person';
-  certifications: string;
-  specialty: string;
-  /**
    * ISO date (`YYYY-MM-DD`) they began practising. Years in practice are
    * derived from this at build time and refreshed in the browser on load, so
    * the figure never needs editing and never goes stale.
    */
   practiceStartDate: string;
   email: string;
+  /**
+   * Handwritten signature image, shown under the hero greeting.
+   *
+   * Optional for everyone: only the office `lead` is ever greeted on a home
+   * page, so nobody else needs one.
+   */
+  signature?: string;
+  /** Alt text for the signature image. Required whenever `signature` is set. */
+  signatureAlt?: string;
+  /**
+   * "Experience" bullets for the "Why choose …" panel on the home page of any
+   * office this person leads — their certifications and what sets them apart.
+   *
+   * Optional: only an office `lead` needs them. The panel hides any section
+   * that is empty.
+   */
+  highlights?: string[];
+  /** "Passions" chips for the same panel — what this person cares about. */
+  passions?: string[];
+}
+
+/**
+ * A licensed clinician. They appear on team pages and get a full profile, so
+ * everything that page renders is required — leave one out and the build stops
+ * rather than publishing a half-empty profile.
+ */
+interface Clinician extends TeamMemberBase {
+  schemaType: 'Physician';
+  /** Post-nominals, e.g. 'DC'. */
+  credentials: string;
+  certifications: string;
+  specialty: string;
   photo: string;
-  /** Handwritten signature image, shown under the hero greeting. */
-  signature: string;
-  /** Alt text for the signature image. */
-  signatureAlt: string;
   /** Body paragraphs, in order. */
   bio: string[];
   practiceMix: PracticeMix[];
@@ -214,6 +238,36 @@ export interface TeamMember {
   /** "In the office and in the community" paragraphs. */
   community: string[];
 }
+
+/**
+ * Everyone else — a massage therapist, an assistant, the front desk.
+ *
+ * They are named where they are relevant (a specialty card, say) without
+ * needing a profile's worth of material. Every field here is optional, and
+ * each page skips whatever is missing. Fill any of them in and it simply
+ * starts appearing.
+ */
+interface Associate extends TeamMemberBase {
+  schemaType: 'Person';
+  /** Post-nominals, e.g. 'LMT'. */
+  credentials?: string;
+  certifications?: string;
+  specialty?: string;
+  photo?: string;
+  bio?: string[];
+  practiceMix?: PracticeMix[];
+  priorities?: string[];
+  community?: string[];
+}
+
+/**
+ * Anyone in `team.ts` — chiropractors today, but massage therapists,
+ * assistants and front-desk staff fit the same shape.
+ *
+ * `schemaType` is the discriminant: it decides both how search engines read
+ * the person and how much detail the config demands of them.
+ */
+export type TeamMember = Clinician | Associate;
 
 export interface Specialty {
   slug: string;

@@ -14,25 +14,48 @@ const name = displayName(member);
 ---
 
 <article class="card member">
-  <img
-    class="member__photo"
-    src={member.photo}
-    width="600"
-    height="600"
-    loading="lazy"
-    decoding="async"
-    alt={`Portrait of ${name}`}
-  />
+  {
+    member.photo ? (
+      <img
+        class="member__photo"
+        src={member.photo}
+        width="600"
+        height="600"
+        loading="lazy"
+        decoding="async"
+        alt={`Portrait of ${name}`}
+      />
+    ) : (
+      /* No portrait on file — a tinted panel keeps the card the same shape as
+         its neighbours instead of collapsing the row. */
+      <div class="member__placeholder" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false">
+          <circle cx="12" cy="8.5" r="3.75" fill="none" stroke="currentColor" stroke-width="1.5" />
+          <path
+            d="M4.5 20a7.5 7.5 0 0 1 15 0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+    )
+  }
   <div class="member__body">
     <h3 class="member__name">
       <a href={href}>{name}</a>
     </h3>
-    <p class="member__specialty">{member.specialty}</p>
+    <p class="member__specialty">{member.specialty ?? member.role}</p>
     <dl class="member__meta">
-      <div>
-        <dt>Certifications</dt>
-        <dd>{member.certifications}</dd>
-      </div>
+      {
+        member.certifications && (
+          <div>
+            <dt>Certifications</dt>
+            <dd>{member.certifications}</dd>
+          </div>
+        )
+      }
       <div>
         <dt>In practice</dt>
         <dd><PracticeYears startDate={member.practiceStartDate} /></dd>
@@ -75,11 +98,29 @@ const name = displayName(member);
     outline: none;
   }
 
-  .member__photo {
+  .member__photo,
+  .member__placeholder {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
     background: var(--surface-sunk);
+  }
+
+  .member__placeholder {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(
+      165deg,
+      var(--vfc-blue-soft) 0%,
+      var(--vfc-gray-soft) 100%
+    );
+    color: var(--vfc-blue);
+  }
+
+  .member__placeholder svg {
+    width: 3.5rem;
+    height: 3.5rem;
+    opacity: 0.6;
   }
 
   .member__body {

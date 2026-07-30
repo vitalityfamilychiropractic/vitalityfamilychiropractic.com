@@ -51,6 +51,16 @@ const voice = getMember(location.lead);
 // lead does not personally deliver points at the person who does.
 const { member: cardMember, label: cardLabel } = specialtyLead(location, entry.id);
 
+/*
+ * Bio pages are generated from `location.team`, so someone assigned to a
+ * specialty but not yet listed on the team has no page to link to. Link only
+ * when the page exists — otherwise the name renders as plain text and starts
+ * linking by itself the moment they are added to `team`.
+ */
+const cardMemberUrl = location.team.includes(cardMember.slug)
+  ? `/${location.slug}/team/${cardMember.slug}/`
+  : null;
+
 // `render()` populates `entry.rendered`, which is what gives us the HTML as a
 // string to run token substitution over.
 await render(entry);
@@ -110,11 +120,19 @@ const image = specialtyImage(location, entry.id);
         <div class="detail__card card">
           <p class="detail__cardLabel">{cardLabel}</p>
           <p class="detail__cardName">
-            <a href={`/${location.slug}/team/${cardMember.slug}/`}>
-              {displayName(cardMember)}
-            </a>
+            {
+              cardMemberUrl ? (
+                <a href={cardMemberUrl}>{displayName(cardMember)}</a>
+              ) : (
+                displayName(cardMember)
+              )
+            }
           </p>
-          <p class="detail__cardMeta">{cardMember.certifications}</p>
+          {
+            cardMember.certifications && (
+              <p class="detail__cardMeta">{cardMember.certifications}</p>
+            )
+          }
           <a
             class="btn btn--primary detail__cardBook"
             href={location.bookingUrl}

@@ -49,6 +49,19 @@ export const team: TeamMember[] = [
       'Dr. Christie loves supporting local businesses and “doing life” with her patients and their businesses. She is available for lunch and learn presentations, corporate wellness programs on site, and is always excited to serve as needed in the community.',
       'Please reach out if you feel we could be of service in any way.',
     ],
+    highlights: [
+      'Relentlessly devoted to serving families with the highest quality of customer experience and chiropractic care',
+      'The only chiropractor in the Orlando metro area south of Altamonte Springs certified by the Academy Council on Chiropractic Pediatrics (CACCP)',
+      'Most specialized pregnancy-related chiropractic care with Webster Technique plus Perinatal certified through the ICPA',
+      'Extensive training in chiropractic cranial corrections',
+    ],
+    passions: [
+      'Generational Family Wellness Care',
+      'Community and Relationships',
+      'Birth',
+      'Breastfeeding',
+      'Continuing Education',
+    ],
   },
   {
     slug: 'ashley-harmon',
@@ -84,29 +97,32 @@ export const team: TeamMember[] = [
       'Dr. Ashley finds the most rewarding aspect of her chiropractic practice in the strong relationships she forms with her patients while helping them reach their health and wellness goals. She enjoys creating a welcoming experience for patients and their families.',
       'Dr. Ashley is passionate about supporting local businesses and enjoys being actively involved in the lives of her patients and their ventures.',
     ],
+    highlights: [
+      'Webster Technique certified',
+      'Chiropractic cranial correction',
+      'Currently enrolled in pediatric and prenatal certification through the ICPA',
+      'Activator certified',
+      'AVCA Certified Animal Chiropractor',
+    ],
+    passions: [
+      'Family Wellness Care',
+      'Building Relationships',
+      'Pregnancy and Birth',
+      'Continuing Education',
+    ],
   },
   {
+    // Not a clinician, so only the fields that are actually true of her.
+    // Add `certifications`, `photo`, `bio` and the rest whenever there is
+    // something real to put in them — each page starts showing them on its own.
     slug: 'candice-ashburn',
     name: 'Candice Ashburn',
     shortName: 'Candice',
     credentials: 'LMT',
     role: 'Massage Therapist',
     schemaType: 'Person',
-    certifications: '',
-    specialty: '',
     practiceStartDate: '2000-01-01',
     email: 'candice@vitalityfamilychiropractic.com',
-    photo: '',
-    signature: '',
-    signatureAlt: '',
-    bio: [
-    ],
-    practiceMix: [
-    ],
-    priorities: [
-    ],
-    community: [
-    ],
   },
 ];
 

@@ -77,6 +77,9 @@ The ones that are easy to miss:
   Google Maps and the coordinates are the first item in the menu.
 - `specialties` — which service pages this office offers, in menu order. See
   [Specialties](#specialties).
+- `lead` — whose portrait, signature, "Why choose …" panel and specialty cards
+  the office runs on. Their `highlights` and `passions` come with them; there is
+  nothing to copy per office.
 - `pricing.rows` — each row's `values` array must have exactly as many numbers
   as there are `tiers`, or the build stops and tells you which row is short.
 - `hours` — `blocks` is what visitors read, `machine` is what Google reads.
@@ -229,16 +232,64 @@ the exceptions need configuring.
 
 ## The team
 
-`src/config/team.ts` holds everyone who appears on a team page. Nobody has to be
-a chiropractor; two fields carry the difference:
+`src/config/team.ts` holds everyone the site names anywhere. Nobody has to be a
+chiropractor, and **how much you have to fill in depends on `schemaType`.**
+
+### `schemaType: 'Physician'` — a licensed clinician
+
+They appear on team pages and get a full profile, so everything that page
+renders is required: `credentials`, `certifications`, `specialty`, `photo`,
+`bio`, `practiceMix`, `priorities` and `community`. Leave one out and the build
+stops rather than publishing a half-empty profile.
+
+### `schemaType: 'Person'` — everyone else
+
+A massage therapist, an assistant, the front desk. They get named where they
+are relevant — a specialty card, say — without needing a profile's worth of
+material, so **all of those fields are optional.** Candice is the example:
+
+```ts
+{
+  slug: 'candice-ashburn',
+  name: 'Candice Ashburn',
+  shortName: 'Candice',
+  credentials: 'LMT',
+  role: 'Massage Therapist',
+  schemaType: 'Person',
+  practiceStartDate: '2000-01-01',
+  email: 'candice@vitalityfamilychiropractic.com',
+}
+```
+
+Every page skips what is missing — no empty headings, no broken images, no
+stray "Certifications:" with nothing after it. Fill any field in later and it
+simply starts appearing.
+
+### Required of everyone
+
+`slug`, `name`, `shortName`, `role`, `schemaType`, `practiceStartDate`, `email`.
+
+### Optional for everyone
 
 | Field | What it does |
 | --- | --- |
-| `role` | Job title, singular and capitalised — `Chiropractor`, `Massage Therapist`. Drives the "Your …" heading on specialty cards. |
-| `schemaType` | `Physician` for licensed clinicians, `Person` for everyone else. Controls the structured data search engines read. |
+| `signature` / `signatureAlt` | Handwritten signature under the home page greeting. Only an office `lead` is ever greeted, so nobody else needs one. |
+| `highlights` | "Experience" bullets for the "Why choose …" panel. |
+| `passions` | "Passions" chips for the same panel. |
 
-`credentials` may be an empty string; names then print without a trailing
-comma.
+`highlights` and `passions` describe a person rather than a building, so they
+live here and an office picks them up by naming that person as its `lead`.
+Change Dr. Ashley's certifications once and every office she leads updates.
+The panel skips whichever section is empty rather than leaving a heading over
+nothing.
+
+### Appearing on a team page, or not
+
+Team pages are generated from each location's `team` array — **not** from this
+file. Someone referenced only by `specialtyLeads` is named on that specialty's
+card but gets no profile page, and the card renders their name as plain text
+rather than linking somewhere that does not exist. That is how Candice is set
+up: responsible for a specialty, not listed among the doctors.
 
 Someone who works at two offices is defined **once** and listed in both
 offices' `team` arrays. They get a page under each office, so the phone number,

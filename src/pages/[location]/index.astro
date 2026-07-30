@@ -71,15 +71,37 @@ const path = `/${location.slug}/`;
           Experience your family can lean on
         </h2>
 
-        <h3 class="why__subhead">Experience</h3>
-        <ul class="ticks">
-          {location.highlights.map((item) => <li>{item}</li>)}
-        </ul>
+        {/*
+          Both lists belong to the person, not the office, so an office picks
+          them up by naming its `lead`. Each section is skipped when empty —
+          a lead without a credentials list gets a shorter panel rather than a
+          stray heading over nothing.
+        */}
+        {
+          lead.highlights && lead.highlights.length > 0 && (
+            <>
+              <h3 class="why__subhead">Experience</h3>
+              <ul class="ticks">
+                {lead.highlights.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </>
+          )
+        }
 
-        <h3 class="why__subhead">Passions</h3>
-        <ul class="pills">
-          {location.passions.map((item) => <li>{item}</li>)}
-        </ul>
+        {
+          lead.passions && lead.passions.length > 0 && (
+            <>
+              <h3 class="why__subhead">Passions</h3>
+              <ul class="pills">
+                {lead.passions.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </>
+          )
+        }
 
         <a class="why__link" href={`/${location.slug}/team/${lead.slug}/`}>
           Read {lead.shortName}’s full story

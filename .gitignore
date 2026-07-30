@@ -9,6 +9,7 @@ node_modules/
 # builds. Only these belong in .gitignore.
 .bun/
 bun-debug.log
+bun.lock
 
 # logs
 npm-debug.log*

@@ -30,6 +30,14 @@ const { location, member } = Astro.props;
 const path = `/${location.slug}/team/${member.slug}/`;
 const fullName = displayName(member);
 
+/*
+ * Only a `Physician` is required to have a bio, photo and the rest. This page
+ * can still be reached by an `Associate` if one is listed in a location's
+ * `team`, so every section below is written to cope with its material being
+ * absent rather than rendering an empty heading or a broken image.
+ */
+const summary = member.bio?.[0] ?? `${fullName} — ${member.role} at our ${location.name} office.`;
+
 const personSchema = {
   '@context': 'https://schema.org',
   // `Physician` only for licensed clinicians — see `schemaType` in team.ts.
@@ -37,13 +45,13 @@ const personSchema = {
   name: fullName,
   jobTitle: member.role,
   url: `${site.url}${path}`,
-  image: `${site.url}${member.photo}`,
+  ...(member.photo ? { image: `${site.url}${member.photo}` } : {}),
   email: member.email,
   telephone: location.phone,
   ...(member.schemaType === 'Physician'
     ? { medicalSpecialty: 'Chiropractic' }
     : {}),
-  description: member.bio[0],
+  description: summary,
   worksFor: { '@id': `${site.url}/${location.slug}/` },
 };
 ---
@@ -51,7 +59,7 @@ const personSchema = {
 <LocationLayout
   location={location}
   title={fullName}
-  description={member.bio[0]}
+  description={summary}
   path={path}
   ogImage={member.photo}
   schemas={[personSchema]}
@@ -64,7 +72,7 @@ const personSchema = {
   <PageHeader
     eyebrow="About us"
     title={fullName}
-    standfirst={member.specialty}
+    standfirst={member.specialty ?? member.role}
     crumbs={[
       { name: 'Home', href: `/${location.slug}/` },
       { name: 'Team', href: `/${location.slug}/team/` },
@@ -75,24 +83,36 @@ const personSchema = {
   <section class="section" aria-labelledby="bio-heading">
     <div class="container profile">
       <aside class="profile__side" aria-label={`Contact details for ${member.name}`}>
-        <img
-          class="profile__photo"
-          src={member.photo}
-          width="600"
-          height="600"
-          decoding="async"
-          alt={`Portrait of ${fullName}`}
-        />
+        {
+          member.photo && (
+            <img
+              class="profile__photo"
+              src={member.photo}
+              width="600"
+              height="600"
+              decoding="async"
+              alt={`Portrait of ${fullName}`}
+            />
+          )
+        }
 
         <dl class="facts">
-          <div class="facts__row">
-            <dt>Certifications</dt>
-            <dd>{member.certifications}</dd>
-          </div>
-          <div class="facts__row">
-            <dt>Specialty</dt>
-            <dd>{member.specialty}</dd>
-          </div>
+          {
+            member.certifications && (
+              <div class="facts__row">
+                <dt>Certifications</dt>
+                <dd>{member.certifications}</dd>
+              </div>
+            )
+          }
+          {
+            member.specialty && (
+              <div class="facts__row">
+                <dt>Specialty</dt>
+                <dd>{member.specialty}</dd>
+              </div>
+            )
+          }
           <div class="facts__row">
             <dt>In practice</dt>
             <dd><PracticeYears startDate={member.practiceStartDate} /></dd>
@@ -120,49 +140,80 @@ const personSchema = {
         </a>
       </aside>
 
+      {/*
+        Each block appears only if there is material for it, so a profile with
+        just a biography reads as a short page rather than a run of empty
+        headings.
+      */}
       <div class="profile__main">
         <h2 class="profile__heading" id="bio-heading">Biography</h2>
         <div class="prose">
-          {member.bio.map((paragraph) => <p>{paragraph}</p>)}
-        </div>
-
-        <h2 class="profile__heading">My practice</h2>
-        <ul class="mix">
           {
-            member.practiceMix.map((item) => (
-              <li class="mix__item">
-                <div class="mix__head">
-                  <span class="mix__label">{item.label}</span>
-                  <span class="mix__value">{item.percent}%</span>
-                </div>
-                {/*
-                  A meter, not a decorative bar: assistive tech reads the value
-                  rather than guessing at a coloured rectangle.
-                */}
-                <div
-                  class="mix__track"
-                  role="meter"
-                  aria-valuenow={item.percent}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-label={`${item.label}: ${item.percent} percent of practice`}
-                >
-                  <div class="mix__fill" style={`width: ${item.percent}%`}></div>
-                </div>
-              </li>
-            ))
+            member.bio && member.bio.length > 0 ? (
+              member.bio.map((paragraph) => <p>{paragraph}</p>)
+            ) : (
+              <p>{summary}</p>
+            )
           }
-        </ul>
-
-        <h2 class="profile__heading">What's important to me</h2>
-        <ul class="ticks">
-          {member.priorities.map((item) => <li>{item}</li>)}
-        </ul>
-
-        <h2 class="profile__heading">In the office and in the community</h2>
-        <div class="prose">
-          {member.community.map((paragraph) => <p>{paragraph}</p>)}
         </div>
+
+        {
+          member.practiceMix && member.practiceMix.length > 0 && (
+            <>
+              <h2 class="profile__heading">My practice</h2>
+              <ul class="mix">
+                {member.practiceMix.map((item) => (
+                  <li class="mix__item">
+                    <div class="mix__head">
+                      <span class="mix__label">{item.label}</span>
+                      <span class="mix__value">{item.percent}%</span>
+                    </div>
+                    {/*
+                      A meter, not a decorative bar: assistive tech reads the
+                      value rather than guessing at a coloured rectangle.
+                    */}
+                    <div
+                      class="mix__track"
+                      role="meter"
+                      aria-valuenow={item.percent}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      aria-label={`${item.label}: ${item.percent} percent of practice`}
+                    >
+                      <div class="mix__fill" style={`width: ${item.percent}%`} />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+
+        {
+          member.priorities && member.priorities.length > 0 && (
+            <>
+              <h2 class="profile__heading">What's important to me</h2>
+              <ul class="ticks">
+                {member.priorities.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+
+        {
+          member.community && member.community.length > 0 && (
+            <>
+              <h2 class="profile__heading">In the office and in the community</h2>
+              <div class="prose">
+                {member.community.map((paragraph) => (
+                  <p>{paragraph}</p>
+                ))}
+              </div>
+            </>
+          )
+        }
       </div>
     </div>
   </section>

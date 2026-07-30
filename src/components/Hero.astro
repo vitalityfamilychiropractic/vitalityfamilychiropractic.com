@@ -43,14 +43,19 @@ const lead = getMember(location.lead);
         </a>
       </div>
 
-      <img
-        class="hero__signature"
-        src={lead.signature}
-        alt={lead.signatureAlt}
-        width="387"
-        height="52"
-        loading="eager"
-      />
+      {/* Optional — not everyone who could lead an office has one on file. */}
+      {
+        lead.signature && (
+          <img
+            class="hero__signature"
+            src={lead.signature}
+            alt={lead.signatureAlt ?? `${lead.shortName}’s handwritten signature`}
+            width="387"
+            height="52"
+            loading="eager"
+          />
+        )
+      }
     </div>
 
     <div class="hero__figure">

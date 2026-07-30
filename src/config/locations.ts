@@ -63,19 +63,6 @@ export const locations: Location[] = [
     lead: 'christie-mclarty',
     intro:
       'Vitality Family Chiropractic is a community based wellness center in Celebration, Florida focused on helping families achieve a better quality of life through premier chiropractic care.',
-    highlights: [
-      'Relentlessly devoted to serving families with the highest quality of customer experience and chiropractic care',
-      'The only chiropractor in the Orlando metro area south of Altamonte Springs certified by the Academy Council on Chiropractic Pediatrics (CACCP)',
-      'Most specialized pregnancy-related chiropractic care with Webster Technique plus Perinatal certified through the ICPA',
-      'Extensive training in chiropractic cranial corrections',
-    ],
-    passions: [
-      'Generational Family Wellness Care',
-      'Community and Relationships',
-      'Birth',
-      'Breastfeeding',
-      'Continuing Education',
-    ],
     pricingIntro:
       'Our goal is to provide affordable family chiropractic care with up front pricing so you are never waiting on a mystery medical bill from us.',
     insuranceNote:
@@ -198,10 +185,6 @@ export const locations: Location[] = [
     ],
     // Massage therapy is delivered by someone other than the office's lead
     // chiropractor, so its page names them instead.
-    //
-    // TODO: swap `member` for the actual massage therapist once they are added
-    // to src/config/team.ts with `role: 'Massage Therapist'`. At that point the
-    // `label` below can be deleted — the heading derives from the role.
     specialtyLeads: {
       'massage-therapy': {
         member: 'candice-ashburn',
@@ -211,19 +194,6 @@ export const locations: Location[] = [
     lead: 'ashley-harmon',
     intro:
       'Vitality Family Chiropractic is a community based wellness center in College Station, Texas focused on helping families achieve a better quality of life through premier chiropractic care.',
-    highlights: [
-      'Webster Technique certified',
-      'Chiropractic cranial correction',
-      'Currently enrolled in pediatric and prenatal certification through the ICPA',
-      'Activator certified',
-      'AVCA Certified Animal Chiropractor',
-    ],
-    passions: [
-      'Family Wellness Care',
-      'Building Relationships',
-      'Pregnancy and Birth',
-      'Continuing Education',
-    ],
     pricingIntro:
       'We strive to make our pricing affordable for families to receive regular chiropractic care.',
     insuranceNote:
