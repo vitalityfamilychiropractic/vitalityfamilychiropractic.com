@@ -44,9 +44,9 @@ export const locations: Location[] = [
     geo: { lat: 28.3255, lng: -81.534 },
     bookingUrl: 'https://vfccelebration.janeapp.com/',
     form: {
-      endpoint: 'https://api.web3forms.com/submit',
+      endpoint: 'https://formspree.io/f/xwpknnaj',
       // Replace with this office's own Web3Forms access key — see README.
-      accessKey: 'REPLACE_WITH_CELEBRATION_ACCESS_KEY',
+      accessKey: 'celebration',
     },
     announcement: 'Now accepting new patient appointments.',
     hours: [
@@ -142,9 +142,9 @@ export const locations: Location[] = [
     geo: { lat: 30.5637, lng: -96.2895 },
     bookingUrl: 'https://vfc.janeapp.com/',
     form: {
-      endpoint: 'https://api.web3forms.com/submit',
+      endpoint: 'https://formspree.io/f/xwpknnaj',
       // Replace with this office's own Web3Forms access key — see README.
-      accessKey: 'REPLACE_WITH_COLLEGE_STATION_ACCESS_KEY',
+      accessKey: 'college-station',
     },
     hours: [
       {

@@ -38,7 +38,6 @@ const configured = !accessKey.startsWith('REPLACE_WITH');
     action={endpoint}
     data-fallback-email={location.email}
   >
-    <input type="hidden" name="access_key" value={accessKey} />
     <input
       type="hidden"
       name="subject"
@@ -110,13 +109,12 @@ const configured = !accessKey.startsWith('REPLACE_WITH');
       </p>
 
       <p class="form__field">
-        <label class="form__label" for="contact_method">
+        <label class="form__label" for="contactMethod">
           Preferred contact method
         </label>
-        <select class="form__input" id="contact_method" name="contact_method">
+        <select class="form__input" id="contactMethod" name="contactMethod">
           <option value="Email">Email</option>
           <option value="Phone call">Phone call</option>
-          <option value="Text message">Text message</option>
         </select>
       </p>
 
@@ -145,7 +143,7 @@ const configured = !accessKey.startsWith('REPLACE_WITH');
       <span class="visually-hidden">with an asterisk</span> are required.
     </p>
 
-    <button class="btn btn--primary form__submit" type="submit">
+    <button class="btn btn--primary form__submit" id="appt-request-form-button" type="submit">
       Send request
     </button>
 
