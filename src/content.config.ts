@@ -1,4 +1,7 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+// Not `from 'astro:content'` — that re-export was deprecated in Astro 6 and
+// removed in 7.
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 /**

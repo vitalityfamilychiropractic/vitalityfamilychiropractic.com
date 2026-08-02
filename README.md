@@ -120,7 +120,7 @@ src/
 ├─ layouts/         ← page shells
 └─ styles/
    ├─ tokens.css      every colour, size and shadow — change the brand here
-   ├─ fonts.css       self-hosted Inter + Fraunces
+   ├─ fonts.css       self-hosted Inter + Lora
    └─ global.css      reset, typography, buttons, layout helpers
 ```
 
