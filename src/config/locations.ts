@@ -85,16 +85,8 @@ export const locations: Location[] = [
         { label: 'Per Visit', unit: '/visit', values: [70, 100, 125, 125, 150] },
         { label: 'Weekly Visits', unit: '/month', values: [180, 260, 325, 325, 390] },
         { label: 'Biweekly Visits', unit: '/month', values: [120, 165, 205, 205, 245] },
-        {
-          label: 'Weekly Prepaid Visits',
-          unit: '/year',
-          values: [1836, 2652, 3315, 3315, 3978],
-        },
-        {
-          label: 'Biweekly Prepaid Visits',
-          unit: '/year',
-          values: [1173, 1683, 2091, 2091, 2499],
-        },
+        { label: 'Weekly Prepaid Visits', unit: '/year', values: [1836, 2652, 3315, 3315, 3978] },
+        { label: 'Biweekly Prepaid Visits', unit: '/year', values: [1173, 1683, 2091, 2091, 2499] },
       ],
     },
     images: {
@@ -199,10 +191,10 @@ export const locations: Location[] = [
     insuranceNote:
       'We are in-network with Blue Cross Blue Shield PPO and Health Select plans. Specific information regarding your insurance coverage will be reviewed during your new patient appointment. Please note that insurance does not cover chiropractic care for children under 5 years of age, or maintenance and wellness care.',
     fees: [
-      { label: 'New Patient Consultation and Adjustment', amount: '$150' },
+      { label: 'New Patient Consultation and Adjustment', amount: '$170' },
       {
         label: 'Add-on adjustment for children with parent using insurance',
-        amount: '$30 (1-2 kids) and $45 (3+ kids)',
+        amount: '$45 (1-2 kids) and $60 (3+ kids)',
       },
     ],
     pricing: {
@@ -214,19 +206,11 @@ export const locations: Location[] = [
         '2 Adults & Kids',
       ],
       rows: [
-        { label: 'Per Visit', unit: '/visit', values: [65, 90, 115, 115, 140] },
-        { label: 'Weekly Visits', unit: '/month', values: [175, 250, 290, 290, 375] },
-        { label: 'Biweekly Visits', unit: '/month', values: [115, 145, 165, 165, 205] },
-        {
-          label: 'Weekly Prepaid Visits',
-          unit: '/year',
-          values: [1680, 2400, 2784, 2784, 3600],
-        },
-        {
-          label: 'Biweekly Prepaid Visits',
-          unit: '/year',
-          values: [1104, 1392, 1584, 1584, 1968],
-        },
+        { label: 'Per Visit', unit: '/visit', values: [70, 100, 125, 125, 150] },
+        { label: 'Weekly Visits', unit: '/month', values: [180, 260, 325, 325, 390] },
+        { label: 'Biweekly Visits', unit: '/month', values: [120, 165, 205, 205, 245] },
+        { label: 'Weekly Prepaid Visits', unit: '/year', values: [1836, 2652, 3315, 3315, 3978] },
+        { label: 'Biweekly Prepaid Visits', unit: '/year', values: [1173, 1683, 2091, 1999, 2299] },
       ],
     },
     images: {
