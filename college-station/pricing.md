@@ -11,4 +11,4 @@ title: Pricing
 #### Out of pocket pricing:
 
 **New Patient Consultation and Adjustment:** $150\
-**Add-on adjustment for children with parent using insurance:** $30 (1-2 kids) and $45 (3+ kids)
+**Add-on adjustment for children with parent using insurance:** $40 (1-2 kids) and $45 (3+ kids)
