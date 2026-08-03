@@ -194,7 +194,7 @@ export const locations: Location[] = [
       { label: 'New Patient Consultation and Adjustment', amount: '$170' },
       {
         label: 'Add-on adjustment for children with parent using insurance',
-        amount: '$45 (1-2 kids) and $60 (3+ kids)',
+        amount: '$40 (1-2 kids) and $60 (3+ kids)',
       },
     ],
     pricing: {
