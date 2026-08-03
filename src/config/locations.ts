@@ -208,7 +208,7 @@ export const locations: Location[] = [
       rows: [
         { label: 'Per Visit', unit: '/visit', values: [70, 100, 125, 125, 150] },
         { label: 'Weekly Visits', unit: '/month', values: [180, 260, 325, 325, 390] },
-        { label: 'Biweekly Visits', unit: '/month', values: [120, 165, 205, 205, 245] },
+        { label: 'Biweekly Visits', unit: '/month', values: [120, 165, 205, 205, 240] },
         { label: 'Weekly Prepaid Visits', unit: '/year', values: [1836, 2652, 3315, 3315, 3978] },
         { label: 'Biweekly Prepaid Visits', unit: '/year', values: [1173, 1683, 2091, 1999, 2299] },
       ],
