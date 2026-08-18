@@ -146,6 +146,14 @@ $why-me-college-station-image:	url('/assets/img/why-me-ashley-gray.png');
 }
 
 .home-description {
+	h1 {
+		color:					$white;
+		font-size:				32px;
+		font-weight:			700;
+		text-align:				center;
+		margin-bottom:			1rem;
+	}
+
 	.description {
 		color:					$white;
 		font-size:				20px;

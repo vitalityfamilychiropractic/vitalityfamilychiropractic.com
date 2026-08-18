@@ -1,0 +1,4 @@
+# Serve brand assets at the site root. A Cloudflare rule currently sends
+# unmatched root paths to /college-station/; this keeps the favicon on-origin.
+/favicon.ico /assets/img/favicon.ico 200
+/apple-touch-icon.png /assets/img/apple-touch-icon.png 200

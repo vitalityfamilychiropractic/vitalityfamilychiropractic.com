@@ -28,12 +28,13 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://www.vitalityfamilychiropractic.com" # the base hostname & protocol for your site, e.g. http://example.com
 facebook_username: vitalityfamilychiropractic
-#google_id: G-D120PL4X89
+google_id: G-D120PL4X89
 port: 4001
 
 # Build settings
 plugins:
   - jekyll-feed
+  - jekyll-redirect-from
   - jekyll-sitemap
 
 
@@ -45,6 +46,9 @@ plugins:
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
+include:
+  - _redirects
+
 # exclude:
 #   - .sass-cache/
 #   - .jekyll-cache/

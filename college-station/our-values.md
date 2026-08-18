@@ -2,6 +2,9 @@
 layout: default-md
 location: college-station
 title: Our Values
+description: >-
+  How the College Station, TX office cares for families: short visits, continuing
+  education, and regular chiropractic care through every stage of life.
 image_url: /assets/img/our-values.jpg
 image_alt: A chiropractor treating a patient laying on a chiropractic table.
 ---

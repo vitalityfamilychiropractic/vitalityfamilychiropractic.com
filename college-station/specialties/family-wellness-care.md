@@ -2,16 +2,21 @@
 layout: default-md
 location: college-station
 title: Family Wellness Care
+description: >-
+  Family wellness chiropractic in College Station, TX with Ashley Harmon, DC.
+  Regular nervous-system-focused care for parents and kids in Bryan, College
+  Station, and the Brazos Valley.
 image_url: /assets/img/family-wellness-care-page-ashley.jpg
+image_alt: Dr. Ashley with a family in the College Station office.
 ---
 
-## Family Wellness Care
+## Family Wellness Care in College Station
 
 There are many reasons people choose to visit a chiropractor.  At Vitality Family Chiropractic, people choose to visit for two main reasons:
 
 #### They are healthy and want to stay healthy
 
-Your nervous system controls everything in your body.  Making sure it is working without interference from the spine is very important.  Without normal nervous system function, your body simply won’t work properly.  That means your immune system, digestive system, musculoskeletal system, and every other part of your body will be affected.  Many families choose to use chiropractic care as a safe and natural approach to keeping their nervous system functioning properly so they can be as healthy as possible.  
+Your nervous system controls everything in your body.  Making sure it is working without interference from the spine is very important.  Without normal nervous system function, your body simply won’t work properly.  That means your immune system, digestive system, musculoskeletal system, and every other part of your body will be affected.  Many families choose to use chiropractic care as a safe and natural approach to keeping their nervous system functioning properly so they can be as healthy as possible.
 
 #### They are sick and tired of being sick and tired
 

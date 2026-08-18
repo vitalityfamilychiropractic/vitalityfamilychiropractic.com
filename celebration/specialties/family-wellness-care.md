@@ -2,16 +2,21 @@
 layout: default-md
 location: celebration
 title: Family Wellness Care
+description: >-
+  Family wellness chiropractic in Celebration, FL with Christie McLarty, DC.
+  Regular nervous-system-focused care for parents and kids in Celebration,
+  Kissimmee, and Orlando.
 image_url: /assets/img/family-wellness-care-page-christie.jpg
+image_alt: Dr. Christie with children in the Celebration treatment room.
 ---
 
-## Family Wellness Care
+## Family Wellness Care in Celebration
 
 There are many reasons people choose to visit a chiropractor.  At Vitality Family Chiropractic, people choose to visit for two main reasons:
 
 #### They are healthy and want to stay healthy
 
-Your nervous system controls everything in your body.  Making sure it is working without interference from the spine is very important.  Without normal nervous system function, your body simply won’t work properly.  That means your immune system, digestive system, musculoskeletal system, and every other part of your body will be affected.  Many families choose to use chiropractic care as a safe and natural approach to keeping their nervous system functioning properly so they can be as healthy as possible.  
+Your nervous system controls everything in your body.  Making sure it is working without interference from the spine is very important.  Without normal nervous system function, your body simply won’t work properly.  That means your immune system, digestive system, musculoskeletal system, and every other part of your body will be affected.  Many families choose to use chiropractic care as a safe and natural approach to keeping their nervous system functioning properly so they can be as healthy as possible.
 
 #### They are sick and tired of being sick and tired
 

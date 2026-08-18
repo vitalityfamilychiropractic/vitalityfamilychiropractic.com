@@ -2,6 +2,11 @@
 layout: new-pricing
 location: college-station
 title: New Pricing
+sitemap: false
+robots: noindex, follow
+description: >-
+  Upcoming College Station chiropractic pricing effective September 1, 2026.
+  This page is a preview and is not the current fee schedule.
 ---
 
 ### We strive to make our pricing affordable for families to receive regular chiropractic care

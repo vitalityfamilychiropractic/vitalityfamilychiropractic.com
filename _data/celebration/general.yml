@@ -3,11 +3,13 @@ url: /celebration
 street_address: 605 Celebration Avenue
 city: Celebration
 state: Florida
+state_abbr: FL
 zip_code: 34747
 phone_number: (407) 584-7900
 email: info@vitalityfamilychiropractic.com
 google_id: G-D120PL4X89
 google_maps_url: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3512.3003327520937!2d-81.54208688736924!3d28.31951147573632!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88dd7fcbf0716f75%3A0x41cc63344526be49!2sVitality%20Family%20Chiropractic!5e0!3m2!1sen!2sus!4v1751985277050!5m2!1sen!2sus
+map_search_url: https://www.google.com/maps/search/?api=1&query=605+Celebration+Avenue+Celebration+FL+34747
 latitude: 28.31951619812341
 longitude: -81.54208688774355
 area_served:
@@ -48,20 +50,14 @@ hours:
   - day: Friday
     hours:
     - hours: By Appointment
-      opens: "00:00"
-      closes: "00:00"
 
   - day: Saturday
     hours:
     - hours: Closed
-      opens: "00:00"
-      closes: "00:00"
 
   - day: Sunday
     hours:
     - hours: Closed
-      opens: "00:00"
-      closes: "00:00"
 
 bookingurl: https://vfccelebration.janeapp.com/
 welcome-name: Dr Christie

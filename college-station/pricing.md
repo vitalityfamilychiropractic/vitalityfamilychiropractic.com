@@ -2,6 +2,9 @@
 layout: pricing
 location: college-station
 title: Pricing
+description: >-
+  College Station, TX chiropractic fees for individuals and families. In-network
+  with Blue Cross Blue Shield PPO and Health Select; HSA welcome.
 ---
 
 ### We strive to make our pricing affordable for families to receive regular chiropractic care

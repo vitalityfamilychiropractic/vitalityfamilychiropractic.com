@@ -2,6 +2,10 @@
 layout: home
 location: college-station
 title: Home
+description: >-
+  Prenatal, pediatric, and family chiropractic care in College Station, TX with
+  Ashley Harmon, DC. Webster Technique certified. Serving Bryan, College Station,
+  and the Brazos Valley.
 ---
 
 <div class="container-fluid home-banner home-banner-{{ page.location }}">
@@ -18,6 +22,11 @@ title: Home
 	</div>
 </div>
 <div class="container-fluid home-description home-description-{{ page.location }} gradient p-5">
+	<div class="row">
+		<div class="col">
+			<h1>Prenatal, Pediatric, and Family Wellness Chiropractor in {{ site.data[page.location].general.city }}, {{ site.data[page.location].general.state }}</h1>
+		</div>
+	</div>
 	<div class="row description">
 		<div class="col align-self-center">{{ site.data[page.location].general.description }}</div>
 	</div>
@@ -60,7 +69,7 @@ title: Home
 <div class="container-fluid why-me why-me-{{ page.location }}">
 	<div class="row justify-content-lg-end">
 		<div class="col-10 col-lg-6 card m-5 rounded-3">
-			<h1 class="m-5">Why Choose Me?</h1>
+			<h2 class="m-5">Why Choose Me?</h2>
 			<ul class="mx-5 nav nav-underline" id="whyMeTabs" role="tablist">
 				<li class="nav-item" role="presentation">
 					<button class="nav-link active" id="experience-tab" data-bs-toggle="tab" data-bs-target="#experience-tab-pane" type="button" role="tab" aria-controls="experience-tab-pane" aria-seleced="true">Experience</button>

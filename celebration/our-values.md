@@ -2,6 +2,9 @@
 layout: default-md
 location: celebration
 title: Our Values
+description: >-
+  How the Celebration, FL office cares for families: short visits, continuing
+  education, and regular chiropractic care through every stage of life.
 image_url: /assets/img/our-values.jpg
 image_alt: A chiropractor treating a patient laying on a chiropractic table.
 ---

@@ -5,6 +5,27 @@
     {% if page.key == item.key %}{% assign member = item %}{% endif %}
   {% endfor %}
   {% include head.html %}
+  {% include localBusiness.html %}
+  {% if member %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Physician",
+      "name": "{{ member.name }}",
+      "jobTitle": "Chiropractor",
+      "medicalSpecialty": "Chiropractic",
+      "url": "{{ site.url }}{{ page.url | replace: '.html', '' }}",
+      "email": "{{ member.email }}",
+      "telephone": "{{ member.phone }}",
+      "image": "{{ site.url }}/assets/img/team/{{ page.key }}.jpg",
+      "worksFor": {
+        "@type": "Chiropractor",
+        "name": "{{ site.title }} - {{ site.data[page.location].general.city }}",
+        "url": "{{ site.url }}{{ site.data[page.location].general.url }}"
+      }
+    }
+  </script>
+  {% endif %}
 </head>
 <body>
   <header>
