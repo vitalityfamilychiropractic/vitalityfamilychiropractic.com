@@ -1,0 +1,12 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% assign pages = site.html_pages | where_exp: "p", "p.sitemap != false" %}
+{% for p in pages %}{% unless p.redirect_to or p.url == "/404.html" %}
+  <url>
+    <loc>{{ p.url | replace: ".html", "" | absolute_url | xml_escape }}</loc>
+  </url>
+{% endunless %}{% endfor %}
+</urlset>

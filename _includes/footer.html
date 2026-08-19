@@ -44,7 +44,7 @@
             {% for location in site.data.locations %}
             {% assign item = site.data.[location].general %}
             <div class="col-md-4 px-lg-0 py-3">
-                <iframe src="{{ item.google_maps_url }}" style="margin-left: 1rem; width: 350px; height: 350px; border: 0px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="{{ item.google_maps_url }}" title="Map of Vitality Family Chiropractic in {{ item.city }}, {{ item.state }}" style="margin-left: 1rem; width: 350px; height: 350px; border: 0px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             {% endfor %}
         </div>

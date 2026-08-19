@@ -30,9 +30,7 @@
 		"image": [
 			"{{ site.url }}/assets/img/logo.png"
 		],
-		"logo": [
-			"{{ site.url }}/assets/img/logo-square.png"
-		],
+		"logo": "{{ site.url }}/assets/img/logo-square.png",
 		"name": "{{ site.title }} - {{ loc.city }}",
 		"description": "{{ loc.description | strip_newlines | strip }}",
 		"address": {
@@ -51,7 +49,7 @@
 		"areaServed": [ {{ areasServed | slice: 0, areasLength }}
 		],
 		"email": "{{ loc.email }}",
-		"url": "{{ site.url }}{{ loc.url }}",
+		"url": "{{ site.url }}{{ loc.url }}/",
 		"telephone": "{{ loc.phone_number }}",
 		"priceRange": "${{ site.data[page.location].pricing[0].per_visit }} - ${{ site.data[page.location].pricing[4].per_visit }}",
 		"hasMap": "{{ loc.map_search_url | default: loc.google_maps_url }}",

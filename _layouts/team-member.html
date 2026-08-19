@@ -21,7 +21,7 @@
       "worksFor": {
         "@type": "Chiropractor",
         "name": "{{ site.title }} - {{ site.data[page.location].general.city }}",
-        "url": "{{ site.url }}{{ site.data[page.location].general.url }}"
+        "url": "{{ site.url }}{{ site.data[page.location].general.url }}/"
       }
     }
   </script>
@@ -44,7 +44,7 @@
   </header>
   <main>
     <div class="d-flex title-banner bg-body-tertiary banner align-items-center" style="height: 150px;">
-      <h1 class="py-2 px-5 flex-lg-grow-1">Team</h1>
+      <h1 class="py-2 px-5 flex-lg-grow-1">{{ member.name }}</h1>
     </div>
     <div class="container content team-member">
       <div class="row py-5">
@@ -52,7 +52,6 @@
           <img class="img-fluid rounded" src="/assets/img/team/{{ page.key }}.jpg" alt="{{ member.name }}"/>
         </div>
         <div class="col">
-          <h2 class="py-2">{{ member.name }}</h2>
           {% if member.certifications %}<p><strong>Certifications:</strong> {{ member.certifications }}</p>{% endif %}
           {% if member.specialty %}<p><strong>Specialty:</strong> {{ member.specialty }}</p>{% endif %}
           {% if member.start_date %}<p><strong>Length of Work:</strong> <span id="years-service" data-start-date="{{ member.start_date }}">{{ display_years }} Year{% if display_years > 1 %}s{% endif %}</span></p>{% endif %}

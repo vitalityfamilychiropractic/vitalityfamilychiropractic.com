@@ -11,7 +11,7 @@
     {% assign document_title = site.title %}
   {% endif %}
 {% elsif page.title %}
-  {% if loc %}
+  {% if loc and page.title_location != false %}
     {% assign document_title = page.title | append: " in " | append: loc.city | append: ", " | append: loc.state | append: " | " | append: site.title %}
   {% else %}
     {% assign document_title = page.title | append: " | " | append: site.title %}
@@ -27,9 +27,7 @@
 
 <!-- For Google -->
 <meta name="description" content="{% if page.description %}{{ page.description }}{% elsif loc.description %}{{ loc.description }}{% else %}{{ site.description }}{% endif %}" />
-<meta name="keywords" content="{{ site.keywords }}" />
 <meta name="author" content="{{ site.title }}" />
-<meta name="copyright" content="{{ site.copyright }}" />
 
 <!-- For Facebook -->
 <meta property="og:title" content="{{ document_title }}" />
@@ -37,10 +35,12 @@
 <meta property="og:site_name" content="{{ site.title }}" />
 <meta property="og:url" content="{{ canonical_url }}" />
 <meta property="og:image" content="{{ site.url }}/assets/img/logo.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta property="og:description" content="{% if page.description %}{{ page.description }}{% elsif loc.description %}{{ loc.description }}{% else %}{{ site.description }}{% endif %}" />
 
 <!-- For Twitter -->
-<meta name="twitter:card" content="summary" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="{{ document_title }}" />
 <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% elsif loc.description %}{{ loc.description }}{% else %}{{ site.description }}{% endif %}" />
 <meta name="twitter:image" content="{{ site.url }}/assets/img/logo.png" />

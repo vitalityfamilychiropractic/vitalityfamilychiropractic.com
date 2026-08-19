@@ -11,7 +11,7 @@ description: >-
 <div class="container-fluid home-banner home-banner-{{ page.location }}">
 	<div class="row">
 		<div class="col align-self-center">
-			<img class="spine z-0" src="/assets/img/spine-2.webp"/>
+			<img class="spine z-0" src="/assets/img/spine-2.webp" alt=""/>
 			<p class="welcome">
 				<span>Hi, I'm</span> <span class="welcome-color-2">{{ site.data[page.location].general.welcome-name }}</span>
 			</p>
@@ -32,7 +32,7 @@ description: >-
 	</div>
 	<div class="row">
 		<div class="col-4 offset-2 offset-sm-4 offset-md-6 offset-lg-8 py-4">
-			<img class="signature" src="{{ site.data[page.location].general.signature-url }}"/>
+			<img class="signature" src="{{ site.data[page.location].general.signature-url }}" alt="Signature of {{ site.data[page.location].general.welcome-name }}"/>
 		</div>
 	</div>
 </div>
@@ -42,7 +42,7 @@ description: >-
 	<div class="card mb-3">
 		<div class="row g-0">
 			<div class="col-md-4">
-				<img class="card-img-top" src="{{ feature.img }}"/>
+				<img class="card-img-top" src="{{ feature.img }}" alt="{{ feature.alt }}"/>
 			</div>
 			<div class="col-md-5 align-self-center">
 				<a href="{{ feature.href }}"><button type="button" class="btn btn-light shadow p-5">{{ feature.title }}</button></a>
@@ -57,7 +57,7 @@ description: >-
 		{% for feature in site.data[page.location].features %}
 		<div class="col-4">
 			<div class="card mx-auto rounded-3">
-				<img class="card-img-top" src="{{ feature.img }}"/>
+				<img class="card-img-top" src="{{ feature.img }}" alt="{{ feature.alt }}"/>
 				<div class="features-button">
 					<a href="{{ feature.href }}"><button type="button" class="btn btn-light shadow p-3">{{ feature.title }}</button></a>
 				</div>

@@ -2,3 +2,15 @@
 # unmatched root paths to /college-station/; this keeps the favicon on-origin.
 /favicon.ico /assets/img/favicon.ico 200
 /apple-touch-icon.png /assets/img/apple-touch-icon.png 200
+
+# Old /contacts URLs and slash variants → canonical /contact/
+/college-station/contacts /college-station/contact/ 301
+/college-station/contacts/ /college-station/contact/ 301
+/college-station/contacts.html /college-station/contact/ 301
+/college-station/contact /college-station/contact/ 301
+/college-station/contact.html /college-station/contact/ 301
+/celebration/contacts /celebration/contact/ 301
+/celebration/contacts/ /celebration/contact/ 301
+/celebration/contacts.html /celebration/contact/ 301
+/celebration/contact /celebration/contact/ 301
+/celebration/contact.html /celebration/contact/ 301
