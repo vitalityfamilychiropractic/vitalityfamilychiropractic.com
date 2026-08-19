@@ -5,7 +5,11 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://www.vitalityfamilychiropractic.com',
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/404'),
+    }),
+  ],
   build: {
     // Emit `/celebration/pricing/index.html` so URLs stay directory-style.
     format: 'directory',

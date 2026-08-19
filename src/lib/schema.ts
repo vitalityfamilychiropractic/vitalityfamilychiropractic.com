@@ -1,5 +1,5 @@
 import { site } from '../config/site';
-import { formatAddress } from '../config/locations';
+import { formatAddress, locationDescription } from '../config/locations';
 import type { TeamMember, Location } from '../config/types';
 
 const DAY_NAMES: Record<string, string> = {
@@ -35,16 +35,16 @@ export function localBusinessSchema(
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'Chiropractic',
+    '@type': 'Chiropractor',
     '@id': url,
     name: `${site.name} — ${location.name}`,
     legalName: site.legalName,
-    description: location.intro,
+    description: locationDescription(location),
     url,
     telephone: location.phone,
     email: location.email,
     image: `${site.url}${location.images.portraitStudio}`,
-    logo: `${site.url}${site.logo}`,
+    logo: `${site.url}${site.logoRaster}`,
     priceRange: '$$',
     address: {
       '@type': 'PostalAddress',
@@ -65,6 +65,10 @@ export function localBusinessSchema(
     openingHoursSpecification: openingHours,
     sameAs: [site.social.facebook],
     medicalSpecialty: 'Chiropractic',
+    areaServed: location.areaServed.map((name) => ({
+      '@type': 'AdministrativeArea',
+      name,
+    })),
     // Taken from the office's own specialty list, so an office offering
     // massage therapy advertises it and one that does not, does not.
     availableService: services.map((name) => ({
@@ -120,11 +124,11 @@ export function organizationSchema(locations: Location[]) {
     name: site.name,
     legalName: site.legalName,
     url: site.url,
-    logo: `${site.url}${site.logo}`,
+    logo: `${site.url}${site.logoRaster}`,
     email: site.email,
     sameAs: [site.social.facebook],
     department: locations.map((l) => ({
-      '@type': 'Chiropractic',
+      '@type': 'Chiropractor',
       '@id': `${site.url}/${l.slug}/`,
       name: `${site.name} — ${l.name}`,
       url: `${site.url}/${l.slug}/`,

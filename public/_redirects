@@ -1,0 +1,73 @@
+# URLs from the previous Jekyll site. Cloudflare Pages applies these even when
+# a matching file exists. Leave `/` alone — it is the office chooser.
+
+# --- Contact: old plural path and Jekyll .html ---
+/celebration/contacts /celebration/contact/ 301
+/celebration/contacts/ /celebration/contact/ 301
+/celebration/contacts.html /celebration/contact/ 301
+/celebration/contact /celebration/contact/ 301
+/celebration/contact.html /celebration/contact/ 301
+/college-station/contacts /college-station/contact/ 301
+/college-station/contacts/ /college-station/contact/ 301
+/college-station/contacts.html /college-station/contact/ 301
+/college-station/contact /college-station/contact/ 301
+/college-station/contact.html /college-station/contact/ 301
+
+# --- Jekyll .html pages → directory URLs ---
+/celebration/index.html /celebration/ 301
+/celebration/our-values.html /celebration/our-values/ 301
+/celebration/pricing.html /celebration/pricing/ 301
+/celebration/privacy.html /celebration/privacy/ 301
+/celebration/team.html /celebration/team/ 301
+/celebration/team/christie-mclarty.html /celebration/team/christie-mclarty/ 301
+/celebration/specialties/family-wellness-care.html /celebration/specialties/family-wellness-care/ 301
+/celebration/specialties/pediatric-care.html /celebration/specialties/pediatric-care/ 301
+/celebration/specialties/pregnancy-care.html /celebration/specialties/pregnancy-care/ 301
+/college-station/index.html /college-station/ 301
+/college-station/our-values.html /college-station/our-values/ 301
+/college-station/pricing.html /college-station/pricing/ 301
+/college-station/privacy.html /college-station/privacy/ 301
+/college-station/team.html /college-station/team/ 301
+/college-station/team/ashley-harmon.html /college-station/team/ashley-harmon/ 301
+/college-station/team/christie-mclarty.html /college-station/team/christie-mclarty/ 301
+/college-station/specialties/family-wellness-care.html /college-station/specialties/family-wellness-care/ 301
+/college-station/specialties/pediatric-care.html /college-station/specialties/pediatric-care/ 301
+/college-station/specialties/pregnancy-care.html /college-station/specialties/pregnancy-care/ 301
+
+# Preview pricing page that was never meant to rank.
+/college-station/new-pricing /college-station/pricing/ 301
+/college-station/new-pricing/ /college-station/pricing/ 301
+/college-station/new-pricing.html /college-station/pricing/ 301
+
+# --- Root paths that used to alias College Station ---
+/our-values /college-station/our-values/ 301
+/our-values/ /college-station/our-values/ 301
+/our-values.html /college-station/our-values/ 301
+/team /college-station/team/ 301
+/team/ /college-station/team/ 301
+/team.html /college-station/team/ 301
+/team/ashley-harmon /college-station/team/ashley-harmon/ 301
+/team/ashley-harmon/ /college-station/team/ashley-harmon/ 301
+/team/ashley-harmon.html /college-station/team/ashley-harmon/ 301
+/team/christie-mclarty /college-station/team/christie-mclarty/ 301
+/team/christie-mclarty/ /college-station/team/christie-mclarty/ 301
+/team/christie-mclarty.html /college-station/team/christie-mclarty/ 301
+/pricing /college-station/pricing/ 301
+/pricing/ /college-station/pricing/ 301
+/pricing.html /college-station/pricing/ 301
+/contacts /college-station/contact/ 301
+/contacts/ /college-station/contact/ 301
+/contacts.html /college-station/contact/ 301
+/contact /college-station/contact/ 301
+/contact/ /college-station/contact/ 301
+/contact.html /college-station/contact/ 301
+/privacy.html /privacy/ 301
+/specialties/pregnancy-care /college-station/specialties/pregnancy-care/ 301
+/specialties/pregnancy-care/ /college-station/specialties/pregnancy-care/ 301
+/specialties/pregnancy-care.html /college-station/specialties/pregnancy-care/ 301
+/specialties/pediatric-care /college-station/specialties/pediatric-care/ 301
+/specialties/pediatric-care/ /college-station/specialties/pediatric-care/ 301
+/specialties/pediatric-care.html /college-station/specialties/pediatric-care/ 301
+/specialties/family-wellness-care /college-station/specialties/family-wellness-care/ 301
+/specialties/family-wellness-care/ /college-station/specialties/family-wellness-care/ 301
+/specialties/family-wellness-care.html /college-station/specialties/family-wellness-care/ 301

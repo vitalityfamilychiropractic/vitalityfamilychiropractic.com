@@ -63,6 +63,20 @@ export const locations: Location[] = [
     lead: 'christie-mclarty',
     intro:
       'Vitality Family Chiropractic is a community based wellness center in Celebration, Florida focused on helping families achieve a better quality of life through premier chiropractic care.',
+    description:
+      'Prenatal, pediatric, and family chiropractic care in Celebration, FL with Christie McLarty, DC. Webster Technique and CACCP certified. Now accepting new patient appointments.',
+    areaServed: [
+      'Celebration',
+      'Davenport',
+      'Kissimmee',
+      'Lake Buena Vista',
+      'Orlando',
+      'Windermere',
+      'Winter Garden',
+      'Winter Park',
+      'Orange County',
+      'Osceola County',
+    ],
     pricingIntro:
       'Our goal is to provide affordable family chiropractic care with up front pricing so you are never waiting on a mystery medical bill from us.',
     insuranceNote:
@@ -186,6 +200,23 @@ export const locations: Location[] = [
     lead: 'ashley-harmon',
     intro:
       'Vitality Family Chiropractic is a community based wellness center in College Station, Texas focused on helping families achieve a better quality of life through premier chiropractic care.',
+    description:
+      'Prenatal, pediatric, and family chiropractic care in College Station, TX with Ashley Harmon, DC. Webster Technique certified. Serving Bryan, College Station, and the Brazos Valley.',
+    areaServed: [
+      'College Station',
+      'Bryan',
+      'Anderson',
+      'Brenham',
+      'Caldwell',
+      'Franklin',
+      'Lexington',
+      'Navasota',
+      'Brazos County',
+      'Burleson County',
+      'Grimes County',
+      'Robertson County',
+      'Brazos Valley',
+    ],
     pricingIntro:
       'We strive to make our pricing affordable for families to receive regular chiropractic care.',
     insuranceNote:
@@ -260,4 +291,9 @@ export function formatAddress(location: Location): string {
 /** Digits-only phone for `tel:` links, e.g. '+14075847900'. */
 export function telHref(phone: string): string {
   return `+1${phone.replace(/\D/g, '')}`;
+}
+
+/** Home-page / LocalBusiness description, falling back to the visible intro. */
+export function locationDescription(location: Location): string {
+  return location.description ?? location.intro;
 }

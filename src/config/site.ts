@@ -13,6 +13,10 @@ export const site = {
   url: 'https://www.vitalityfamilychiropractic.com',
   email: 'info@vitalityfamilychiropractic.com',
   logo: '/img/brand/logo.svg',
+  /** Raster logo for JSON-LD; Google does not treat SVG as a logo image. */
+  logoRaster: '/img/brand/logo-square.png',
+  /** Default Open Graph image (1200×630). */
+  ogImage: '/img/brand/og.png',
   spineGraphic: '/img/brand/spine.webp',
   social: {
     facebook: 'https://www.facebook.com/vitalityfamilychiropractic',

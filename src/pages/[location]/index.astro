@@ -3,7 +3,7 @@ import LocationLayout from '../../layouts/LocationLayout.astro';
 import Hero from '../../components/Hero.astro';
 import SpecialtyGrid from '../../components/SpecialtyGrid.astro';
 import HoursTable from '../../components/HoursTable.astro';
-import { locations, formatAddress, telHref } from '../../config/locations';
+import { locations, formatAddress, telHref, locationDescription } from '../../config/locations';
 import { getMember } from '../../config/team';
 import { values, valuesHeadline } from '../../config/values';
 import type { Location } from '../../config/types';
@@ -27,7 +27,7 @@ const path = `/${location.slug}/`;
 <LocationLayout
   location={location}
   title="Home"
-  description={location.intro}
+  description={locationDescription(location)}
   path={path}
   crumbs={[{ name: location.name, href: path }]}
 >

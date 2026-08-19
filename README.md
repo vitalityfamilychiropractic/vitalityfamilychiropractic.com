@@ -75,6 +75,9 @@ The ones that are easy to miss:
 - `form.accessKey` — this office's own form key (see below).
 - `geo` — latitude and longitude, used for local SEO. Right-click the pin in
   Google Maps and the coordinates are the first item in the menu.
+- `description` — unique meta description for the office home page. Leave it
+  off and the visible `intro` paragraph is used instead.
+- `areaServed` — towns and counties for LocalBusiness structured data.
 - `specialties` — which service pages this office offers, in menu order. See
   [Specialties](#specialties).
 - `lead` — whose portrait, signature, "Why choose …" panel and specialty cards
@@ -403,26 +406,12 @@ Cloudflare Pages, Vercel, GitHub Pages, or any static host.
 Set `site` in `astro.config.mjs` to the live domain; canonical URLs, the sitemap
 and structured data are all generated from it.
 
-### Redirects worth adding
+### Redirects
 
-Most paths are unchanged from the current site, so existing search rankings
-carry over. Two groups need redirecting:
+`public/_redirects` ships with the build. It 301s the previous Jekyll URLs
+(`/contacts`, `.html` pages, and root paths that aliased College Station) onto
+the new directory URLs.
 
-**Root-level pages.** The current site mirrors its College Station pages at the
-root. The new root is the office chooser, so point the rest at College Station:
-
-```
-/our-values      /college-station/our-values/   301
-/team            /college-station/team/         301
-/pricing         /college-station/pricing/      301
-/contacts        /college-station/contact/      301
-```
-
-**The contact page**, which is now singular:
-
-```
-/celebration/contacts       /celebration/contact/       301
-/college-station/contacts   /college-station/contact/   301
-```
-
-Leave `/` alone — it now serves the chooser rather than redirecting.
+Leave `/` alone — it now serves the chooser rather than redirecting. When this
+branch goes live, remove the Cloudflare rule that sends unmatched root paths
+to `/college-station/`, or the chooser will never be served.

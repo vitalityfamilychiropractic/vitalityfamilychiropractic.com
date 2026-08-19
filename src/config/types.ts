@@ -144,6 +144,16 @@ export interface Location {
   lead: string;
   /** Opening paragraph on the office home page. */
   intro: string;
+  /**
+   * SEO meta description for the office home page and LocalBusiness markup.
+   * Falls back to `intro` when omitted.
+   */
+  description?: string;
+  /**
+   * Towns and counties this office serves, used in LocalBusiness structured
+   * data. Required so a new office cannot ship without it.
+   */
+  areaServed: string[];
   /*
    * "Experience" and "Passions" are not here: they describe a person, not a
    * building, so they live on the team member — see `TeamMember.highlights`
