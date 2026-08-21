@@ -48,7 +48,7 @@ export const locations: Location[] = [
       // Replace with this office's own Web3Forms access key — see README.
       accessKey: 'celebration',
     },
-    announcement: 'Now accepting new patient appointments.',
+    announcement: 'Now accepting new patient appointments',
     hours: [
       { day: 'Mon', blocks: ['8:30am – 4pm'], machine: [['08:30', '16:00']] },
       { day: 'Tue', blocks: ['8:30am – 4pm'], machine: [['08:30', '16:00']] },
