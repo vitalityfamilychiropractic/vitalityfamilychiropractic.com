@@ -332,6 +332,14 @@ const others = locations.filter((l) => l.slug !== location.slug);
     justify-content: space-between;
     gap: var(--space-m);
     min-height: 4.75rem;
+    /*
+     * Vertical padding, not just min-height. Closed, the 4.75rem box centres
+     * the brand row (1rem + 2.75rem toggle + 1rem). Open, the panel wraps onto
+     * the next line and would consume that min-height, sitting the Menu button
+     * flush against the utility bar. Padding keeps the same gutters in both
+     * states. Cleared at the desktop breakpoint below.
+     */
+    padding-block: 1rem;
   }
 
   .header__brand {
@@ -451,7 +459,6 @@ const others = locations.filter((l) => l.slug !== location.slug);
      paint with no flash of an expanded menu. */
   .panel {
     flex-basis: 100%;
-    padding-block-end: var(--space-s);
   }
 
   :global(html.js) .panel {
@@ -638,6 +645,7 @@ const others = locations.filter((l) => l.slug !== location.slug);
 
     .header__inner {
       flex-wrap: nowrap;
+      padding-block: 0;
     }
 
     .panel,

@@ -195,6 +195,14 @@ b {
   margin-block-start: var(--space-l);
 }
 
+/*
+ * Headings keep the extra space above when they follow other copy. A leading
+ * one must not, or the block sits below the photo it is meant to line up with.
+ */
+.prose > :first-child {
+  margin-block-start: 0;
+}
+
 .prose ul,
 .prose ol {
   max-width: var(--measure);
