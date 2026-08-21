@@ -57,13 +57,16 @@ const path = `/${location.slug}/team/`;
 </LocationLayout>
 
 <style>
-  /* `1fr` rather than a fixed max so a one- or two-person office fills its row
-     instead of leaving a wide gap; the container cap stops the cards growing
-     past a comfortable width. */
+  /* `1fr` so a two-person office fills its row instead of leaving a wide gap.
+     A lone card is capped so the square portrait doesn't grow with the row. */
   .team {
     display: grid;
     gap: var(--space-m);
     grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
     max-width: 58rem;
+  }
+
+  .team:has(> :only-child) {
+    max-width: calc((58rem - var(--space-m)) / 2);
   }
 </style>
