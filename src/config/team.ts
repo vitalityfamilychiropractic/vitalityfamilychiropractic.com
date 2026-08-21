@@ -121,7 +121,7 @@ export const team: TeamMember[] = [
     credentials: 'LMT',
     role: 'Massage Therapist',
     schemaType: 'Person',
-    practiceStartDate: '2000-01-01',
+    practiceStartDate: '2021-11-10',
     email: 'candice@vitalityfamilychiropractic.com',
   },
 ];

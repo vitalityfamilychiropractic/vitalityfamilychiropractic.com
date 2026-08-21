@@ -256,6 +256,8 @@ export const locations: Location[] = [
         'pediatric-care': '/img/locations/college-station/pediatric-care.jpg',
         'family-wellness-care':
           '/img/locations/college-station/family-wellness-care.jpg',
+        'massage-therapy':
+          '/img/locations/college-station/massage-therapy.jpg',
       },
       specialtiesAlt: {
         'pregnancy-care':
@@ -264,6 +266,8 @@ export const locations: Location[] = [
           'A laughing baby lying on an adjusting table while a chiropractor gently supports their head',
         'family-wellness-care':
           'Dr. Ashley showing a toddler how an adjustment works using a doll on the table',
+        'massage-therapy':
+          'A massage therapist in black scrubs giving a back massage to a draped patient on a treatment table',
       },
     },
   },
