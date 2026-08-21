@@ -57,16 +57,30 @@ const path = `/${location.slug}/team/`;
 </LocationLayout>
 
 <style>
-  /* `1fr` so a two-person office fills its row instead of leaving a wide gap.
-     A lone card is capped so the square portrait doesn't grow with the row. */
+  /* At most three columns: the min track is one-third of the row (minus
+     gaps), so a fourth card wraps. `clamp` still floors at 16rem and caps
+     at 100% so a narrow phone doesn't overflow. A lone card is sized to one
+     two-up column; two-up keeps the 58rem cap; three or more share the
+     container. */
   .team {
     display: grid;
     gap: var(--space-m);
-    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(clamp(16rem, calc((100% - 2 * var(--space-m)) / 3), 100%), 1fr)
+    );
     max-width: 58rem;
+  }
+
+  .team > :global(*) {
+    min-width: 0;
   }
 
   .team:has(> :only-child) {
     max-width: calc((58rem - var(--space-m)) / 2);
+  }
+
+  .team:has(> :nth-child(3)) {
+    max-width: none;
   }
 </style>
