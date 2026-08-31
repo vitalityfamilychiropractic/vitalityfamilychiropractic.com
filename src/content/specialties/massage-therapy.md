@@ -5,10 +5,6 @@ standfirst: Massage and chiropractic work well together — one releases the mus
 order: 4
 ---
 
-> **Draft copy.** This page demonstrates a service offered at one office and not
-> the other. Please review the wording and replace it with your own before
-> going live, and add a photo to the office's `images.specialties` entry.
-
 Muscles and joints do not work in isolation. When a joint has been out of
 position for a long time, the surrounding soft tissue adapts around it — and
 after an adjustment, that same tissue can pull the joint straight back where it
