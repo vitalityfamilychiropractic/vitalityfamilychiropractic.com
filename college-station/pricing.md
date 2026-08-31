@@ -2,16 +2,18 @@
 layout: pricing
 location: college-station
 title: Pricing
-description: >-
-  College Station, TX chiropractic fees for individuals and families. In-network
-  with Blue Cross Blue Shield PPO and Health Select; HSA welcome.
+description: College Station chiropractic pricing effective September 1, 2026.
 ---
 
 ### We strive to make our pricing affordable for families to receive regular chiropractic care
 
 **Insurance:** We are in-network with Blue Cross Blue Shield PPO and Health Select plans.  Specific information regarding your insurance coverage will be reviewed during your new patient appointment.  \*Insurance does not cover chiropractic care for children under 5 years of age or maintenance/wellness care\*
 
+<div class="alert alert-success text-center" role="alert">
+  <h3 style="margin-bottom:0;">Pricing Effective September 1, 2026</h3>
+</div>
+
 #### Out of pocket pricing:
 
-**New Patient Consultation and Adjustment:** $150\
-**Add-on adjustment for children with parent using insurance:** $30 (1-2 kids) and $45 (3+ kids)
+**New Patient Consultation and Adjustment:** $170\
+**Add-on adjustment for children with parent using insurance:** $40 (1-2 kids) and $60 (3+ kids)
