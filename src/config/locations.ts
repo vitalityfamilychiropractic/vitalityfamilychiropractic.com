@@ -304,11 +304,15 @@ export function telHref(phone: string): string {
   return `+1${phone.replace(/\D/g, '')}`;
 }
 
-/** Full Facebook URL */
-export function facebookHref(location: Location): string {
-  return location.social && location.social.facebook
-  ? `https://www.facebook.com/${location.social.facebook}`
-  : `https://www.facebook.com/${site.social.facebook}`;
+/**
+ * Full Facebook URL from a page handle. Accepts a location or the brand-level
+ * `site` object — both store the handle under `social.facebook`.
+ */
+export function facebookHref(entity: {
+  social?: { facebook?: string };
+}): string {
+  const handle = entity.social?.facebook ?? site.social.facebook;
+  return `https://www.facebook.com/${handle}`;
 }
 
 /** Home-page / LocalBusiness description, falling back to the visible intro. */
