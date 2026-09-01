@@ -1,6 +1,6 @@
 ---
 import { site } from '../config/site';
-import { locations, formatAddress, telHref } from '../config/locations';
+import { locations, formatAddress, telHref, facebookHref } from '../config/locations';
 import { buildNav, isCurrent, isAncestor } from '../lib/nav';
 import { getSpecialtiesFor } from '../lib/specialties';
 import type { Location } from '../config/types';
@@ -45,7 +45,7 @@ const others = locations.filter((l) => l.slug !== location.slug);
         </a>
         <a
           class="utility__link"
-          href={site.social.facebook}
+          href={facebookHref(location)}
           rel="noopener noreferrer"
           target="_blank"
         >

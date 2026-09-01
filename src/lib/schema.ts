@@ -1,5 +1,5 @@
 import { site } from '../config/site';
-import { formatAddress, locationDescription } from '../config/locations';
+import { formatAddress, locationDescription, facebookHref } from '../config/locations';
 import type { TeamMember, Location } from '../config/types';
 
 const DAY_NAMES: Record<string, string> = {
@@ -63,7 +63,7 @@ export function localBusinessSchema(
     },
     hasMap: location.mapUrl,
     openingHoursSpecification: openingHours,
-    sameAs: [site.social.facebook],
+    sameAs: [facebookHref(location)],
     medicalSpecialty: 'Chiropractic',
     areaServed: location.areaServed.map((name) => ({
       '@type': 'AdministrativeArea',
@@ -126,7 +126,7 @@ export function organizationSchema(locations: Location[]) {
     url: site.url,
     logo: `${site.url}${site.logoRaster}`,
     email: site.email,
-    sameAs: [site.social.facebook],
+    sameAs: [facebookHref(site)],
     department: locations.map((l) => ({
       '@type': 'Chiropractor',
       '@id': `${site.url}/${l.slug}/`,

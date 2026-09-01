@@ -1,3 +1,4 @@
+import { site } from '../config/site';
 import type { Location } from './types';
 
 /**
@@ -37,6 +38,9 @@ export const locations: Location[] = [
     },
     phone: '(407) 584-7900',
     email: 'info@vitalityfamilychiropractic.com',
+    social: {
+      facebook: 'vfcofcelebration',
+    },
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=605+Celebration+Avenue+Celebration+FL+34747',
     mapEmbedUrl:
@@ -141,6 +145,9 @@ export const locations: Location[] = [
     },
     phone: '(979) 703-7977',
     email: 'info@vitalityfamilychiropractic.com',
+    social: {
+      facebook: 'vitalityfamilychiropractic',
+    },
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=3012+Barron+Road+Suite+300+College+Station+TX+77845',
     mapEmbedUrl:
@@ -218,7 +225,7 @@ export const locations: Location[] = [
       'Brazos Valley',
     ],
     pricingIntro:
-      'We strive to make our pricing affordable for families to receive regular chiropractic care.',
+      'We strive to make our pricing affordable for families to receive regular chiropractic care. The below pricing is effective September 1, 2026.',
     insuranceNote:
       'We are in-network with Blue Cross Blue Shield PPO and Health Select plans. Specific information regarding your insurance coverage will be reviewed during your new patient appointment. Please note that insurance does not cover chiropractic care for children under 5 years of age, or maintenance and wellness care.',
     fees: [
@@ -295,6 +302,13 @@ export function formatAddress(location: Location): string {
 /** Digits-only phone for `tel:` links, e.g. '+14075847900'. */
 export function telHref(phone: string): string {
   return `+1${phone.replace(/\D/g, '')}`;
+}
+
+/** Full Facebook URL */
+export function facebookHref(location: Location): string {
+  return location.social && location.social.facebook
+  ? `https://www.facebook.com/${location.social.facebook}`
+  : `https://www.facebook.com/${site.social.facebook}`;
 }
 
 /** Home-page / LocalBusiness description, falling back to the visible intro. */

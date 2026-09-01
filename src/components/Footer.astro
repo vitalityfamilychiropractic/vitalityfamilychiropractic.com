@@ -1,7 +1,7 @@
 ---
 import LocationDetails from './LocationDetails.astro';
 import { site } from '../config/site';
-import { locations } from '../config/locations';
+import { locations, facebookHref } from '../config/locations';
 import { getSpecialtiesFor } from '../lib/specialties';
 import type { Location } from '../config/types';
 
@@ -82,7 +82,7 @@ const copyrightYears =
               </li>
               <li>
                 <a
-                  href={site.social.facebook}
+                  href={facebookHref(location)}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Footer from '../components/Footer.astro';
 import HoursTable from '../components/HoursTable.astro';
 import { site } from '../config/site';
-import { locations, formatAddress, telHref } from '../config/locations';
+import { locations, formatAddress, telHref, facebookHref } from '../config/locations';
 import { getMember, displayName } from '../config/team';
 import { organizationSchema } from '../lib/schema';
 import { getOfferedSpecialties } from '../lib/specialties';
@@ -39,7 +39,7 @@ const offices = locations.map((location) => ({
       />
       <a
         class="masthead__facebook"
-        href={site.social.facebook}
+        href={facebookHref(site)}
         rel="noopener noreferrer"
         target="_blank"
       >

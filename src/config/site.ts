@@ -19,7 +19,7 @@ export const site = {
   ogImage: '/img/brand/og.png',
   spineGraphic: '/img/brand/spine.webp',
   social: {
-    facebook: 'https://www.facebook.com/vitalityfamilychiropractic',
+    facebook: 'vitalityfamilychiropractic',
   },
   /** Shown in the footer next to the copyright. */
   copyrightStart: 2011,
