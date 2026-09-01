@@ -102,7 +102,7 @@ export interface Location {
   /** Formatted for display, e.g. '(407) 584-7900'. */
   phone: string;
   email: string;
-  /** Social media URLs */
+  /** Social handles (page names, not full URLs). */
   social: { facebook: string };
   /** Google Maps place link, opened from the address. */
   mapUrl: string;
