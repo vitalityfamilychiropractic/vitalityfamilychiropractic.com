@@ -3,11 +3,11 @@ layout: default-md
 location: college-station
 title: Pregnancy Care
 description: >-
-  Webster Technique prenatal chiropractic in College Station, TX with Ashley
-  Harmon, DC. Pregnancy, birth preparation, and postpartum care for families
+  Webster Technique prenatal chiropractic in College Station, TX with Christie
+  McLarty, DC. Pregnancy, birth preparation, and postpartum care for families
   in Bryan, College Station, and the Brazos Valley.
-image_url: /assets/img/pregnancy-care-page-ashley.jpg
-image_alt: Dr. Ashley with a pregnant patient in the College Station office.
+image_url: /assets/img/pregnancy-care-page-christie.jpg
+image_alt: Dr. Christie with a pregnant patient in the College Station office.
 ---
 
 ## Pregnancy Care in College Station

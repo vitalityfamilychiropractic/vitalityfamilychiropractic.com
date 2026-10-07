@@ -3,11 +3,11 @@ layout: default-md
 location: college-station
 title: Family Wellness Care
 description: >-
-  Family wellness chiropractic in College Station, TX with Ashley Harmon, DC.
+  Family wellness chiropractic in College Station, TX with Christie McLarty, DC.
   Regular nervous-system-focused care for parents and kids in Bryan, College
   Station, and the Brazos Valley.
-image_url: /assets/img/family-wellness-care-page-ashley.jpg
-image_alt: Dr. Ashley with a family in the College Station office.
+image_url: /assets/img/family-wellness-care-page-christie.jpg
+image_alt: Dr. Christie with a family in the College Station office.
 ---
 
 ## Family Wellness Care in College Station

@@ -3,11 +3,11 @@ layout: default-md
 location: college-station
 title: Pediatric Care
 description: >-
-  Pediatric and infant chiropractic in College Station, TX with Ashley Harmon,
+  Pediatric and infant chiropractic in College Station, TX with Christie McLarty,
   DC. Gentle care for newborns through teens in Bryan, College Station, and
   the Brazos Valley.
-image_url: /assets/img/pediatric-care-page-ashley.jpg
-image_alt: Dr. Ashley with young children in the College Station office.
+image_url: /assets/img/pediatric-care-page-christie.jpg
+image_alt: Dr. Christie with young children in the College Station office.
 ---
 
 ## Pediatric Care in College Station
