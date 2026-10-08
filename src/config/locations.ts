@@ -203,8 +203,8 @@ export const locations: Location[] = [
         member: 'candice-ashburn',
       },
     },
-    team: ['ashley-harmon', 'christie-mclarty'],
-    lead: 'ashley-harmon',
+    team: ['christie-mclarty'],
+    lead: 'christie-mclarty',
     intro:
       'Vitality Family Chiropractic is a community based wellness center in College Station, Texas focused on helping families achieve a better quality of life through premier chiropractic care.',
     description:
@@ -252,29 +252,27 @@ export const locations: Location[] = [
       ],
     },
     images: {
-      portraitCutout: '/img/locations/college-station/portrait-cutout.png',
-      portraitCutoutAlt:
-        'Dr. Ashley seated with two smiling young children on her lap',
-      portraitStudio: '/img/locations/college-station/portrait-studio.jpg',
-      portraitStudioAlt:
-        'Dr. Ashley seated, holding a smiling baby girl wearing a pink bow',
-      specialties: {
-        'pregnancy-care': '/img/locations/college-station/pregnancy-care.jpg',
-        'pediatric-care': '/img/locations/college-station/pediatric-care.jpg',
-        'family-wellness-care':
-          '/img/locations/college-station/family-wellness-care.jpg',
-        'massage-therapy':
-          '/img/locations/college-station/massage-therapy.jpg',
-      },
-      specialtiesAlt: {
-        'pregnancy-care':
-          'Dr. Ashley adjusting the mid-back of a pregnant patient lying on an adjusting table',
-        'pediatric-care':
-          'A laughing baby lying on an adjusting table while a chiropractor gently supports their head',
-        'family-wellness-care':
-          'Dr. Ashley showing a toddler how an adjustment works using a doll on the table',
-        'massage-therapy':
-          'A massage therapist in black scrubs giving a back massage to a draped patient on a treatment table',
+      portraitCutout: '/img/locations/celebration/portrait-cutout.png',
+    portraitCutoutAlt:
+      'Dr. Christie kneeling and holding a laughing baby in a backwards cap',
+    portraitStudio: '/img/locations/celebration/portrait-studio.jpg',
+    portraitStudioAlt:
+      'Dr. Christie seated, holding a baby in a blue plaid shirt on her lap',
+    specialties: {
+      'pregnancy-care': '/img/locations/celebration/pregnancy-care.jpg',
+      'pediatric-care': '/img/locations/celebration/pediatric-care.jpg',
+      'family-wellness-care': '/img/locations/celebration/family-wellness-care.jpg',
+      'massage-therapy': '/img/locations/college-station/massage-therapy.jpg',
+    },
+    specialtiesAlt: {
+      'pregnancy-care':
+        'Dr. Christie adjusting the neck of a pregnant patient lying on an adjusting table',
+      'pediatric-care':
+        'A sleeping newborn on a blue blanket while a chiropractor gently cradles their head',
+      'family-wellness-care':
+        'Dr. Christie in the treatment room surrounded by four smiling children of different ages',
+      'massage-therapy':
+        'A massage therapist in black scrubs giving a back massage to a draped patient on a treatment table',
       },
     },
   },
