@@ -33,21 +33,23 @@ const description = await pageDescription('our-values', location);
   ]}
 >
   <PageHeader title="Our Values" />
-  <div class="container-fluid content-band">
-    <div class="row my-5">
-      <div class="col-sm-5 px-3 mb-4 mb-sm-0">
-        <img class="rounded img-fluid w-100" src={location.images.values} alt={location.images.valuesAlt} />
-      </div>
-      <div class="col-sm-7 px-5 content">
-        <p class="values-lead">{valuesHeadline}</p>
-        <ul class="values-list list-unstyled">
-          {values.map((item) => (
-            <li>
-              <i class={`bi ${item.icon}`} aria-hidden="true" />
-              <p>{item.text}</p>
-            </li>
-          ))}
-        </ul>
+  <div class="w-100 px-lg-5">
+    <div class="container-lg">
+      <div class="row my-5">
+        <div class="col-sm-5 px-3 mb-4 mb-sm-0">
+          <img class="rounded img-fluid w-100" src={location.images.values} alt={location.images.valuesAlt} />
+        </div>
+        <div class="col-sm-7 px-5 content">
+          <p class="values-lead">{valuesHeadline}</p>
+          <ul class="values-list list-unstyled">
+            {values.map((item) => (
+              <li>
+                <i class={`bi ${item.icon}`} aria-hidden="true" />
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   </div>

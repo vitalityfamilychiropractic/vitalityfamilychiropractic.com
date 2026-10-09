@@ -24,7 +24,7 @@ import { organizationSchema } from '../lib/schema';
         {
           locations.map((office) => (
             <div
-              class="col-md align-self-center text-center landing-office"
+              class="col-md d-flex align-items-center justify-content-center text-center landing-office"
               style={`--landing-image: url('${office.images.landing}')`}
             >
               <a class="btn btn-primary btn-lg" href={`/${office.slug}/`}>
