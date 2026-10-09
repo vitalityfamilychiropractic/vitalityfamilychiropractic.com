@@ -17,19 +17,22 @@ import { organizationSchema } from '../lib/schema';
   <header>
     <Header landing />
   </header>
-  <main>
+  <main id="main" tabindex="-1">
+    <h1 class="visually-hidden">Choose your Vitality Family Chiropractic office</h1>
     <div class="container-fluid landing-page">
       <div class="row">
-        <div class="col-md align-self-center text-center landing-page-celebration">
-          <a href="/celebration/">
-            <button type="button" class="btn btn-primary btn-lg">Celebration, FL</button>
-          </a>
-        </div>
-        <div class="col-md align-self-center text-center landing-page-college-station">
-          <a href="/college-station/">
-            <button type="button" class="btn btn-primary btn-lg">College Station, TX</button>
-          </a>
-        </div>
+        {
+          locations.map((office) => (
+            <div
+              class="col-md align-self-center text-center landing-office"
+              style={`--landing-image: url('${office.images.landing}')`}
+            >
+              <a class="btn btn-primary btn-lg" href={`/${office.slug}/`}>
+                {office.address.city}, {office.address.stateAbbr}
+              </a>
+            </div>
+          ))
+        }
       </div>
     </div>
   </main>

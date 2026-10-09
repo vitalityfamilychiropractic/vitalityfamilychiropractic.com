@@ -11,7 +11,7 @@ const { location, member } = Astro.props;
 const name = displayName(member);
 ---
 
-<div class="card" style="width: 18rem;">
+<div class="card team-card">
   {
     member.photo && (
       <img class="card-img-top card-img-bottom my-2" alt={name} src={member.photo} />
@@ -19,6 +19,8 @@ const name = displayName(member);
   }
   <div class="card-body">
     <h5 class="card-title">{name}</h5>
-    <a class="btn btn-primary" href={`/${location.slug}/team/${member.slug}/`}>Read More</a>
+    <a class="btn btn-primary" href={`/${location.slug}/team/${member.slug}/`}>
+      Read More<span class="visually-hidden"> about {name}</span>
+    </a>
   </div>
 </div>

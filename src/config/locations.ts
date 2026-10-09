@@ -93,10 +93,11 @@ export const locations: Location[] = [
     images: {
       banner: '/assets/img/banner-christie-gray.jpg',
       whyMe: '/assets/img/why-me-christie-gray.png',
+      landing: '/assets/img/celebration-water-tower.png',
       portraitStudio: '/assets/img/team/christie-mclarty.jpg',
       portraitStudioAlt: 'Portrait of Christie McLarty, DC',
       values: '/assets/img/our-values.jpg',
-      valuesAlt: 'A chiropractor treating a patient laying on a chiropractic table.',
+      valuesAlt: 'A chiropractor treating a patient lying on a chiropractic table.',
       specialties: {
         'pregnancy-care': '/assets/img/pregnancy-care-christie.jpg',
         'pediatric-care': '/assets/img/pediatric-care-christie.jpg',
@@ -230,10 +231,11 @@ export const locations: Location[] = [
     images: {
       banner: '/assets/img/banner-christie-gray.jpg',
       whyMe: '/assets/img/why-me-christie-gray.png',
+      landing: '/assets/img/college-station-water-tower.png',
       portraitStudio: '/assets/img/team/christie-mclarty.jpg',
       portraitStudioAlt: 'Portrait of Christie McLarty, DC',
       values: '/assets/img/our-values.jpg',
-      valuesAlt: 'A chiropractor treating a patient laying on a chiropractic table.',
+      valuesAlt: 'A chiropractor treating a patient lying on a chiropractic table.',
       specialties: {
         'pregnancy-care': '/assets/img/pregnancy-care-christie.jpg',
         'pediatric-care': '/assets/img/pediatric-care-christie.jpg',

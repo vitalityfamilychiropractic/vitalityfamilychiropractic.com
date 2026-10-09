@@ -8,14 +8,18 @@ interface Props {
 const { hours } = Astro.props;
 ---
 
-<table class="table" style="width: 350px;">
+<table class="table hours-table">
+  <caption class="visually-hidden">Open hours</caption>
   <tbody>
     {
       hours.map((entry) => {
         const slots = entry.blocks.length > 0 ? entry.blocks : [entry.note ?? ''];
         return (
           <tr>
-            <td class="align-top">{entry.day.slice(0, 3)}</td>
+            <th class="align-top" scope="row">
+              <span class="visually-hidden">{entry.day}</span>
+              <span aria-hidden="true">{entry.day.slice(0, 3)}</span>
+            </th>
             <td>
               {slots.map((slot, index) => (
                 <>

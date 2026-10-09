@@ -73,6 +73,8 @@ export interface LocationImages {
   banner: string;
   /** Wide photo behind the "Why choose me?" panel at large breakpoints. */
   whyMe: string;
+  /** Photo behind this office on the location chooser. */
+  landing: string;
   /** Portrait used as the LocalBusiness image in JSON-LD. */
   portraitStudio: string;
   portraitStudioAlt: string;

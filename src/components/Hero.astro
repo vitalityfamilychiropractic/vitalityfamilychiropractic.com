@@ -14,7 +14,7 @@ const lead = getMember(location.lead);
 const welcomeName = lead.welcomeName;
 ---
 
-<div class={`container-fluid home-banner home-banner-${location.slug}`}>
+<div class="container-fluid home-banner" style={`--banner-image: url('${location.images.banner}')`}>
   <div class="row">
     <div class="col align-self-center">
       <img class="spine z-0" src={site.spineGraphic} alt="" />
@@ -22,14 +22,15 @@ const welcomeName = lead.welcomeName;
         <span>Hi, I'm</span> <span class="welcome-color-2">{welcomeName}</span>
       </p>
       <p>
-        <a href={location.bookingUrl} target="_blank" rel="noopener noreferrer">
-          <button type="button" class="btn btn-primary btn-lg">Book an Appointment</button>
+        <a class="btn btn-primary btn-lg" href={location.bookingUrl} target="_blank" rel="noopener noreferrer">
+          Book an Appointment
+          <span class="visually-hidden"> (opens in a new tab)</span>
         </a>
       </p>
     </div>
   </div>
 </div>
-<div class={`container-fluid home-description home-description-${location.slug} gradient p-5`}>
+<div class="container-fluid home-description p-5">
   <div class="row">
     <div class="col">
       <h1>
@@ -43,7 +44,7 @@ const welcomeName = lead.welcomeName;
     <div class="col align-self-center">{intro}</div>
   </div>
   <div class="row">
-    <div class="col-4 offset-2 offset-sm-4 offset-md-6 offset-lg-8 py-4">
+    <div class="col-12 col-md-4 offset-md-6 offset-lg-8 py-4">
       {
         lead.signature && (
           <img

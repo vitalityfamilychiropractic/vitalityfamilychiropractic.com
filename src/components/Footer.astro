@@ -1,7 +1,7 @@
 ---
 import HoursTable from './HoursTable.astro';
 import { site } from '../config/site';
-import { locations } from '../config/locations';
+import { locations, telHref } from '../config/locations';
 import type { Location } from '../config/types';
 
 interface Props {
@@ -24,9 +24,9 @@ const privacyHref = location ? `/${location.slug}/privacy/` : '/privacy/';
   <div class="row">
     {
       locations.map((office) => (
-        <div class="col-md-6 py-3">
+        <div class="col-md-6 py-3 d-flex flex-column">
           <h4>
-            <i class="bi bi-geo-alt-fill text-primary" />{' '}
+            <i class="bi bi-geo-alt-fill text-primary" aria-hidden="true" />{' '}
             <a href={`/${office.slug}/`}>{office.name}</a>
           </h4>
           <p class="px-3">
@@ -36,29 +36,23 @@ const privacyHref = location ? `/${location.slug}/privacy/` : '/privacy/';
             <br />
           </p>
           <p class="px-3">
-            <i class="bi bi-telephone-fill text-primary" /> {office.phone}
+            <i class="bi bi-telephone-fill text-primary" aria-hidden="true" />{' '}
+            <a href={`tel:${telHref(office.phone)}`}>{office.phone}</a>
           </p>
           <p class="px-3">
-            <i class="bi bi-envelope-fill text-primary" /> {office.email}
+            <i class="bi bi-envelope-fill text-primary" aria-hidden="true" />{' '}
+            <a href={`mailto:${office.email}`}>{office.email}</a>
           </p>
           <h5 class="px-3">
-            <i class="bi bi-clock-fill text-primary" /> Open Hours
+            <i class="bi bi-clock-fill text-primary" aria-hidden="true" /> Open Hours
           </h5>
           <div class="px-3">
             <HoursTable hours={office.hours} />
           </div>
-        </div>
-      ))
-    }
-  </div>
-  <div class="row">
-    {
-      locations.map((office) => (
-        <div class="col-md-6 py-3">
           <iframe
+            class="location-map mt-3 mt-md-auto"
             src={office.mapEmbedUrl}
             title={`Map of Vitality Family Chiropractic in ${office.address.city}, ${office.address.state}`}
-            style="width: 350px; height: 350px; border: 0px;"
             allowfullscreen
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"

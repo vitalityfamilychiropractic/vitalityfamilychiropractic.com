@@ -78,15 +78,14 @@ export function localBusinessSchema(
       '@type': 'AdministrativeArea',
       name,
     })),
-    // Taken from the office's own specialty list, so an office offering
-    // massage therapy advertises it and one that does not, does not.
+    // Taken from the office's own specialty list, so each office advertises
+    // only the services it actually offers.
     availableService: services.map((name) => ({
       '@type': 'MedicalTherapy',
       name,
     })),
     employee: team.map((m) => ({
-      // Only licensed clinicians are `Physician`; a massage therapist or an
-      // assistant is a plain `Person`.
+      // Only licensed clinicians are `Physician`. Everyone else is a `Person`.
       '@type': m.schemaType,
       name: m.credentials ? `${m.name}, ${m.credentials}` : m.name,
       jobTitle: m.role,

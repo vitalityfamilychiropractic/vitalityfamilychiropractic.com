@@ -53,11 +53,11 @@ const passions = lead.passions ?? [];
   <Hero location={location} intro={intro} />
   <SpecialtyGrid location={location} specialties={specialties} />
 
-  <div class={`container-fluid why-me why-me-${location.slug}`}>
+  <div class="container-fluid why-me" style={`--why-me-image: url('${location.images.whyMe}')`}>
     <div class="row justify-content-lg-end">
       <div class="col-10 col-lg-6 card m-5 rounded-3">
         <h2 class="m-5">Why Choose Me?</h2>
-        <ul class="mx-5 nav nav-underline" id="whyMeTabs" role="tablist">
+        <ul class="mx-5 nav nav-underline" id="whyMeTabs" role="tablist" aria-label="Why choose me">
           <li class="nav-item" role="presentation">
             <button
               class="nav-link active"
@@ -72,7 +72,7 @@ const passions = lead.passions ?? [];
               Experience
             </button>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" role="presentation">
             <button
               class="nav-link"
               id="passions-tab"
@@ -112,11 +112,9 @@ const passions = lead.passions ?? [];
           </div>
         </div>
         <div class="mx-5 my-3">
-          <a
-            class="fw-bold link-primary link-underline-opacity-0"
-            href={`/${location.slug}/team/${lead.slug}/`}
-          >
-            Read More &gt;
+          <a class="fw-bold link-primary" href={`/${location.slug}/team/${lead.slug}/`}>
+            Read More <span aria-hidden="true">&gt;</span>
+            <span class="visually-hidden"> about {lead.shortName}</span>
           </a>
         </div>
       </div>
@@ -132,6 +130,8 @@ const passions = lead.passions ?? [];
             <div
               class={`elfsight-app-${location.reviewsWidgetId}`}
               data-elfsight-app-lazy
+              role="region"
+              aria-label="Patient reviews"
             />
           </div>
         </div>

@@ -8,8 +8,8 @@ import type { Location, TeamMember } from '../config/types';
  * `specialties` array in `locations.ts` decides which of them it actually
  * offers and in what order.
  *
- * So a service only one office provides — massage therapy at College Station —
- * is written once like any other page and simply listed by that one office.
+ * A service only one office provides is written once like any other page
+ * and simply listed by that one office.
  * Nothing about it is special-cased.
  */
 export interface SpecialtySummary {
@@ -87,8 +87,8 @@ export async function getOfferedSpecialties(
  * Who the contact card on a specialty page names, and what it calls them.
  *
  * Resolution order, most specific first:
- *   1. `specialtyLeads[slug].member` — this office assigned someone to this
- *      service, e.g. the massage therapist rather than the lead chiropractor.
+ *   1. `specialtyLeads[slug].member` — this office assigned a specific
+ *      clinician to this service.
  *   2. `location.lead` — the office's usual lead.
  *
  * The heading comes from `specialtyLeads[slug].label` when set, otherwise from

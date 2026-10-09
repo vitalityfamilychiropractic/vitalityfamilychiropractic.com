@@ -1,10 +1,13 @@
-# Serve brand assets at the site root. A Cloudflare rule currently sends
-# unmatched root paths to /college-station/; this keeps the favicon on-origin.
+# Serve brand assets at the site root. These files do not live at `/`.
 /favicon.ico /assets/img/favicon.ico 200
 /apple-touch-icon.png /assets/img/apple-touch-icon.png 200
 
+# The public homepage is the College Station office. Cloudflare Pages applies
+# this even though the office chooser is still built at `/`.
+/ /college-station/ 301
+
 # URLs from the previous Jekyll site. Cloudflare Pages applies these even when
-# a matching file exists. Leave `/` alone — it is the office chooser.
+# a matching file exists.
 
 # --- Contact: old plural path and Jekyll .html ---
 /celebration/contacts /celebration/contact/ 301

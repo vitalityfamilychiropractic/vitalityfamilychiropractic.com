@@ -31,19 +31,20 @@ const brandHref = logoHref ?? (location ? `/${location.slug}/` : '/');
 const otherOffices = location ? locations.filter((office) => office.slug !== location.slug) : [];
 ---
 
-<div class="d-flex topbar bg-body-tertiary" style="height: 50px;">
+<div class="d-flex topbar bg-body-tertiary">
   <div class="py-2 px-5 flex-lg-grow-1 tagline align-self-center">{site.tagline}</div>
-  <div class="p-2 flex-lg align-self-center">
+  <div class="p-2 align-self-center topbar-facebook">
     <a href={facebookHref(site)} target="_blank" rel="noopener noreferrer">
-      <i class="bi bi-facebook fs-4"></i>
-      <span class="visually-hidden">Facebook</span>
+      <i class="bi bi-facebook fs-4" aria-hidden="true"></i>
+      <span class="visually-hidden">Facebook (opens in a new tab)</span>
     </a>
   </div>
   {
     location?.bookingUrl && (
-      <div class="py-2 px-5 align-self-center">
-        <a href={location.bookingUrl} target="_blank" rel="noopener noreferrer">
-          <button type="button" class="btn btn-warning">Book an Appointment</button>
+      <div class="py-2 px-3 px-lg-5 align-self-center topbar-book">
+        <a class="btn btn-warning" href={location.bookingUrl} target="_blank" rel="noopener noreferrer">
+          Book an Appointment
+          <span class="visually-hidden"> (opens in a new tab)</span>
         </a>
       </div>
     )
@@ -52,31 +53,43 @@ const otherOffices = location ? locations.filter((office) => office.slug !== loc
 
 {
   landing ? (
-    <div class="row">
-      <div class="col-12 text-center">
-        <img src={site.logo} alt="Vitality Family Chiropractic Logo" height="200" />
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 text-center">
+          <img class="landing-logo" src={site.logo} alt="Vitality Family Chiropractic" />
+        </div>
       </div>
     </div>
   ) : (
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg" aria-label="Main">
       <div class="container-fluid">
-        <a class="navbar-brand px-5" href={brandHref}>
-          <img src={site.logo} alt="Vitality Family Chiropractic Logo" height="100" />
+        <a class="navbar-brand px-3 px-lg-5" href={brandHref}>
+          <img class="navbar-logo" src={site.logo} alt="Vitality Family Chiropractic" />
         </a>
-        <div class="d-flex flex-column flex-lg-row flex-lg-grow-1 align-items-lg-center px-5" id="navbarSupportedContent">
+        <button
+          class="navbar-toggler ms-auto"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Menu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse flex-column flex-lg-row align-items-lg-center px-3 px-lg-5" id="navbarSupportedContent">
           <ul class="navbar-nav me-lg-auto mb-2 mb-lg-0">
             {items.map((item) =>
               item.children ? (
                 <li class="nav-item dropdown">
-                  <a
+                  <button
                     class="nav-link dropdown-toggle"
-                    href="#"
-                    role="button"
+                    type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
                     {item.label}
-                  </a>
+                  </button>
                   <ul class="dropdown-menu">
                     {item.children.map((child) => {
                       const current = isCurrent(child.href, pathname);

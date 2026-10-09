@@ -17,21 +17,15 @@ const cards = specialties.map((specialty) => ({
 }));
 ---
 
-<div class={`container-fluid features-mobile features-${location.slug} offset-md-3`}>
+<div class={`container-fluid features-mobile features-${location.slug}`}>
   {
     cards.map((card) => (
-      <div class="card mb-3">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img class="card-img-top" src={card.img} alt={card.alt} />
-          </div>
-          <div class="col-md-5 align-self-center">
-            <a href={card.href}>
-              <button type="button" class="btn btn-light shadow p-5">
-                {card.title}
-              </button>
-            </a>
-          </div>
+      <div class="card mb-4 mx-auto">
+        <img class="card-img-top" src={card.img} alt={card.alt} />
+        <div class="features-button">
+          <a class="btn btn-light shadow" href={card.href}>
+            {card.title}
+          </a>
         </div>
       </div>
     ))
@@ -45,10 +39,8 @@ const cards = specialties.map((specialty) => ({
           <div class="card mx-auto rounded-3">
             <img class="card-img-top" src={card.img} alt={card.alt} />
             <div class="features-button">
-              <a href={card.href}>
-                <button type="button" class="btn btn-light shadow p-3">
-                  {card.title}
-                </button>
+              <a class="btn btn-light shadow p-3" href={card.href}>
+                {card.title}
               </a>
             </div>
           </div>

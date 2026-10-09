@@ -2,7 +2,7 @@
 import LocationLayout from '../../../layouts/LocationLayout.astro';
 import PageHeader from '../../../components/PageHeader.astro';
 import PracticeYears from '../../../components/PracticeYears.astro';
-import { locations } from '../../../config/locations';
+import { locations, telHref } from '../../../config/locations';
 import { getMember, displayName } from '../../../config/team';
 import { site } from '../../../config/site';
 import { applyTokens, tokensFor } from '../../../lib/tokens';
@@ -77,14 +77,20 @@ const personSchema = {
         <p>
           <strong>Length of Work:</strong> <PracticeYears startDate={member.practiceStartDate} />
         </p>
-        {member.email && <p><strong>Email:</strong> {member.email}</p>}
-        <p><strong>Phone:</strong> {location.phone}</p>
+        {member.email && (
+          <p>
+            <strong>Email:</strong> <a href={`mailto:${member.email}`}>{member.email}</a>
+          </p>
+        )}
+        <p>
+          <strong>Phone:</strong> <a href={`tel:${telHref(location.phone)}`}>{location.phone}</a>
+        </p>
         {
           member.facebook && (
             <p>
-              <a href={`https://www.facebook.com/${member.facebook}`} target="_blank" rel="noopener noreferrer">
-                <i class="bi bi-facebook fs-4" />
-                <span class="visually-hidden">Facebook</span>
+              <a class="team-facebook" href={`https://www.facebook.com/${member.facebook}`} target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-facebook fs-4" aria-hidden="true" />
+                <span class="visually-hidden">Facebook (opens in a new tab)</span>
               </a>
             </p>
           )
@@ -104,9 +110,9 @@ const personSchema = {
     {
       ((member.practiceMix && member.practiceMix.length > 0) ||
         (member.priorities && member.priorities.length > 0)) && (
-        <div class="row py-5">
+        <div class="row team-split">
           {member.practiceMix && member.practiceMix.length > 0 && (
-            <div class="col">
+            <div class="col-12 col-md-6 team-section team-practice">
               <h3>My Practice</h3>
               {member.practiceMix.map((item) => (
                 <>
@@ -129,9 +135,9 @@ const personSchema = {
             </div>
           )}
           {member.priorities && member.priorities.length > 0 && (
-            <div class="col">
+            <div class="col-12 col-md-6 team-section">
               <h3>What's Important to Me as a Doctor</h3>
-              <ul class="lh-lg">
+              <ul class="lh-lg team-priorities">
                 {member.priorities.map((item) => <li>{item}</li>)}
               </ul>
             </div>
@@ -141,7 +147,7 @@ const personSchema = {
     }
     {
       member.community && member.community.length > 0 && (
-        <div class="row">
+        <div class="row team-community">
           <div class="col">
             <h3>In the Office and In the Community</h3>
             {member.community.map((paragraph) => <p>{paragraph}</p>)}

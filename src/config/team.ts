@@ -14,7 +14,7 @@ export const team: TeamMember[] = [
     credentials: 'DC',
     role: 'Chiropractor',
     schemaType: 'Physician',
-    certifications: 'CACCP, Webster plus perinatal certificated',
+    certifications: 'CACCP, Webster plus perinatal certified',
     specialty: 'Prenatal, Pediatric, and Family Wellness Care',
     practiceStartDate: '2011-09-22',
     email: 'drchristie@vitalityfamilychiropractic.com',
@@ -57,7 +57,7 @@ export const team: TeamMember[] = [
     },
     highlights: [
       'Relentlessly devoted to serving families with the highest quality of customer experience and chiropractic care',
-      'Most specialized pregnancy-related chiropractic care with <a class="link-primary link-underline-opacity-0" href="https://icpa4kids.com/training/webster-certification/webster-technique/">Webster Technique</a> plus Perinatal certified through the ICPA',
+      'Most specialized pregnancy-related chiropractic care with <a class="link-primary" href="https://icpa4kids.com/training/webster-certification/webster-technique/">Webster Technique</a> plus Perinatal certified through the ICPA',
       'Extensive training in chiropractic cranial corrections',
     ],
     passions: [
