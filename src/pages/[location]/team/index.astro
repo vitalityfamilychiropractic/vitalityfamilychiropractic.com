@@ -1,0 +1,49 @@
+---
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import TeamMemberCard from '../../../components/TeamMemberCard.astro';
+import { locations } from '../../../config/locations';
+import { getMember } from '../../../config/team';
+import { pageDescription } from '../../../lib/pages';
+import type { Location } from '../../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/team/`;
+const members = location.team.map(getMember);
+const description = await pageDescription('team', location);
+---
+
+<LocationLayout
+  location={location}
+  title="Team"
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Team', href: path },
+  ]}
+>
+  <PageHeader title="Team" />
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col p-5">
+        <div class="container">
+          <div class="row justify-content-evenly">
+            {members.map((member) => <TeamMemberCard location={location} member={member} />)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</LocationLayout>

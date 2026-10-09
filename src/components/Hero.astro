@@ -1,0 +1,58 @@
+---
+import { site } from '../config/site';
+import { getMember } from '../config/team';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  /** Opening paragraph, already filled in for this office. */
+  intro: string;
+}
+
+const { location, intro } = Astro.props;
+const lead = getMember(location.lead);
+const welcomeName = lead.welcomeName;
+---
+
+<div class={`container-fluid home-banner home-banner-${location.slug}`}>
+  <div class="row">
+    <div class="col align-self-center">
+      <img class="spine z-0" src={site.spineGraphic} alt="" />
+      <p class="welcome">
+        <span>Hi, I'm</span> <span class="welcome-color-2">{welcomeName}</span>
+      </p>
+      <p>
+        <a href={location.bookingUrl} target="_blank" rel="noopener noreferrer">
+          <button type="button" class="btn btn-primary btn-lg">Book an Appointment</button>
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+<div class={`container-fluid home-description home-description-${location.slug} gradient p-5`}>
+  <div class="row">
+    <div class="col">
+      <h1>
+        Prenatal, Pediatric, and Family Wellness Chiropractor in {location.address.city}, {
+          location.address.state
+        }
+      </h1>
+    </div>
+  </div>
+  <div class="row description">
+    <div class="col align-self-center">{intro}</div>
+  </div>
+  <div class="row">
+    <div class="col-4 offset-2 offset-sm-4 offset-md-6 offset-lg-8 py-4">
+      {
+        lead.signature && (
+          <img
+            class="signature"
+            src={lead.signature}
+            alt={lead.signatureAlt ?? `Signature of ${welcomeName}`}
+          />
+        )
+      }
+    </div>
+  </div>
+</div>

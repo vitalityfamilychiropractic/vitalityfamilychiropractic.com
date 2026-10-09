@@ -1,0 +1,32 @@
+---
+import type { HoursEntry } from '../config/types';
+
+interface Props {
+  hours: HoursEntry[];
+}
+
+const { hours } = Astro.props;
+---
+
+<table class="table" style="width: 350px;">
+  <tbody>
+    {
+      hours.map((entry) => {
+        const slots = entry.blocks.length > 0 ? entry.blocks : [entry.note ?? ''];
+        return (
+          <tr>
+            <td class="align-top">{entry.day.slice(0, 3)}</td>
+            <td>
+              {slots.map((slot, index) => (
+                <>
+                  {index > 0 && <br />}
+                  {slot}
+                </>
+              ))}
+            </td>
+          </tr>
+        );
+      })
+    }
+  </tbody>
+</table>

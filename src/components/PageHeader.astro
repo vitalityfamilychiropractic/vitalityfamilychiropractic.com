@@ -1,0 +1,11 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="d-flex title-banner bg-body-tertiary banner align-items-center" style="height: 150px;">
+  <h1 class="py-2 px-5 flex-lg-grow-1">{title}</h1>
+</div>

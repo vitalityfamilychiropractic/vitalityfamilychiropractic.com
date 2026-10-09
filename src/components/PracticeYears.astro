@@ -1,0 +1,44 @@
+---
+import { yearsOfPractice } from '../lib/practice';
+
+interface Props {
+  /** ISO date the person began practicing, `YYYY-MM-DD`. */
+  startDate: string;
+}
+
+const { startDate } = Astro.props;
+
+/** The previous site never showed less than one year. */
+function label(years: number): string {
+  const count = Math.max(1, years);
+  return `${count} ${count > 1 ? 'Years' : 'Year'}`;
+}
+
+const built = label(yearsOfPractice(startDate));
+---
+
+<span id="years-service" data-practice-start={startDate}>{built}</span>
+
+<script>
+  function yearsOfPractice(startDate: string, now: Date): number {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(startDate);
+    if (!match) return NaN;
+
+    const start = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    let years = now.getFullYear() - start.getFullYear();
+    const month = now.getMonth() - start.getMonth();
+    if (month < 0 || (month === 0 && now.getDate() < start.getDate())) years -= 1;
+    return Math.max(0, years);
+  }
+
+  const now = new Date();
+  for (const el of document.querySelectorAll<HTMLElement>('[data-practice-start]')) {
+    const start = el.dataset.practiceStart;
+    if (!start) continue;
+    const years = yearsOfPractice(start, now);
+    if (!Number.isFinite(years)) continue;
+    const count = Math.max(1, years);
+    const text = `${count} ${count > 1 ? 'Years' : 'Year'}`;
+    if (el.textContent !== text) el.textContent = text;
+  }
+</script>

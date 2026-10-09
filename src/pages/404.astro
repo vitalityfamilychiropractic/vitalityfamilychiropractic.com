@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { getLocation } from '../config/locations';
+
+const navLocation = getLocation('college-station');
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The requested page could not be found."
+  path="/404/"
+  noindex
+>
+  <header>
+    <Header navLocation={navLocation} pathname="/404/" logoHref="/" />
+  </header>
+  <main>
+    <PageHeader title="Page not found" />
+    <div class="container" style="margin: 10px auto; max-width: 600px; text-align: center;">
+      <h1 style="margin: 30px 0; font-size: 4em; line-height: 1; letter-spacing: -1px;">404</h1>
+      <p><strong>Page not found :(</strong></p>
+      <p>The requested page could not be found.</p>
+    </div>
+  </main>
+  <footer>
+    <Footer />
+  </footer>
+</BaseLayout>

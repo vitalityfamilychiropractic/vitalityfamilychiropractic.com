@@ -1,0 +1,48 @@
+---
+import LocationLayout from '../../layouts/LocationLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { locations } from '../../config/locations';
+import { values, valuesHeadline } from '../../config/values';
+import { pageDescription } from '../../lib/pages';
+import type { Location } from '../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/our-values/`;
+const description = await pageDescription('our-values', location);
+---
+
+<LocationLayout
+  location={location}
+  title="Our Values"
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Our Values', href: path },
+  ]}
+>
+  <PageHeader title="Our Values" />
+  <div class="container-fluid">
+    <div class="row my-5">
+      <div class="col-lg-5 px-5 mb-4 mb-lg-0">
+        <img class="rounded img-fluid w-100" src={location.images.values} alt={location.images.valuesAlt} />
+      </div>
+      <div class="col-lg-7 px-5 content">
+        <h2>Our Values</h2>
+        <p>{valuesHeadline}</p>
+        {values.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </div>
+</LocationLayout>

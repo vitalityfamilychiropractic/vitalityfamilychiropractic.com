@@ -1,0 +1,94 @@
+---
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+---
+
+<div class="container">
+  <h2>Appointment Request Form</h2>
+  <form id="appt-request-form" action={location.form.endpoint} method="POST">
+    <input type="hidden" name="location" value={location.slug} />
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label for="name">Name:</label>
+        <input id="name" class="form-control" type="text" name="name" required />
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="email">Email:</label>
+        <input id="email" class="form-control" type="email" name="email" required />
+      </div>
+      <div class="form-group col-md-6">
+        <label for="phone">Phone Number:</label>
+        <input id="phone" class="form-control" type="tel" name="phone" required />
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label for="contactMethod">Preferred Contact Method:</label>
+        <select id="contactMethod" class="form-control" name="preferred contact method" required>
+          <option selected value="">Choose...</option>
+          <option>Email</option>
+          <option>Phone</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label for="comments">Comments:</label>
+        <textarea id="comments" class="form-control" name="comments"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-12 my-2">
+        <button id="appt-request-form-button" class="btn btn-primary" type="submit">Submit</button>
+      </div>
+    </div>
+    <p id="appt-request-form-status"></p>
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById('appt-request-form');
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const status = document.getElementById('appt-request-form-status');
+      const data = new FormData(form);
+      fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: { Accept: 'application/json' },
+      })
+        .then((response) => {
+          if (response.ok) {
+            if (status) {
+              status.innerHTML =
+                '<div class="alert alert-success">We have received your request and will be in contact soon.</div>';
+            }
+            form.reset();
+            return;
+          }
+          return response.json().then((body: { errors?: Array<{ message: string }> }) => {
+            const message = body.errors?.map((error) => error.message).join(', ');
+            if (status) {
+              status.innerHTML = `<div class="alert alert-danger">${
+                message || 'Oops! There was a problem submitting your form.'
+              }</div>`;
+            }
+          });
+        })
+        .catch(() => {
+          if (status) {
+            status.innerHTML =
+              '<div class="alert alert-danger">Oops! There was a problem submitting your form.</div>';
+          }
+        });
+    });
+  }
+</script>

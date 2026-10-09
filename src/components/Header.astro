@@ -1,0 +1,145 @@
+---
+import { site } from '../config/site';
+import { facebookHref, formatAddress, locations } from '../config/locations';
+import { buildNav, isCurrent } from '../lib/nav';
+import { getSpecialtiesFor } from '../lib/specialties';
+import type { Location } from '../config/types';
+
+interface Props {
+  /** Office this page belongs to. Drives the booking link and the logo target. */
+  location?: Location;
+  /** Office whose links fill the nav when `location` is omitted, matching the previous default. */
+  navLocation?: Location;
+  pathname?: string;
+  /** Office chooser: centered wordmark, no navigation. */
+  landing?: boolean;
+  logoHref?: string;
+}
+
+const {
+  location,
+  navLocation,
+  pathname = '/',
+  landing = false,
+  logoHref,
+} = Astro.props;
+
+const navSource = location ?? navLocation;
+const specialties = navSource ? await getSpecialtiesFor(navSource) : [];
+const items = navSource ? buildNav(navSource, specialties) : [];
+const brandHref = logoHref ?? (location ? `/${location.slug}/` : '/');
+const otherOffices = location ? locations.filter((office) => office.slug !== location.slug) : [];
+---
+
+<div class="d-flex topbar bg-body-tertiary" style="height: 50px;">
+  <div class="py-2 px-5 flex-lg-grow-1 tagline align-self-center">{site.tagline}</div>
+  <div class="p-2 flex-lg align-self-center">
+    <a href={facebookHref(site)} target="_blank" rel="noopener noreferrer">
+      <i class="bi bi-facebook fs-4"></i>
+      <span class="visually-hidden">Facebook</span>
+    </a>
+  </div>
+  {
+    location?.bookingUrl && (
+      <div class="py-2 px-5 align-self-center">
+        <a href={location.bookingUrl} target="_blank" rel="noopener noreferrer">
+          <button type="button" class="btn btn-warning">Book an Appointment</button>
+        </a>
+      </div>
+    )
+  }
+</div>
+
+{
+  landing ? (
+    <div class="row">
+      <div class="col-12 text-center">
+        <img src={site.logo} alt="Vitality Family Chiropractic Logo" height="200" />
+      </div>
+    </div>
+  ) : (
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand px-5" href={brandHref}>
+          <img src={site.logo} alt="Vitality Family Chiropractic Logo" height="100" />
+        </a>
+        <div class="d-flex flex-column flex-lg-row flex-lg-grow-1 align-items-lg-center px-5" id="navbarSupportedContent">
+          <ul class="navbar-nav me-lg-auto mb-2 mb-lg-0">
+            {items.map((item) =>
+              item.children ? (
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {item.label}
+                  </a>
+                  <ul class="dropdown-menu">
+                    {item.children.map((child) => {
+                      const current = isCurrent(child.href, pathname);
+                      return (
+                        <li>
+                          <a
+                            class:list={['dropdown-item', { active: current }]}
+                            aria-current={current ? 'page' : undefined}
+                            href={child.href}
+                          >
+                            {child.label}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </li>
+              ) : (
+                <li class="nav-item">
+                  <a
+                    class:list={['nav-link', { active: isCurrent(item.href, pathname) }]}
+                    aria-current={isCurrent(item.href, pathname) ? 'page' : undefined}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ),
+            )}
+          </ul>
+          {
+            location && otherOffices.length > 0 && (
+              <div class="dropdown location-switcher">
+                <button
+                  class="location-switcher__toggle dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="bi bi-geo-alt" aria-hidden="true" />
+                  <span class="visually-hidden">Current location: </span>
+                  {location.name}
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg-end location-switcher__panel">
+                  <p class="location-switcher__heading" id="location-switcher-heading">
+                    Our other {otherOffices.length === 1 ? 'office' : 'offices'}
+                  </p>
+                  <ul class="list-unstyled mb-0" aria-labelledby="location-switcher-heading">
+                    {otherOffices.map((office) => (
+                      <li>
+                        <a class="dropdown-item location-switcher__link" href={`/${office.slug}/`}>
+                          <span class="location-switcher__name">{office.name}</span>
+                          <span class="location-switcher__address">{formatAddress(office)}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </nav>
+  )
+}

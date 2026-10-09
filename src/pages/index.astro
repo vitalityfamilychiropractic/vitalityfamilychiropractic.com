@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config/site';
+import { locations } from '../config/locations';
+import { organizationSchema } from '../lib/schema';
+---
+
+<BaseLayout
+  title={site.name}
+  description={site.description}
+  path="/"
+  noindex
+  schemas={[organizationSchema(locations)]}
+>
+  <header>
+    <Header landing />
+  </header>
+  <main>
+    <div class="container-fluid landing-page">
+      <div class="row">
+        <div class="col-md align-self-center text-center landing-page-celebration">
+          <a href="/celebration/">
+            <button type="button" class="btn btn-primary btn-lg">Celebration, FL</button>
+          </a>
+        </div>
+        <div class="col-md align-self-center text-center landing-page-college-station">
+          <a href="/college-station/">
+            <button type="button" class="btn btn-primary btn-lg">College Station, TX</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <Footer />
+  </footer>
+</BaseLayout>

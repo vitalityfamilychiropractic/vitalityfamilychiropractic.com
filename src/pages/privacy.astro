@@ -1,0 +1,36 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHeader from '../components/PageHeader.astro';
+
+const entry = await getEntry('pages', 'privacy');
+if (!entry) throw new Error('Missing src/content/pages/privacy.md');
+const { Content } = await render(entry);
+const description = entry.data.brandSummary ?? entry.data.summary;
+if (description.includes('{{')) {
+  throw new Error(
+    'The brand privacy page description still has a content token. Set brandSummary in src/content/pages/privacy.md.',
+  );
+}
+---
+
+<BaseLayout title={entry.data.title} description={description} path="/privacy/">
+  <header>
+    <Header landing />
+  </header>
+  <main>
+    <PageHeader title={entry.data.title} />
+    <div class="container-fluid">
+      <div class="row my-5">
+        <div class="col px-5 content">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <Footer />
+  </footer>
+</BaseLayout>

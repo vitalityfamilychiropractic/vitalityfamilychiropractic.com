@@ -1,0 +1,71 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getMember } from '../config/team';
+import { localBusinessSchema, breadcrumbSchema } from '../lib/schema';
+import { homeCopy } from '../lib/home';
+import { getSpecialtiesFor } from '../lib/specialties';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  title: string;
+  description: string;
+  /** Absolute path of this page, e.g. '/celebration/pricing/'. */
+  path: string;
+  /**
+   * home — office front page
+   * placed — "Title in City, State | Site"
+   * site — no city in the document title (the privacy policy)
+   */
+  titleStyle?: 'home' | 'placed' | 'site';
+  /** Breadcrumb trail, emitted as BreadcrumbList structured data. */
+  crumbs?: Array<{ name: string; href: string }>;
+  /** Extra JSON-LD for this page. */
+  schemas?: unknown[];
+  /** Landing-style header: logo only, no navigation. */
+  landing?: boolean;
+}
+
+const {
+  location,
+  title,
+  description,
+  path,
+  titleStyle = 'placed',
+  crumbs = [],
+  schemas = [],
+  landing = false,
+} = Astro.props;
+
+const teamMembers = location.team.map(getMember);
+const services = (await getSpecialtiesFor(location)).map((specialty) => specialty.title);
+const { description: officeDescription } = await homeCopy(location);
+
+const allSchemas = [
+  localBusinessSchema(location, teamMembers, services, officeDescription),
+  ...(crumbs.length > 1 ? [breadcrumbSchema(crumbs)] : []),
+  ...schemas,
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path={path}
+  titleStyle={titleStyle}
+  place={{ city: location.address.city, state: location.address.state }}
+  analyticsId={location.analyticsId}
+  schemas={allSchemas}
+>
+  <header>
+    <Header location={location} pathname={path} landing={landing} />
+  </header>
+  <main>
+    <slot />
+  </main>
+  <footer>
+    <Footer location={location} />
+  </footer>
+</BaseLayout>

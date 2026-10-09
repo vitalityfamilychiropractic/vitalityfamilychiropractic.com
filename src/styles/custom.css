@@ -1,0 +1,327 @@
+.btn {
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.tagline {
+  color: #9fa6b1;
+  display: none !important;
+}
+
+.banner {
+  text-align: center;
+}
+
+.contact h4 a {
+  text-decoration: none;
+}
+
+.content {
+  color: #6c757d;
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5 {
+  margin-bottom: 1em;
+}
+
+.copyright {
+  color: #aeb6c2;
+  text-align: right;
+}
+
+.copyright a {
+  color: inherit;
+}
+
+.features {
+  display: none !important;
+  height: 440px;
+  position: relative;
+}
+
+.features .btn {
+  color: #3b4b68;
+  height: 72px;
+  padding: 0 30px;
+}
+
+.features .card {
+  height: 370px;
+  margin-top: -30px;
+  width: 370px;
+  text-align: center;
+}
+
+.features .features-button {
+  margin-top: -30px;
+}
+
+.features .gradient {
+  height: 200px;
+}
+
+.features-mobile {
+  margin-top: 1em;
+  max-width: 75%;
+}
+
+.features-mobile .btn {
+  color: #3b4b68;
+}
+
+.features-mobile .card {
+  border: 0px;
+}
+
+.gradient {
+  background-image: linear-gradient(90deg, #4fc9d8 0%, #58a8ec 100%);
+}
+
+.home-banner {
+  background-color: #cecbc4;
+  background-position: right center;
+  background-repeat: no-repeat;
+  display: none !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.home-banner .btn {
+  position: relative;
+  height: 96px;
+  padding: 0 30px;
+}
+
+.home-banner .row {
+  height: 820px;
+}
+
+.home-banner .welcome {
+  color: #0a3380;
+  font-size: 72px;
+  font-weight: 700;
+  position: relative;
+}
+
+.home-banner .welcome-color-2 {
+  color: #54ced4;
+}
+
+.home-banner-celebration {
+  background-image: url('/assets/img/banner-christie-gray.jpg');
+}
+
+.home-banner-college-station {
+  background-image: url('/assets/img/banner-christie-gray.jpg');
+}
+
+.home-description h1 {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.home-description .description {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.home-description .signature {
+  height: 52px;
+}
+
+.home-description-college-station .signature {
+  height: 64px;
+}
+
+.landing-page .landing-page-celebration {
+  background-image: url('/assets/img/celebration-water-tower.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 700px;
+  padding-top: 350px;
+}
+
+.landing-page .landing-page-college-station {
+  background-image: url('/assets/img/college-station-water-tower.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 700px;
+  padding-top: 350px;
+}
+
+.landing-page .btn {
+  height: 96px;
+  padding: 0 30px;
+}
+
+.landing-page .row {
+  height: 700px;
+}
+
+.nav-link.active {
+  border-bottom: 3px solid #3b4b68;
+}
+
+.spine {
+  left: -125px;
+  position: absolute;
+  top: 0;
+}
+
+.team-member p {
+  white-space: pre-wrap;
+}
+
+.why-me {
+  background-color: #cecbc4;
+  background-position: left center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  position: relative;
+}
+
+#pricingTabsContent .card {
+  height: 12rem;
+  width: 20rem;
+  text-align: center;
+}
+
+#pricingTabsContent .card .card-text {
+  color: #2ea6f7;
+  font-size: 1rem;
+  margin-top: 15px;
+  vertical-align: bottom;
+}
+
+#pricingTabsContent .card .card-text .dollar-sign {
+  display: inline-block;
+  font-size: 1.5rem;
+  line-height: 3.5rem;
+  padding-right: 0.5rem;
+  vertical-align: top;
+}
+
+#pricingTabsContent .card .card-text .price {
+  font-size: 5rem;
+}
+
+#pricingTabsContent .card .card-title {
+  color: #3b4b68;
+  font-weight: bold;
+}
+
+main h1,
+main h2,
+main h3,
+main h4,
+main h5 {
+  color: #3b4b68;
+}
+
+@media (min-width: 606px) {
+  .home-banner {
+    display: block !important;
+  }
+
+  .tagline {
+    display: block !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-page .row {
+    height: 1400px;
+  }
+}
+
+@media (min-width: 992px) {
+  .why-me .row {
+    height: 714px;
+  }
+
+  .why-me-celebration {
+    background-image: url('/assets/img/why-me-christie-gray.png');
+  }
+
+  .why-me-college-station {
+    background-image: url('/assets/img/why-me-christie-gray.png');
+  }
+}
+
+@media (min-width: 1200px) {
+  .features {
+    display: block !important;
+  }
+
+  .features-mobile {
+    display: none;
+  }
+}
+
+/* Office switcher in the main header. */
+.location-switcher__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.9rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 999px;
+  background: #fff;
+  color: #3b4b68;
+  font-weight: 600;
+}
+
+.location-switcher__toggle:hover,
+.location-switcher__toggle:focus {
+  border-color: #0d6efd;
+  color: #0a3380;
+  background: #fff;
+}
+
+.location-switcher__panel {
+  width: 18rem;
+  padding: 0.75rem;
+}
+
+.location-switcher__heading {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6c757d;
+}
+
+.location-switcher__link {
+  white-space: normal;
+  border-radius: 0.375rem;
+  padding: 0.6rem 0.75rem;
+}
+
+.location-switcher__link:hover,
+.location-switcher__link:focus {
+  background: #e7f1ff;
+}
+
+.location-switcher__name {
+  display: block;
+  font-weight: 650;
+  color: #0d6efd;
+}
+
+.location-switcher__address {
+  display: block;
+  font-size: 0.875rem;
+  color: #6c757d;
+}

@@ -1,0 +1,59 @@
+---
+import type { Location } from '../config/types';
+import type { SpecialtySummary } from '../lib/specialties';
+
+interface Props {
+  location: Location;
+  specialties: SpecialtySummary[];
+}
+
+const { location, specialties } = Astro.props;
+
+const cards = specialties.map((specialty) => ({
+  title: specialty.cardLabel,
+  href: `/${location.slug}/specialties/${specialty.slug}/`,
+  img: location.images.specialties[specialty.slug],
+  alt: location.images.specialtiesAlt[specialty.slug] ?? specialty.title,
+}));
+---
+
+<div class={`container-fluid features-mobile features-${location.slug} offset-md-3`}>
+  {
+    cards.map((card) => (
+      <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img class="card-img-top" src={card.img} alt={card.alt} />
+          </div>
+          <div class="col-md-5 align-self-center">
+            <a href={card.href}>
+              <button type="button" class="btn btn-light shadow p-5">
+                {card.title}
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+<div class={`container-fluid features features-${location.slug}`}>
+  <div class="row justify-content-evenly">
+    {
+      cards.map((card) => (
+        <div class="col-4">
+          <div class="card mx-auto rounded-3">
+            <img class="card-img-top" src={card.img} alt={card.alt} />
+            <div class="features-button">
+              <a href={card.href}>
+                <button type="button" class="btn btn-light shadow p-3">
+                  {card.title}
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>

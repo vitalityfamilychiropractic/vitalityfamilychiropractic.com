@@ -1,0 +1,69 @@
+---
+import type { Pricing } from '../config/types';
+
+interface Props {
+  pricing: Pricing;
+}
+
+const { pricing } = Astro.props;
+
+function tabId(index: number): string {
+  return `tier-${index}`;
+}
+---
+
+<div class="row">
+  <div class="col">
+    <ul class="nav nav-underline" id="pricingTabs" role="tablist">
+      {
+        pricing.tiers.map((tier, index) => (
+          <li class="nav-item" role="presentation">
+            <button
+              class:list={['nav-link', { active: index === 0 }]}
+              id={`${tabId(index)}-tab`}
+              data-bs-toggle="tab"
+              data-bs-target={`#${tabId(index)}-tab-pane`}
+              type="button"
+              role="tab"
+              aria-controls={`${tabId(index)}-tab-pane`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+            >
+              {tier}
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<div class="my-3 tab-content" id="pricingTabsContent">
+  {
+    pricing.tiers.map((_tier, index) => (
+      <div
+        class:list={['tab-pane', 'fade', { show: index === 0, active: index === 0 }]}
+        id={`${tabId(index)}-tab-pane`}
+        role="tabpanel"
+        aria-labelledby={`${tabId(index)}-tab`}
+        tabindex="0"
+      >
+        <div class="row my-3 justify-content-around">
+          {pricing.rows.map((row) => (
+            <div class="col-6 col-xl-4 py-3">
+              <div class="card shadow">
+                <div class="card-body">
+                  <h5 class="card-title">{row.label}</h5>
+                  <p class="card-text">
+                    <span class="dollar-sign">$</span>
+                    <span class="price">{row.values[index]}</span>
+                    {row.unit}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</div>

@@ -1,0 +1,75 @@
+---
+import { getCollection, render } from 'astro:content';
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import { locations } from '../../../config/locations';
+import { getMember } from '../../../config/team';
+import { tokensFor, applyTokens } from '../../../lib/tokens';
+import type { Location } from '../../../config/types';
+
+/**
+ * One page per office and specialty it offers. A shared Markdown file renders
+ * under every office that lists it, with that office's lead filled in.
+ */
+export async function getStaticPaths() {
+  const entries = await getCollection('specialties');
+  const bySlug = new Map(entries.map((entry) => [entry.id, entry]));
+
+  return locations.flatMap((location) =>
+    location.specialties.map((slug) => {
+      const entry = bySlug.get(slug);
+      if (!entry) {
+        throw new Error(
+          `Location "${location.slug}" lists specialty "${slug}", but there is no src/content/specialties/${slug}.md.`,
+        );
+      }
+      return {
+        params: { location: location.slug, specialty: slug },
+        props: { location, entry },
+      };
+    }),
+  );
+}
+
+type Entry = Awaited<ReturnType<typeof getCollection<'specialties'>>>[number];
+
+interface Props {
+  location: Location;
+  entry: Entry;
+}
+
+const { location, entry } = Astro.props;
+const path = `/${location.slug}/specialties/${entry.id}/`;
+const lead = getMember(location.lead);
+const imageSrc = location.images.specialtyPages[entry.id];
+const imageAlt = location.images.specialtyPagesAlt[entry.id] ?? entry.data.title;
+const description = applyTokens(entry.data.summary, tokensFor(location, lead));
+
+await render(entry);
+const html = applyTokens(entry.rendered?.html ?? '', tokensFor(location, lead));
+---
+
+<LocationLayout
+  location={location}
+  title={entry.data.title}
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: entry.data.title, href: path },
+  ]}
+>
+  <PageHeader title={entry.data.title} />
+  <div class="container-fluid">
+    <div class="row my-5">
+      {
+        imageSrc && (
+          <div class="col-lg-5 px-5 mb-4 mb-lg-0">
+            <img class="rounded img-fluid w-100" src={imageSrc} alt={imageAlt} />
+          </div>
+        )
+      }
+      <div class:list={['px-5 content', imageSrc ? 'col-lg-7' : 'col-12']} set:html={html} />
+    </div>
+  </div>
+</LocationLayout>
