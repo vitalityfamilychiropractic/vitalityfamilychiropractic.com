@@ -5,8 +5,6 @@ summary: Family wellness chiropractic in {{city}}, {{stateAbbr}} with {{leadFull
 order: 3
 ---
 
-## Family Wellness Care in {{city}}
-
 There are many reasons people choose to visit a chiropractor.  At Vitality Family Chiropractic, people choose to visit for two main reasons:
 
 #### They are healthy and want to stay healthy

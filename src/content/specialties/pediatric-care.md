@@ -5,8 +5,6 @@ summary: Pediatric and infant chiropractic in {{city}}, {{stateAbbr}} with {{lea
 order: 2
 ---
 
-## Pediatric Care in {{city}}
-
 ### We believe that it is easier to build healthy kids than fix broken adults
 
 Brain development is the most active during the first two years of life.  Interference to this development of a child’s nervous system during this period may have lasting permanent effects on the child’s developmental potential.
@@ -15,7 +13,7 @@ Additionally, one-third of a person’s nervous system is protected by the skull
 
 Birth trauma and in utero constraint can be responsible for creating dural tension in the infant’s spine and cranium.  Assisted deliveries including cesarean sections, forceps, vacuum extractions, and induction procedures increase the chance of neurological damage to the infant’s spine and nervous system.
 
-### Regular chiropractic care through infancy and childhood have been shown to:
+#### Regular chiropractic care through infancy and childhood have been shown to:
 
 **Improve:** Sleep, focus, behavior, and bowel function
 

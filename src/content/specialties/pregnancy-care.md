@@ -5,8 +5,6 @@ summary: Webster Technique prenatal chiropractic in {{city}}, {{stateAbbr}} with
 order: 1
 ---
 
-## Pregnancy Care in {{city}}
-
 Chiropractic is concerned with the structural relationship between the spine, pelvis, and nervous system. During pregnancy a woman’s body undergoes dramatic changes structurally, chemically (hormones), and emotionally.  Chiropractic can help make pregnancy more comfortable, more enjoyable, and prepare the body for an easier and safer birth.
 
 The body experiences very rapid changes during pregnancy (increased weight gain, change in posture, and hormones which relax stabilizing ligaments).  The changes are vital for growth and arrival of baby, but they can also interfere with other areas of life.  Common secondary conditions from this shift include aches  and pain (lower back pain, sciatica, pubic bone pain, symphysis pubis dysfunction, tailbone pain, etc), digestive disorders (reflux, heartburn, constipation, etc), overall wellness (fatigue, sleep, mood swings, etc), and even disruptions of normal birth (baby’s position, onset of labor, and progression of labor).
