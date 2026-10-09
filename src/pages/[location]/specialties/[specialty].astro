@@ -60,16 +60,16 @@ const html = applyTokens(entry.rendered?.html ?? '', tokensFor(location, lead));
   ]}
 >
   <PageHeader title={entry.data.title} />
-  <div class="container-fluid">
+  <div class="container-fluid content-band">
     <div class="row my-5">
       {
         imageSrc && (
-          <div class="col-lg-5 px-5 mb-4 mb-lg-0">
+          <div class="col-sm-5 px-3 mb-4 mb-sm-0">
             <img class="rounded img-fluid w-100" src={imageSrc} alt={imageAlt} />
           </div>
         )
       }
-      <div class:list={['px-5 content', imageSrc ? 'col-lg-7' : 'col-12']} set:html={html} />
+      <div class:list={['px-5 content', imageSrc ? 'col-sm-7' : 'col-12']} set:html={html} />
     </div>
   </div>
 </LocationLayout>

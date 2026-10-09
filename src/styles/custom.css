@@ -77,6 +77,27 @@ button.nav-link {
   color: #6c757d;
 }
 
+/* Match the pricing page's inner width. That page is a Bootstrap container
+   inside 3rem of padding. Below lg these pages stay full width. */
+@media (min-width: 992px) {
+  .container-fluid.content-band {
+    width: min(960px, calc(100% - 6rem));
+    margin-inline: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container-fluid.content-band {
+    width: min(1140px, calc(100% - 6rem));
+  }
+}
+
+@media (min-width: 1400px) {
+  .container-fluid.content-band {
+    width: min(1320px, calc(100% - 6rem));
+  }
+}
+
 .content h2,
 .content h3,
 .content h4,
