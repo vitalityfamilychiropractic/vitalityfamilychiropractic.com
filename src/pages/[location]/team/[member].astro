@@ -64,14 +64,14 @@ const personSchema = {
   <PageHeader title={fullName} />
   <div class="container content team-member">
     <div class="row py-5">
-      <div class="col">
-        {
-          member.photo && (
+      {
+        member.photo && (
+          <div class="col-12 col-md-6 mb-4 mb-md-0">
             <img class="img-fluid rounded" src={member.photo} alt={fullName} />
-          )
-        }
-      </div>
-      <div class="col">
+          </div>
+        )
+      }
+      <div class:list={['col-12', member.photo && 'col-md-6']}>
         {member.certifications && <p><strong>Certifications:</strong> {member.certifications}</p>}
         {member.specialty && <p><strong>Specialty:</strong> {member.specialty}</p>}
         <p>
