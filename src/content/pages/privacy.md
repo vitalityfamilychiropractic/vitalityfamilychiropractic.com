@@ -2,10 +2,9 @@
 title: Privacy Policy
 summary: "Privacy policy for Vitality Family Chiropractic's {{city}}, {{state}} office."
 brandSummary: How Vitality Family Chiropractic collects, uses, discloses, and safeguards your personal and health information.
+primaryOffice: "college-station"
 updated: October 1, 2025
 ---
-
-**Effective Date:** October 1, 2025
 
 ## **1. Introduction**
 
@@ -149,11 +148,11 @@ We may update this Privacy Policy from time to time to reflect legal or operatio
 
 ## **13. Contact Information**
 
-**Vitality Family Chiropractic, LLC**
-Attn: Privacy Officer
-3012 Barron Road Suite 300
-College Station, Texas 77845
-Email: info@vitalityfamilychiropractic.com
-Phone: +1 979 703 7977
+**Vitality Family Chiropractic, LLC**\
+Attn: Privacy Officer\
+{{formatStreet}}\
+{{formatCityLine}} {{zip}}\
+Email: {{email}}\
+Phone: {{telHrefFormatted}}
 
 If you believe your privacy rights have been violated, you may file a complaint with us or directly with the **U.S. Department of Health and Human Services, Office for Civil Rights**.

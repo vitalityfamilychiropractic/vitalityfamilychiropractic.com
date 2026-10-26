@@ -1,13 +1,14 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Icon from '../components/Icon.astro';
+import { privacyHtml } from '../lib/pages';
 
 const entry = await getEntry('pages', 'privacy');
 if (!entry) throw new Error('Missing src/content/pages/privacy.md');
-const { Content } = await render(entry);
+const html = privacyHtml(entry);
 const description = entry.data.brandSummary ?? entry.data.summary;
 if (description.includes('{{')) {
   throw new Error(
@@ -29,7 +30,7 @@ if (description.includes('{{')) {
     </section>
     <div class="wrap prose">
       {entry.data.updated && <p class="prose-updated">Updated {entry.data.updated}</p>}
-      <Content />
+      <Fragment set:html={html} />
     </div>
   </main>
   <Footer />

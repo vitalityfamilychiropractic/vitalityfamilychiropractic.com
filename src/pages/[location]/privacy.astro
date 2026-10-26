@@ -1,9 +1,9 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import LocationLayout from '../../layouts/LocationLayout.astro';
 import Icon from '../../components/Icon.astro';
 import { locations } from '../../config/locations';
-import { pageDescription } from '../../lib/pages';
+import { pageDescription, privacyHtml } from '../../lib/pages';
 import type { Location } from '../../config/types';
 
 export function getStaticPaths() {
@@ -21,7 +21,7 @@ const { location } = Astro.props;
 const path = `/${location.slug}/privacy/`;
 const entry = await getEntry('pages', 'privacy');
 if (!entry) throw new Error('Missing src/content/pages/privacy.md');
-const { Content } = await render(entry);
+const html = privacyHtml(entry);
 const description = await pageDescription('privacy', location);
 ---
 
@@ -46,6 +46,6 @@ const description = await pageDescription('privacy', location);
   </section>
   <div class="wrap prose">
     {entry.data.updated && <p class="prose-updated">Updated {entry.data.updated}</p>}
-    <Content />
+    <Fragment set:html={html} />
   </div>
 </LocationLayout>
