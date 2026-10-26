@@ -120,7 +120,6 @@ export const locations: Location[] = [
       stateAbbr: 'TX',
       zip: '77845',
     },
-    hidePostalCode: true,
     phone: '(979) 703-7977',
     email: 'info@vitalityfamilychiropractic.com',
     social: { facebook: 'vitalityfamilychiropractic' },
@@ -236,10 +235,10 @@ export function formatStreet(location: Location): string {
   return [location.address.street, location.address.street2].filter(Boolean).join(', ');
 }
 
-/** City and state line. The ZIP is omitted when `hidePostalCode` is set. */
+/** City and state line. The ZIP stays off the visible address. */
 export function formatCityLine(location: Location): string {
-  const { city, stateAbbr, zip } = location.address;
-  return location.hidePostalCode ? `${city}, ${stateAbbr}` : `${city}, ${stateAbbr} ${zip}`;
+  const { city, stateAbbr } = location.address;
+  return `${city}, ${stateAbbr}`;
 }
 
 /** Full one-line address. */
@@ -250,6 +249,18 @@ export function formatAddress(location: Location): string {
 /** Digits-only phone for `tel:` links, e.g. '+14075847900'. */
 export function telHref(phone: string): string {
   return `+1${phone.replace(/\D/g, '')}`;
+}
+
+/**
+ * Display form of {@link telHref}. Spaces separate the country code, area
+ * code, and prefix, e.g. '+1 979 703 7977'.
+ */
+export function telHrefFormatted(phone: string): string {
+  const match = telHref(phone).match(/^\+1(\d{3})(\d{3})(\d{4})$/);
+  if (!match) {
+    throw new Error(`Cannot format telephone number "${phone}".`);
+  }
+  return `+1 ${match[1]} ${match[2]} ${match[3]}`;
 }
 
 /**
