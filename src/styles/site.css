@@ -425,8 +425,8 @@ section { position: relative; }
 .ev-nav:disabled { opacity: .35; cursor: default; background: var(--paper); color: var(--slate); }
 .ev-back { transform: scaleX(-1); }
 .ev-track {
-  display: flex; gap: var(--ev-gap); overflow-x: auto; scroll-snap-type: x mandatory;
-  scrollbar-width: none; padding-block: 8px 14px;
+  display: flex; justify-content: safe center; gap: var(--ev-gap); overflow-x: auto;
+  scroll-snap-type: x mandatory; scrollbar-width: none; padding-block: 8px 14px;
 }
 .ev-track::-webkit-scrollbar { display: none; }
 .ev-card {

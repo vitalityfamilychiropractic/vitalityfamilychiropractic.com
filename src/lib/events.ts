@@ -1,7 +1,8 @@
 /**
  * Upcoming events for one office, read from its public Google Calendar.
  * The feed is the calendar's public iCal address. The calendar has to be
- * public, or Google returns no events.
+ * public, or Google returns no events. The classes page calls this on each
+ * visit through /api/events, not during the static build.
  */
 
 export interface CalendarEvent {

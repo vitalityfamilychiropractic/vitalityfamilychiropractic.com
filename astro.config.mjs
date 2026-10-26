@@ -67,6 +67,39 @@ for (const [from, to] of rootAliases) redirect(from, to);
 export default defineConfig({
   site: 'https://www.vitalityfamilychiropractic.com',
   redirects,
+  vite: {
+    plugins: [
+      {
+        name: 'events-api',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const requestUrl = req.url ?? '';
+            const path = requestUrl.split('?')[0];
+            if (path !== '/api/events' && path !== '/api/events/') {
+              next();
+              return;
+            }
+            const url = new URL(requestUrl, 'http://127.0.0.1');
+            server
+              .ssrLoadModule('/src/lib/events-api.ts')
+              .then(async (mod) => {
+                const response = await mod.eventsResponse(url);
+                res.statusCode = response.status;
+                /** @type {Headers} */
+                const headers = response.headers;
+                headers.forEach((value, key) => {
+                  res.setHeader(key, value);
+                });
+                res.end(Buffer.from(await response.arrayBuffer()));
+              })
+              .catch((error) => {
+                next(error);
+              });
+          });
+        },
+      },
+    ],
+  },
   integrations: [
     sitemap({
       filter: (page) => {

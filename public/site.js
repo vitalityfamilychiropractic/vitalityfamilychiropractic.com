@@ -88,22 +88,34 @@
     } catch (e) { /* share sheet closed */ }
   }));
 
-  // Upcoming-event carousel. Past events drop off without a rebuild.
-  d.querySelectorAll("[data-events]").forEach((root) => {
-    const track = root.querySelector(".ev-track");
-    const empty = root.querySelector(".ev-empty");
-    const now = Date.now();
-    track && [...track.children].forEach((card) => {
-      const end = Date.parse(card.getAttribute("data-end"));
-      if (Number.isFinite(end) && end <= now) card.remove();
-    });
-    if (!track || !track.children.length) {
-      if (track) track.hidden = true;
-      const bar = root.querySelector(".ev-bar");
-      if (bar) bar.hidden = true;
-      if (empty) empty.hidden = false;
-      return;
+  // Upcoming events, read from this office's calendar on each visit.
+  const eventCard = (event, index) => {
+    const card = d.createElement("article");
+    card.className = "ev-card";
+    card.setAttribute("data-end", event.end);
+    const date = d.createElement("p");
+    date.className = "ev-date";
+    const time = d.createElement("time");
+    time.dateTime = event.start;
+    time.textContent = event.dateLabel || "";
+    date.append(time);
+    const title = d.createElement("h3");
+    title.id = event.id || `event-${index + 1}`;
+    title.textContent = event.title || "Untitled event";
+    card.setAttribute("aria-labelledby", title.id);
+    const when = d.createElement("p");
+    when.className = "ev-time";
+    when.textContent = event.timeLabel || "";
+    card.append(date, title, when);
+    if (event.description) {
+      const desc = d.createElement("p");
+      desc.className = "ev-desc";
+      desc.textContent = event.description;
+      card.append(desc);
     }
+    return card;
+  };
+  const mountCarousel = (root, track) => {
     const prev = root.querySelector("[data-ev-prev]");
     const next = root.querySelector("[data-ev-next]");
     const motion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -129,6 +141,49 @@
     track.addEventListener("scroll", update, { passive: true });
     addEventListener("resize", update);
     update();
+  };
+  d.querySelectorAll("[data-events]").forEach((root) => {
+    const office = root.getAttribute("data-office");
+    const days = root.getAttribute("data-days");
+    const stage = root.querySelector(".ev-stage");
+    const track = root.querySelector(".ev-track");
+    const empty = root.querySelector(".ev-empty");
+    const showEmpty = (message) => {
+      root.setAttribute("aria-busy", "false");
+      if (stage) stage.hidden = true;
+      if (!empty) return;
+      if (message) empty.textContent = message;
+      empty.hidden = false;
+    };
+    if (!office || !days || !track) {
+      showEmpty("The calendar could not be loaded. Please refresh the page.");
+      return;
+    }
+    const params = new URLSearchParams({ office, days });
+    fetch(`/api/events?${params}`, { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error(String(response.status));
+        return response.json();
+      })
+      .then((events) => {
+        if (!Array.isArray(events)) throw new Error("bad payload");
+        const now = Date.now();
+        track.replaceChildren();
+        events.forEach((event, index) => {
+          const end = Date.parse(event.end);
+          if (Number.isFinite(end) && end <= now) return;
+          track.append(eventCard(event, index));
+        });
+        root.setAttribute("aria-busy", "false");
+        if (!track.children.length) {
+          showEmpty("");
+          return;
+        }
+        if (stage) stage.hidden = false;
+        if (empty) empty.hidden = true;
+        mountCarousel(root, track);
+      })
+      .catch(() => showEmpty("The calendar could not be loaded. Please refresh the page."));
   });
 
   // ---------- Preview-only behaviour ----------
