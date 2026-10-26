@@ -24,6 +24,11 @@ const pages = defineCollection({
      * Used by the brand privacy page, whose summary names a city.
      */
     brandSummary: z.string().optional(),
+    /**
+     * Location slug whose street, email, and phone fill `{{formatStreet}}`,
+     * `{{email}}`, and `{{telHrefFormatted}}` in the privacy policy.
+     */
+    primaryOffice: z.string().optional(),
     /** Last substantive revision — shown on the privacy policy. */
     updated: z.string().optional(),
     /** Contact page aside heading. */
