@@ -132,6 +132,30 @@ h4 { font-size: 1.42rem; font-variation-settings: "SOFT" 100, "opsz" 36; }
 section { position: relative; }
 .ph { display: block; width: 100%; height: 100%; }
 .ph img { width: 100%; height: 100%; object-fit: cover; }
+/* Dev-only photo id. The class is omitted from production HTML. */
+.ph-dev { position: relative; }
+.ph-dev::after {
+  content: attr(data-photo);
+  position: absolute;
+  z-index: 2;
+  left: 8px;
+  top: 8px;
+  max-width: calc(100% - 16px);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgb(23 37 47 / .9);
+  color: #fff;
+  font: 700 12px/1.35 var(--sans);
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s linear;
+}
+.ph-dev:hover::after { opacity: 1; }
 .split { display: grid; gap: clamp(40px, 6vw, 96px); align-items: center; }
 @media (min-width: 960px) {
   .split { grid-template-columns: 1fr 1fr; }

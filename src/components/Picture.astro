@@ -12,9 +12,12 @@ interface Props {
 const { location, use, sizes, priority = false } = Astro.props;
 const photo = photoFor(location, use);
 const srcset = photo.widths.map((width) => `${webpSrc(photo.src, width)} ${width}w`).join(', ');
+const dev = import.meta.env.DEV;
+const resolvedId = location.photoAliases?.[use.id] ?? use.id;
+const photoLabel = resolvedId === use.id ? use.id : `${resolvedId} · asked ${use.id}`;
 ---
 
-<picture class="ph">
+<picture class:list={['ph', dev && 'ph-dev']} data-photo={dev ? photoLabel : undefined}>
   {srcset && <source type="image/webp" srcset={srcset} sizes={sizes} />}
   <img
     src={photo.src}
@@ -26,5 +29,6 @@ const srcset = photo.widths.map((width) => `${webpSrc(photo.src, width)} ${width
     loading={priority ? undefined : 'lazy'}
     fetchpriority={priority ? 'high' : undefined}
     role={photo.alt ? undefined : 'presentation'}
+    title={dev ? photoLabel : undefined}
   />
 </picture>
