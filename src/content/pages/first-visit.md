@@ -37,8 +37,8 @@ sections:
         text: "And yes, your children are welcome. We are a family chiropractic office, after all!"
     reverse: true
     image:
-      id: "team-with-little-ones"
-      position: "62% 45%"
+      id: "consult-room"
+      position: "35% 45%"
     frame: "frame"
   - kind: "centered"
     heading: "First, We Get to Know You."

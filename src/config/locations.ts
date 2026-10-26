@@ -102,8 +102,10 @@ export const locations: Location[] = [
     },
     photoAliases: {
       'landing-office': 'celebration-reception',
+      'mural-detail': 'celebration-mural-detail',
       'office-reception': 'celebration-reception',
       'office-waiting-room': 'celebration-waiting-room',
+      'treatment-room': 'celebration-treatment-room',
     },
     homeClaim:
       'Vitality Family Chiropractic offers prenatal and pediatric chiropractic care in Celebration. Dr. Christie founded the practice and spent more than a decade caring for families in College Station before opening this office.',
@@ -198,7 +200,9 @@ export const locations: Location[] = [
       ],
     },
     photoAliases: {
+      'consult-room': 'team-with-little-ones',
       'landing-office': 'college-station-reception',
+      'mural-detail': 'college-station-mural-detail',
       'office-reception': 'college-station-reception',
       'office-waiting-room': 'college-station-waiting-room',
     },
