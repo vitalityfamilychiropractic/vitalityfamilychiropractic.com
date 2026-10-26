@@ -1,6 +1,7 @@
 ---
-name: "Christie"
+name: "Christie McLarty"
 shortName: "Dr. Christie"
+credentials: "DC"
 role: "Chiropractor"
 schemaType: "Physician"
 tagline: "Chiropractor. Mama. Professional Baby Snuggler. Eternal Optimist."

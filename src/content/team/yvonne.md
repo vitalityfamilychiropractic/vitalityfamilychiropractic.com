@@ -1,5 +1,5 @@
 ---
-name: "Yvonne"
+name: "Yvonne Stephens"
 shortName: "Yvonne"
 role: "Office Manager"
 schemaType: "Person"

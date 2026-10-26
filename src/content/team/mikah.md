@@ -1,6 +1,7 @@
 ---
-name: "Mikah"
+name: "Mikah Shriver"
 shortName: "Dr. Mikah"
+credentials: "DC"
 role: "Chiropractor"
 schemaType: "Physician"
 tagline: "Chiropractor. Mama's Biggest Cheerleader. Movie Buff. Professional Overexplainer."

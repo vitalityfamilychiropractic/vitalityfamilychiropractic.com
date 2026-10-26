@@ -1,6 +1,7 @@
 ---
-name: "Candice"
+name: "Candice Ashburn"
 shortName: "Candice"
+credentials: "LMT"
 role: "Licensed Massage Therapist"
 schemaType: "Person"
 factsTitle: "Five Things You Didn't Know About Candice"
