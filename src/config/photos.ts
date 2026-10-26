@@ -189,7 +189,7 @@ export const photos: Record<string, Photo> = {
     position: "55% 55%",
   },
   "celebration-pregnancy": {
-    src: "/assets/img/locations/celebration/pregnancy-care.jpg",
+    src: "/assets/img/locations/celebration/pregnancy-care-960.jpg",
     alt: "Dr. Christie adjusts a pregnant patient lying on a chiropractic table.",
     width: 960,
     height: 960,
