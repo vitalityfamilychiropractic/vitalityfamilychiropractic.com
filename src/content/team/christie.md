@@ -1,5 +1,5 @@
 ---
-name: "Christie McLarty"
+name: "Christie"
 shortName: "Dr. Christie"
 role: "Chiropractor"
 schemaType: "Physician"
@@ -12,8 +12,6 @@ facts:
   - "🎤 She's forever a Backstreet Boys girl. Although Mackenzie has introduced a little K-pop into the mix."
   - "🏓 She's always up for a little friendly competition. Whether it's pickleball or golf (where she's still working on keeping the ball out of the woods), she's happiest when she's having fun and making memories."
 photo: "portrait-christie"
-credentials: "DC"
-email: "drchristie@vitalityfamilychiropractic.com"
 ---
 
 Dr. Christie's love for chiropractic started long before she ever imagined opening her own practice.
