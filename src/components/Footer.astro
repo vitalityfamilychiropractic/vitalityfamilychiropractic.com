@@ -45,7 +45,7 @@ function current(href: string | undefined) {
                 {item.heading ? (
                   <span class="foot-heading">{item.label}</span>
                 ) : item.href ? (
-                  <a href={item.href} aria-current={current(item.href)}>
+                  <a class:list={[item.devOnly && 'is-off']} href={item.href} aria-current={current(item.href)}>
                     {item.label}
                   </a>
                 ) : (

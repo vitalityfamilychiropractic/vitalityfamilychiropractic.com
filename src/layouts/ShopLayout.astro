@@ -1,0 +1,92 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import LocationLayout from './LocationLayout.astro';
+import Icon from '../components/Icon.astro';
+import { products } from '../config/shop';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  title: string;
+  description: string;
+  path: string;
+  intro: string;
+}
+
+const { location, title, description, path, intro } = Astro.props;
+
+for (const product of products) {
+  for (const key of ['name', 'description', 'price', 'image', 'href'] as const) {
+    if (!product[key].trim()) throw new Error(`A shop product is missing ${key}.`);
+  }
+  let url: URL;
+  try {
+    url = new URL(product.href);
+  } catch {
+    throw new Error(`Shop product "${product.name}" has a store link that is not a URL.`);
+  }
+  if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+    throw new Error(`Shop product "${product.name}" must link to the online store with http or https.`);
+  }
+  const file = join(process.cwd(), 'public', product.image.replace(/^\//, ''));
+  if (!existsSync(file)) {
+    throw new Error(`Shop product "${product.name}" is missing its image at ${product.image}.`);
+  }
+}
+---
+
+<LocationLayout
+  location={location}
+  title={title}
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: title, href: path },
+  ]}
+>
+  <section class="tm-hero" aria-labelledby="shop-title">
+    <div class="wrap">
+      <div class="tm-hero-inner reveal">
+        <Icon name="sprig" class="sprig" />
+        <h1 id="shop-title">{title}</h1>
+        <p class="shop-intro" set:html={intro} />
+      </div>
+    </div>
+  </section>
+  {
+    products.length > 0 && (
+      <section class="shop-main" aria-label="Products">
+        <div class="wrap">
+          <ul class="shop-grid">
+            {products.map((product) => (
+              <li>
+                <article class="shop-card">
+                  <div class="shop-photo">
+                    <img src={product.image} alt="" />
+                  </div>
+                  <div class="shop-body">
+                    <h2>{product.name}</h2>
+                    <p class="shop-price">{product.price}</p>
+                    <p class="shop-desc">{product.description}</p>
+                    <a
+                      class="btn btn-sm"
+                      href={product.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Buy ${product.name}`}
+                    >
+                      Buy
+                      <Icon name="arrow" />
+                    </a>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+</LocationLayout>

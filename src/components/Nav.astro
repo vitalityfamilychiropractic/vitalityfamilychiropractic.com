@@ -44,7 +44,11 @@ const mobile = variant === 'mobile';
               </div>
             )}
             {!item.children && item.href && (
-              <a class="nav-link" href={item.href} aria-current={current ? 'page' : undefined}>
+              <a
+                class:list={['nav-link', item.devOnly && 'is-off']}
+                href={item.href}
+                aria-current={current ? 'page' : undefined}
+              >
                 {item.label}
               </a>
             )}
