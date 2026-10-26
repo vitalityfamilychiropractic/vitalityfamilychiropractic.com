@@ -40,8 +40,9 @@ src/
 ├─ config/            files you edit
 │  ├─ locations.ts      every office: address, hours, prices, team order, booking URL
 │  ├─ photos.ts         photo catalog and per-office aliases
-│  ├─ partners.ts       community partners (the list may be empty)
-│  ├─ site.ts           brand name, tagline, logo, default analytics id
+│  ├─ partners.ts       community partners; each office picks them in `location.partners`
+│  ├─ shop.ts           shop products: image, name, description, price, store link
+│  ├─ site.ts           brand name, tagline, logo, default analytics id, shop nav
 │  └─ types.ts          field definitions — the build checks against these
 ├─ content/           shared writing
 │  ├─ services/         one file per Our Care page
@@ -71,11 +72,14 @@ Each office is a directory under its slug.
 | `/{office}/new-patients/first-visit/` | First visit |
 | `/{office}/new-patients/pricing-insurance/` | Pricing and insurance |
 | `/{office}/contact/` | Phone, address, map, hours |
+| `/{office}/shop/` | Shop. Product cards come from `src/config/shop.ts` |
 | `/{office}/privacy/` and `/privacy/` | Privacy policy |
 
 Massage is a child of Our Care, and only at offices that list it in
-`services`. Celebration does not. Shop stays in the College Station menu as a
-label with no link while `shop.href` is null.
+`services`. Celebration does not. Shop is one item for every office, linking
+to `/{office}/shop/`. Turn it on or off with `shop.inNav` in `src/config/site.ts`.
+While that is false, production menus omit it and the dev server still shows
+it in gray.
 
 Old paths such as `/specialties/`, `/team/`, `/pricing/`, and `/our-values/`
 redirect. Astro redirects are in `astro.config.mjs` (one key per path).
@@ -86,7 +90,7 @@ forms. Our Values redirects to that office's home. There is no values page.
 
 1. Add photos under `public/assets/img/locations/{slug}/` and register them in `src/config/photos.ts`.
 2. Add any new person as `src/content/team/{slug}.md`. The team schema is strict.
-3. Copy an entry in `src/config/locations.ts` and change every field, including `slug`, `bookingUrl`, `analyticsId`, hours, pricing, `services`, `team`, and `lead`.
+3. Copy an entry in `src/config/locations.ts` and change every field, including `slug`, `bookingUrl`, `analyticsId`, hours, pricing, `services`, `team`, `partners`, and `lead`.
 4. Run `bun run build`.
 
 That generates the office home, team, a page per service the office lists,
@@ -216,6 +220,7 @@ list. A string in the front matter may contain tokens and inline HTML.
 | `contact.md` | `/{office}/contact/` |
 | `team.md` | `/{office}/meet-our-team/` (title and summary only; bios are team files) |
 | `pricing.md` | `/{office}/new-patients/pricing-insurance/` (title and summary only; numbers come from the office) |
+| `shop.md` | `/{office}/shop/` (title, summary, and intro; products are `shop.ts`) |
 | `privacy.md` | `/{office}/privacy/` and `/privacy/`. The Markdown body is the policy. The contact block is filled from `primaryOffice`. |
 | `services/{id}.md` | `/{office}/our-care/{id}/` |
 
@@ -228,7 +233,7 @@ description. These fields are optional, and only some routes read them:
 | `updated` | The "Updated …" line on the privacy policy |
 | `primaryOffice` | Location slug for the privacy contact block, on every privacy URL |
 | `asideTitle`, `aside` | The contact page. Both are required there. |
-| `intro` | The partners page, shown even when the partner list is empty |
+| `intro` | The partners page and the shop page. Shown even when that list is empty |
 | `eventsWithinDays` | Classes & Events. How many days ahead to show from `eventsCalendarId` |
 | `sections` | Home, first visit, community, classes, and every service page |
 

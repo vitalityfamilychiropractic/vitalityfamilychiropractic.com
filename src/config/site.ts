@@ -21,4 +21,12 @@ export const site = {
   social: {
     facebook: 'vitalityfamilychiropractic',
   },
+  /**
+   * Shop in every office menu. The item links to `/{office}/shop/`.
+   * Set `inNav` to false to leave it out of production menus. The dev server
+   * still shows the link, in gray.
+   */
+  shop: {
+    inNav: true,
+  },
 } as const;

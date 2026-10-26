@@ -1,3 +1,4 @@
+import { site } from '../config/site';
 import type { Location } from '../config/types';
 import { servicesFor } from './services';
 
@@ -7,6 +8,11 @@ export interface NavItem {
   children?: NavItem[];
   /** A button that opens the menu, rather than a link to a section page. */
   heading?: boolean;
+  /**
+   * Drawn in gray. Set when Shop is turned off in `site.ts` and this is the
+   * dev server, so the link can still be opened.
+   */
+  devOnly?: boolean;
 }
 
 /**
@@ -14,7 +20,8 @@ export interface NavItem {
  * location's slug, so each office reads as a standalone site.
  *
  * Massage is a child of Our Care, and only at offices that offer it.
- * Shop stays in the menu as a non-link when `href` is null.
+ * Shop is the same for every office. `site.shop.inNav` turns it off in
+ * production; the dev server keeps the gray link.
  */
 export async function buildNav(location: Location): Promise<NavItem[]> {
   const services = await servicesFor(location);
@@ -48,10 +55,11 @@ export async function buildNav(location: Location): Promise<NavItem[]> {
     },
   ];
 
-  if (location.shop?.inNav) {
+  if (site.shop.inNav || import.meta.env.DEV) {
     items.push({
-      label: location.shop.label,
-      ...(location.shop.href ? { href: location.shop.href } : {}),
+      label: 'Shop',
+      href: `${base}/shop/`,
+      devOnly: !site.shop.inNav,
     });
   }
 

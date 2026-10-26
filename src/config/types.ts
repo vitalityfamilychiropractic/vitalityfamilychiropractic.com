@@ -58,14 +58,6 @@ export interface FeeLine {
   amount: string;
 }
 
-/** A nav item that is present even when it does not link anywhere yet. */
-export interface ShopLink {
-  label: string;
-  /** Null keeps the label in the menu without making it a link. */
-  href: string | null;
-  inNav: boolean;
-}
-
 export interface Location {
   /** URL segment and config key, e.g. 'celebration'. Lowercase, hyphenated. */
   slug: string;
@@ -101,6 +93,11 @@ export interface Location {
    * office is listed in each office's array where that office wants them.
    */
   team: string[];
+  /**
+   * Partner slugs on this office's partners page, in display order.
+   * Each must match a slug in `src/config/partners.ts`.
+   */
+  partners: string[];
   /** The team member whose name fills `{{lead}}` in shared prose. */
   lead: string;
   /**
@@ -137,8 +134,6 @@ export interface Location {
   insuranceFaq: string;
   /** Optional sentence above `<main>` on this office's pages. */
   announcement?: string;
-  /** Shop menu item. Omitted from the nav when `inNav` is false. */
-  shop?: ShopLink;
 }
 
 /** Fields schema.org needs from a team member. Bios live in the content collection. */
