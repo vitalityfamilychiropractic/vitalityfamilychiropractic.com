@@ -247,8 +247,17 @@ section { position: relative; }
 .site-footer { background: var(--slate-2); color: #D7E0E5; padding: clamp(56px, 7vw, 88px) 0 28px; font-size: .95rem; }
 .site-footer a { color: #F3F5F6; text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
-.site-footer .brand-mark { color: var(--ivory); display: block; }
-.site-footer .brand-sub { color: var(--dusty); }
+.foot-logo { position: relative; display: block; width: fit-content; line-height: 0; margin: 0 0 0 -10px; }
+.foot-logo img { display: block; height: 70px; width: auto; }
+.foot-logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  pointer-events: none;
+  -webkit-mask: url("/assets/img/logo.svg") center / contain no-repeat;
+  mask: url("/assets/img/logo.svg") center / contain no-repeat;
+}
 .foot { display: grid; gap: 40px; }
 @media (min-width: 860px) { .foot { grid-template-columns: 1.1fr 2fr .9fr; } }
 .foot address { font-style: normal; margin-top: 20px; line-height: 1.6; }
