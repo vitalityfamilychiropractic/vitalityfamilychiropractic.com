@@ -1,0 +1,89 @@
+---
+import LocationLayout from '../../../../layouts/LocationLayout.astro';
+import { locations, telHref } from '../../../../config/locations';
+import { partnersFor, type Partner } from '../../../../config/partners';
+import type { Location } from '../../../../config/types';
+
+export function getStaticPaths() {
+  return locations.flatMap((location) =>
+    partnersFor(location).map((partner) => ({
+      params: { location: location.slug, partner: partner.slug },
+      props: { location, partner },
+    })),
+  );
+}
+
+interface Props {
+  location: Location;
+  partner: Partner;
+}
+
+const { location, partner } = Astro.props;
+const path = `/${location.slug}/our-community/community-partners/${partner.slug}/`;
+const listPath = `/${location.slug}/our-community/community-partners/`;
+
+function initials(name: string): string {
+  const words = name
+    .replace(/\./g, '')
+    .split(/\s+/)
+    .filter((word) => word && word.toLowerCase() !== 'dr');
+  const letters = words.map((word) => word[0]).filter((letter): letter is string => Boolean(letter));
+  const pair = letters.length > 1 ? `${letters[0]}${letters.at(-1)}` : (letters[0] ?? '');
+  return pair.toUpperCase();
+}
+---
+
+<LocationLayout
+  location={location}
+  title={partner.name}
+  description={`${partner.profession}${partner.business ? ` at ${partner.business}` : ''}. ${partner.summary}`}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Our Community', href: `/${location.slug}/our-community/` },
+    { name: 'Community Partners', href: listPath },
+    { name: partner.name, href: path },
+  ]}
+>
+  <section class="pt-card-wrap">
+    <div class="wrap">
+      <article class="pt-card">
+        <div class="pt-card-avatar" aria-hidden="true">
+          <span class="pt-initials">{initials(partner.name)}</span>
+        </div>
+        <h1>{partner.name}</h1>
+        <p class="pt-prof">
+          {partner.profession}
+          {partner.business && ` · ${partner.business}`}
+        </p>
+        <p>{partner.summary}</p>
+        <div class="ctas pt-actions">
+          {
+            partner.phone && (
+              <a class="btn btn-sm" href={`tel:${telHref(partner.phone)}`}>
+                {partner.phone}
+              </a>
+            )
+          }
+          {
+            partner.email && (
+              <a class="btn btn-sm btn-ghost" href={`mailto:${partner.email}`}>
+                {partner.email}
+              </a>
+            )
+          }
+          {
+            partner.website && (
+              <a class="btn btn-sm btn-ghost" href={partner.website} target="_blank" rel="noopener noreferrer">
+                Website
+              </a>
+            )
+          }
+        </div>
+        <p class="pt-back">
+          <a href={listPath}>All community partners</a>
+        </p>
+      </article>
+    </div>
+  </section>
+</LocationLayout>

@@ -57,6 +57,7 @@ export const locations: Location[] = [
     ],
     services: ['prenatal', 'newborn-infant', 'pediatric', 'adult-family'],
     team: ['christie'],
+    partners: ['pebble-quince'],
     lead: 'christie',
     areaServed: [
       'Celebration',
@@ -110,7 +111,6 @@ export const locations: Location[] = [
     homeClaim:
       'Vitality Family Chiropractic offers prenatal and pediatric chiropractic care in Celebration. Dr. Christie founded the practice and spent more than a decade caring for families in College Station before opening this office.',
     homeBlurb: 'Now welcoming new patients.',
-    shop: { label: 'Shop', href: null, inNav: false },
   },
   {
     slug: 'college-station',
@@ -145,6 +145,7 @@ export const locations: Location[] = [
     ],
     services: ['prenatal', 'newborn-infant', 'pediatric', 'adult-family', 'massage-therapy'],
     team: ['mikah', 'christie', 'yvonne', 'mikayla', 'candice'],
+    partners: ['juniper-latchkey', 'noodle-fern'],
     lead: 'christie',
     areaServed: [
       'College Station',
@@ -209,7 +210,6 @@ export const locations: Location[] = [
     homeClaim:
       'Vitality Family Chiropractic is <strong>the leader in prenatal and pediatric chiropractic care in the Brazos Valley</strong>, and we\'ve been caring for families here for over 13 years.',
     homeBlurb: 'Caring for Brazos Valley families for over 13 years.',
-    shop: { label: 'Shop', href: null, inNav: true },
   },
 ];
 
