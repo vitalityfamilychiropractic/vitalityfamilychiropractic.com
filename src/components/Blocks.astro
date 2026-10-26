@@ -80,6 +80,17 @@ function frameClass(frame?: string): string {
   return 'frame pg-frame';
 }
 
+/** Days ahead for a showEvents section. Other sections do not list events. */
+function eventWindow(showEvents: boolean | undefined): number | undefined {
+  if (!showEvents) return undefined;
+  if (typeof eventsWithinDays !== 'number' || !Number.isInteger(eventsWithinDays) || eventsWithinDays < 1) {
+    throw new Error(
+      'A section with showEvents needs eventsWithinDays, a positive number of days, on the page front matter.',
+    );
+  }
+  return eventsWithinDays;
+}
+
 const cardSizes = '(min-width: 1100px) 30vw, (min-width: 700px) 46vw, 92vw';
 const splitSizes = '(min-width: 960px) 40vw, 88vw';
 ---
@@ -323,11 +334,7 @@ const splitSizes = '(min-width: 960px) 40vw, 88vw';
     }
 
     if (section.kind === 'centered') {
-      if (section.showEvents && (!Number.isInteger(eventsWithinDays) || eventsWithinDays < 1)) {
-        throw new Error(
-          'A section with showEvents needs eventsWithinDays, a positive number of days, on the page front matter.',
-        );
-      }
+      const withinDays = eventWindow(section.showEvents);
       return (
         <section class="pg-centered" aria-labelledby={id}>
           <div class="wrap">
@@ -337,9 +344,7 @@ const splitSizes = '(min-width: 960px) 40vw, 88vw';
               <Flow flow={section.flow} tokens={tokens} />
               <Ctas ctas={section.ctas} tokens={tokens} />
             </div>
-            {section.showEvents && eventsWithinDays && (
-              <Events location={location} withinDays={eventsWithinDays} />
-            )}
+            {withinDays != null && <Events location={location} withinDays={withinDays} />}
           </div>
         </section>
       );
