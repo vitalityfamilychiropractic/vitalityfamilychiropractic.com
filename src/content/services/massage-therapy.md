@@ -5,7 +5,7 @@ order: 5
 summary: "Prenatal, postpartum, therapeutic, and lymphatic drainage massage with Candice, our licensed massage therapist, in {{city}}, {{stateAbbr}}."
 cardTitle: "Massage Therapy"
 cardText: "Sometimes your body needs a little extra attention. Our licensed massage therapist offers individualized bodywork to help you relax, recharge, and care for yourself."
-cardImage: "mural-detail"
+cardImage: "massage-therapy"
 sections:
   - kind: "intro"
     heading: "Massage Therapy at Vitality"

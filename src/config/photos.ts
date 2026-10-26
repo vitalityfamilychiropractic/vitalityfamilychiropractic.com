@@ -84,6 +84,14 @@ export const photos: Record<string, Photo> = {
     widths: [480, 800, 1200],
     position: "40% 45%",
   },
+  "massage-therapy": {
+    src: "/assets/img/locations/college-station/massage-therapy-1200.jpg",
+    alt: "A bright Vitality massage therapy room with an adjusting table",
+    width: 1200,
+    height: 800,
+    widths: [480, 800, 1200, 1800],
+    position: "55% 40%",
+  },
   "mom-and-baby": {
     src: "/assets/img/locations/college-station/mom-and-baby-1200.jpg",
     alt: "A smiling mom holds her grinning baby, who is wearing a ball cap",
