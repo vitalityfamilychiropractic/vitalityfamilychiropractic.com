@@ -33,6 +33,7 @@ export interface PostalAddress {
   state: string;
   /** Two-letter postal abbreviation, e.g. 'FL'. */
   stateAbbr: string;
+  /** Kept for map links. Visible addresses and schema.org omit it. */
   zip: string;
 }
 
@@ -71,11 +72,6 @@ export interface Location {
   /** Short label used in nav, page titles and the location switcher. */
   name: string;
   address: PostalAddress;
-  /**
-   * When true, the visible address and schema.org PostalAddress omit the ZIP.
-   * The map query can still include it.
-   */
-  hidePostalCode?: boolean;
   /** Formatted for display, e.g. '(407) 584-7900'. */
   phone: string;
   email: string;
