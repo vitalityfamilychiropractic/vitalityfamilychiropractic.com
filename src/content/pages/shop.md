@@ -1,7 +1,7 @@
 ---
 title: "Shop"
 summary: "A pocket apothecary from Vitality Family Chiropractic. Each item opens in the online store."
-intro: "Six curious blends from the shelf. Choose one and the online store opens so you can buy it."
+intro: "[Need text here]. Choose one and the online store opens so you can buy it."
 products:
   - name: "Moonbark Tincture"
     description: "A dropper of pale silver and oak bark, for evenings when the chairs have started a committee."
