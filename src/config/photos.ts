@@ -132,6 +132,14 @@ export const photos: Record<string, Photo> = {
     widths: [480, 800, 1200],
     position: "45% 35%",
   },
+  "portrait-mikayla": {
+    src: "/assets/img/staff/portrait-mikayla-1200.jpg",
+    alt: "Mikayla smiling in front of a stone wall",
+    width: 1536,
+    height: 2048,
+    widths: [480, 800, 1200],
+    position: "45% 35%",
+  },
   "portrait-yvonne": {
     src: "/assets/img/staff/portrait-yvonne-1200.jpg",
     alt: "Yvonne smiling in front of a stone wall",

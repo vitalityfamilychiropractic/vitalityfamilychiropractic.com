@@ -10,6 +10,7 @@ facts:
   - "She's a certified EMT! Because apparently being a full-time student, working, and volunteering wasn't enough to keep her busy."
   - "She's a certified floral designer. She earned her certificate through Texas A&amp;M's Benz School of Floral Design and loves creating beautiful arrangements."
   - "She's the mom of her friend group. She's got a plan, a backup plan, and probably a backup plan for that backup plan."
+photo: "portrait-mikayla"
 ---
 
 Mikayla may have been born in Florida, but she'll be the first to tell you she's a Texas girl! She grew up in the tiny town of Dime Box before making her way to College Station to attend Texas A&amp;M. She's graduating with her degree in Animal Science in December 2026, but Aggieland isn't getting rid of her just yet! She'll be sticking around for graduate school, too.
