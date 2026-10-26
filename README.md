@@ -66,7 +66,10 @@ Each office is a directory under its slug.
 | `/{office}/` | Office home |
 | `/{office}/our-care/{service}/` | A service, such as prenatal or massage-therapy |
 | `/{office}/meet-our-team/` | Team, in `location.team` order. On a wide screen the portrait switches sides for each person. |
-| `/{office}/our-community/` | Community, plus classes and partners |
+| `/{office}/our-community/` | Community |
+| `/{office}/our-community/classes-events/` | Classes and events from that office's calendar |
+| `/{office}/our-community/community-partners/` | Partners whose `locations` include this office, in catalog order |
+| `/{office}/our-community/community-partners/{partner}/` | One partner. Built only for offices named on that partner. |
 | `/{office}/new-patients/first-visit/` | First visit |
 | `/{office}/new-patients/pricing-insurance/` | Pricing and insurance |
 | `/{office}/contact/` | Phone, address, map, hours |
@@ -89,11 +92,13 @@ forms. Our Values redirects to that office's home. There is no values page.
 1. Add photos under `public/assets/img/locations/{slug}/` and register them in `src/config/photos.ts`.
 2. Add any new person as `src/content/team/{slug}.md`. The team schema is strict.
 3. Copy an entry in `src/config/locations.ts` and change every field, including `slug`, `bookingUrl`, `analyticsId`, hours, pricing, `services`, `team`, and `lead`.
-4. Run `bun run build`.
+4. To show a community partner at the new office, add its slug to that partner's `locations` array in `src/content/pages/partners.md`. An unknown office slug fails the build.
+5. Run `bun run build`.
 
 That generates the office home, team, a page per service the office lists,
-community, first visit, pricing, contact, and privacy, plus sitemap entries
-and Chiropractor structured data.
+community, classes and events, the partners index, a profile for each partner
+whose `locations` include the office, shop, first visit, pricing, contact, and
+privacy, plus sitemap entries and Chiropractor structured data.
 
 `pricing.rows[].values` must have one number per tier. A short row fails the build.
 
@@ -233,13 +238,14 @@ description. These fields are optional, and only some routes read them:
 | `asideTitle`, `aside` | The contact page. Both are required there. |
 | `intro` | The partners page and the shop page. Shown even when that list is empty |
 | `partners` | Community partner catalog on `partners.md`. Each partner has slug, `locations`, name, profession, summary, and optional business, phone, email, and website. `locations` is the office slugs where that partner appears. Catalog order is the order on the page. |
-| `products` | Shop catalog on `shop.md`: name, description, price, image, and the store link |
+| `products` | Shop catalog on `shop.md`: name, description, price, image, and the store link. Images live in `public/assets/img/shop/`. |
 | `eventsWithinDays` | Classes & Events. How many days ahead to show from `eventsCalendarId` |
 | `sections` | Home, first visit, community, classes, and every service page |
 
 A service file also needs `navLabel`, `order`, `cardTitle`, `cardText`, and
 `cardImage` (a photo id). `cardSoft` gives that home-page card the softer
-background. `order` is the menu order.
+background. `order` sorts the service pills on the brand landing page. The
+office menu follows `location.services`.
 
 A team file is one person. The schema is strict.
 

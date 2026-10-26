@@ -33,8 +33,6 @@ Owner decisions from 2026-10-25 that still hold:
 
 - Our Care and New Patients are menu headings, not pages.
 - "Explore Our Care" and "Explore All Our Services" go to Prenatal.
-- Shop stays in the College Station menu and has no URL until a Fourthwall
-  link exists. Do not invent one.
 - No contact form. First-visit scheduling buttons dial the office. Book Now
   opens that office's Jane App.
 - The menu label is "Your First Visit".
@@ -72,8 +70,10 @@ verification UI back.
 | --- | --- |
 | Office facts: address, hours, prices, team order, lead, booking, aliases | `src/config/locations.ts` |
 | Photo catalog and WebP widths | `src/config/photos.ts` |
-| Brand name, logo, default analytics | `src/config/site.ts` |
+| Brand name, logo, default analytics, shop nav | `src/config/site.ts` (`shop.inNav`) |
 | Shared page sections | `src/content/pages/*.md` |
+| Shop catalog | `src/content/pages/shop.md` (`products`). Images in `public/assets/img/shop/` |
+| Community partners | `src/content/pages/partners.md`. Each partner's `locations` names the offices |
 | Our Care pages | `src/content/services/*.md` |
 | A person | `src/content/team/*.md` |
 | How a section kind renders | `src/components/Blocks.astro` |
@@ -91,6 +91,8 @@ is strict: an unknown key in a team file fails the build. Page and service
 Copy an office entry to add an office. No new route file is required. `team`
 on the location is the only display order. Do not put an order field on the
 person. `lead` is who `{{lead}}` names, and whose name the landing card uses.
+To show a partner at that office, add its slug to the partner's `locations`
+in `src/content/pages/partners.md`. An unknown office slug fails the build.
 
 ## Content model
 
@@ -123,9 +125,12 @@ It is now a child of Our Care at `/{office}/our-care/massage-therapy/`, and
 only if that office lists `massage-therapy` in `services`. Celebration does
 not. `/massage-therapy/` redirects to the College Station care page.
 
-Our Care and New Patients are still headings, not links. Shop is still in the
-College Station menu as a label with `href: null`. Celebration's shop has
-`inNav: false`, so it is omitted there.
+Our Care and New Patients are still headings, not links. Shop is one item in
+every office menu and links to `/{office}/shop/`. The catalog is the
+`products` list in `src/content/pages/shop.md`. Buy links are `example.com`
+stand-ins until a real store URL is ready. Do not guess one. `shop.inNav` in
+`src/config/site.ts` turns the item on or off for every office. While that is
+false, production menus omit it and the dev server still shows the link in gray.
 
 There is no Our Values page. `/our-values/` and `/{office}/our-values/`
 redirect to the office home. Old Jekyll paths (`/specialties/pregnancy-care/`,
