@@ -196,6 +196,22 @@ export const photos: Record<string, Photo> = {
     widths: [480, 800, 1200, 1800],
     position: "55% 55%",
   },
+"celebration-reception": {
+    src: "/assets/img/locations/celebration/celebration-reception-1200.jpg",
+    alt: "The Vitality Family Chiropractic reception desk, painted in white with wood accent, in front of a white wall",
+    width: 2048,
+    height: 1536,
+    widths: [480, 800, 1200, 1800],
+    position: "55% 50%",
+  },
+  "celebration-waiting-room": {
+    src: "/assets/img/locations/celebration/celebration-waiting-room-1200.jpg",
+    alt: "The Vitality waiting room with a basket of toys, rows of chairs and a floral wall mural",
+    width: 2048,
+    height: 1536,
+    widths: [480, 800, 1200, 1800],
+    position: "60% 55%",
+  },
   "celebration-pregnancy": {
     src: "/assets/img/locations/celebration/pregnancy-care-960.jpg",
     alt: "Dr. Christie adjusts a pregnant patient lying on a chiropractic table.",
