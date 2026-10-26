@@ -38,6 +38,7 @@ export const locations: Location[] = [
     email: 'info@vitalityfamilychiropractic.com',
     social: { facebook: 'vitalityfamilychiropractic' },
     analyticsId: 'G-D120PL4X89',
+    eventsCalendarId: 'c_503e49f0dcd5538b5d17f5abc1602d7630ce99749b432f82b7d4f4402b82ad72@group.calendar.google.com',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=605+Celebration+Avenue+Celebration+FL+34747',
     mapEmbedUrl:
@@ -124,6 +125,7 @@ export const locations: Location[] = [
     email: 'info@vitalityfamilychiropractic.com',
     social: { facebook: 'vitalityfamilychiropractic' },
     analyticsId: 'G-P4WYJN76TD',
+    eventsCalendarId: 'c_246191c42c744962d17ec248914f6ab930c66eb5d6acfa7b95c926e791f30045@group.calendar.google.com',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=3012+Barron+Road+Suite+300+College+Station+TX+77845',
     mapEmbedUrl:

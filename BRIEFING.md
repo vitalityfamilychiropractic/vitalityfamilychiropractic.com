@@ -259,8 +259,12 @@ be empty. The partners page still shows its `intro`. The original partner
 directory and digital business cards were templates waiting on owner data.
 Do not invent partners.
 
-The events calendar embed was never supplied. Classes & Events is copy and
-sections, not a live calendar. Do not invent an embed.
+Classes & Events reads each office's public Google Calendar
+(`location.eventsCalendarId`). The "See What's Coming Up" section sets
+`showEvents: true`. `eventsWithinDays` on `classes-events.md` is how far ahead
+the cards look. The cards are a horizontal carousel: title, date, start and
+end, and the description. Events that have already ended are left out. Do not
+replace that with a calendar embed.
 
 ## Build and deploy
 

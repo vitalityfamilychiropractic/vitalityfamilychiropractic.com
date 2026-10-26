@@ -1,5 +1,6 @@
 ---
 import Ctas from './Ctas.astro';
+import Events from './Events.astro';
 import Flow from './Flow.astro';
 import Icon from './Icon.astro';
 import Paragraphs from './Paragraphs.astro';
@@ -45,6 +46,8 @@ interface Section {
   frame?: string;
   soft?: boolean;
   columns?: number;
+  /** Draw this office's upcoming calendar under the section copy. */
+  showEvents?: boolean;
 }
 interface ServiceCard {
   id: string;
@@ -61,9 +64,11 @@ interface Props {
   location: Location;
   tokens: Record<string, string>;
   services?: ServiceCard[];
+  /** How far ahead a `showEvents` section looks. Set on the page front matter. */
+  eventsWithinDays?: number;
 }
 
-const { sections = [], location, tokens, services = [] } = Astro.props;
+const { sections = [], location, tokens, services = [], eventsWithinDays } = Astro.props;
 
 function html(value: string | undefined): string {
   return value ? applyTokens(value, tokens) : '';
@@ -318,6 +323,11 @@ const splitSizes = '(min-width: 960px) 40vw, 88vw';
     }
 
     if (section.kind === 'centered') {
+      if (section.showEvents && (!Number.isInteger(eventsWithinDays) || eventsWithinDays < 1)) {
+        throw new Error(
+          'A section with showEvents needs eventsWithinDays, a positive number of days, on the page front matter.',
+        );
+      }
       return (
         <section class="pg-centered" aria-labelledby={id}>
           <div class="wrap">
@@ -327,6 +337,9 @@ const splitSizes = '(min-width: 960px) 40vw, 88vw';
               <Flow flow={section.flow} tokens={tokens} />
               <Ctas ctas={section.ctas} tokens={tokens} />
             </div>
+            {section.showEvents && eventsWithinDays && (
+              <Events location={location} withinDays={eventsWithinDays} />
+            )}
           </div>
         </section>
       );

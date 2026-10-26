@@ -79,6 +79,8 @@ export interface Location {
   social: { facebook: string };
   /** Google Analytics measurement id for this office. */
   analyticsId: string;
+  /** Google Calendar ID for this office's events calendar. */
+  eventsCalendarId: string,
   /** Google Maps place link, opened from the address. */
   mapUrl: string;
   /** Google Maps embed URL for the contact-page iframe. */

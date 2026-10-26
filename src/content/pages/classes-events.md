@@ -1,11 +1,13 @@
 ---
 title: "Classes & Events"
 summary: "Childbirth education, breastfeeding and new parent support, and family events at Vitality Family Chiropractic in {{city}}, {{stateAbbr}}."
+eventsWithinDays: 60
 sections:
   - kind: "page-hero"
     heading: "Classes &amp; Events"
   - kind: "centered"
     heading: "See What's Coming Up!"
+    showEvents: true
     flow:
       - kind: "p"
         text: "There's always something new on the calendar, and we'd love to see you at our next gathering."

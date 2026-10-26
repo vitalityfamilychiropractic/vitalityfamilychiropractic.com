@@ -211,7 +211,7 @@ list. A string in the front matter may contain tokens and inline HTML.
 | `home.md` | `/{office}/` |
 | `first-visit.md` | `/{office}/new-patients/first-visit/` |
 | `community.md` | `/{office}/our-community/` |
-| `classes-events.md` | `/{office}/our-community/classes-events/` |
+| `classes-events.md` | `/{office}/our-community/classes-events/`. `eventsWithinDays` limits the calendar. A centered section with `showEvents: true` lists that office's public Google Calendar under its copy. |
 | `partners.md` | `/{office}/our-community/community-partners/` |
 | `contact.md` | `/{office}/contact/` |
 | `team.md` | `/{office}/meet-our-team/` (title and summary only; bios are team files) |
@@ -229,6 +229,7 @@ description. These fields are optional, and only some routes read them:
 | `primaryOffice` | Location slug for the privacy contact block, on every privacy URL |
 | `asideTitle`, `aside` | The contact page. Both are required there. |
 | `intro` | The partners page, shown even when the partner list is empty |
+| `eventsWithinDays` | Classes & Events. How many days ahead to show from `eventsCalendarId` |
 | `sections` | Home, first visit, community, classes, and every service page |
 
 A service file also needs `navLabel`, `order`, `cardTitle`, `cardText`, and

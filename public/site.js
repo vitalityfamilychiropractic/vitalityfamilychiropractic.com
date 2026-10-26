@@ -88,6 +88,49 @@
     } catch (e) { /* share sheet closed */ }
   }));
 
+  // Upcoming-event carousel. Past events drop off without a rebuild.
+  d.querySelectorAll("[data-events]").forEach((root) => {
+    const track = root.querySelector(".ev-track");
+    const empty = root.querySelector(".ev-empty");
+    const now = Date.now();
+    track && [...track.children].forEach((card) => {
+      const end = Date.parse(card.getAttribute("data-end"));
+      if (Number.isFinite(end) && end <= now) card.remove();
+    });
+    if (!track || !track.children.length) {
+      if (track) track.hidden = true;
+      const bar = root.querySelector(".ev-bar");
+      if (bar) bar.hidden = true;
+      if (empty) empty.hidden = false;
+      return;
+    }
+    const prev = root.querySelector("[data-ev-prev]");
+    const next = root.querySelector("[data-ev-next]");
+    const motion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const step = () => {
+      const card = track.querySelector(".ev-card");
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return (card ? card.getBoundingClientRect().width : track.clientWidth) + gap;
+    };
+    const scrollByCard = (direction) => track.scrollBy({ left: direction * step(), behavior: motion ? "auto" : "smooth" });
+    prev && prev.addEventListener("click", () => scrollByCard(-1));
+    next && next.addEventListener("click", () => scrollByCard(1));
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); scrollByCard(1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); scrollByCard(-1); }
+    });
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      const bar = root.querySelector(".ev-bar");
+      if (bar) bar.hidden = max <= 4;
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= max - 2;
+    };
+    track.addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+    update();
+  });
+
   // ---------- Preview-only behaviour ----------
   if (!d.body.classList.contains("is-preview")) return;
   d.body.classList.add("show-flags");

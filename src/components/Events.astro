@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import { upcomingEvents } from '../lib/events';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  withinDays: number;
+}
+
+const { location, withinDays } = Astro.props;
+const events = await upcomingEvents(location.eventsCalendarId, withinDays);
+const empty = `Nothing is scheduled in the next ${withinDays} days.`;
+---
+
+<div class="ev" data-events>
+  {
+    events.length > 0 ? (
+      <div class="ev-stage">
+        <div class="ev-track" tabindex="0" aria-label="Upcoming events">
+          {events.map((event) => (
+            <article class="ev-card" data-end={event.end} aria-labelledby={event.id}>
+              <p class="ev-date">
+                <time datetime={event.start}>{event.dateLabel}</time>
+              </p>
+              <h3 id={event.id}>{event.title}</h3>
+              <p class="ev-time">{event.timeLabel}</p>
+              {event.description && <p class="ev-desc">{event.description}</p>}
+            </article>
+          ))}
+        </div>
+        <div class="ev-bar">
+          <button type="button" class="ev-nav" data-ev-prev aria-label="Previous events">
+            <Icon name="arrow" class="i ev-back" />
+          </button>
+          <button type="button" class="ev-nav" data-ev-next aria-label="Next events">
+            <Icon name="arrow" class="i" />
+          </button>
+        </div>
+      </div>
+    ) : (
+      <p class="ev-empty">{empty}</p>
+    )
+  }
+  {events.length > 0 && (
+    <p class="ev-empty" hidden>
+      {empty}
+    </p>
+  )}
+</div>

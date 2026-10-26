@@ -38,5 +38,10 @@ const description = await pageDescription('classes-events', location);
     { name: entry.data.title, href: path },
   ]}
 >
-  <Blocks sections={entry.data.sections} location={location} tokens={tokensFor(location, lead.data)} />
+  <Blocks
+    sections={entry.data.sections}
+    location={location}
+    tokens={tokensFor(location, lead.data)}
+    eventsWithinDays={entry.data.eventsWithinDays}
+  />
 </LocationLayout>

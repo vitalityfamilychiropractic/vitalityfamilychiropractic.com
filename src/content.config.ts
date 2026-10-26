@@ -37,6 +37,11 @@ const pages = defineCollection({
     aside: z.string().optional(),
     /** Partners page introduction. Shown even when the partner list is empty. */
     intro: z.string().optional(),
+    /**
+     * Classes and Events: how many days ahead to list from the office calendar.
+     * A section with `showEvents: true` reads this.
+     */
+    eventsWithinDays: z.number().int().positive().optional(),
     sections: z.array(z.any()).optional(),
   }),
 });
