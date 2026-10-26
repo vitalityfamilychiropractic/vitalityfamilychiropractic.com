@@ -22,8 +22,6 @@ const photoLabel = resolvedId === use.id ? use.id : `${resolvedId} · asked ${us
   <img
     src={photo.src}
     alt={photo.alt}
-    width={photo.width}
-    height={photo.height}
     style={`object-position:${photo.position}`}
     decoding="async"
     loading={priority ? undefined : 'lazy'}
