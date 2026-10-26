@@ -241,6 +241,12 @@ export function formatCityLine(location: Location): string {
   return `${city}, ${stateAbbr}`;
 }
 
+/** City, state and zip line. */
+export function formatCityZipLine(location: Location): string {
+  const { city, stateAbbr, zip } = location.address;
+  return `${city}, ${stateAbbr} ${zip}`;
+}
+
 /** Full one-line address. */
 export function formatAddress(location: Location): string {
   return [formatStreet(location), formatCityLine(location)].filter(Boolean).join(', ');

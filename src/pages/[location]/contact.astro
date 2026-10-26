@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import LocationLayout from '../../layouts/LocationLayout.astro';
 import Hours from '../../components/Hours.astro';
 import Icon from '../../components/Icon.astro';
-import { formatCityLine, formatStreet, locations, telHref } from '../../config/locations';
+import { formatCityZipLine, formatStreet, locations, telHref } from '../../config/locations';
 import { pageDescription } from '../../lib/pages';
 import { getMember } from '../../lib/team';
 import { applyTokens, tokensFor } from '../../lib/tokens';
@@ -60,7 +60,7 @@ const phone = telHref(location.phone);
         </div>
         <div class="ct-block">
           <h2>Address</h2>
-          <address set:html={`${formatStreet(location)}<br>${formatCityLine(location)}`} />
+          <address set:html={`${formatStreet(location)}<br>${formatCityZipLine(location)}`} />
           <p><a class="ct-link" href={location.mapUrl} target="_blank" rel="noopener">Get Directions</a></p>
         </div>
         <div class="ct-block">
