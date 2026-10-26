@@ -69,17 +69,6 @@ sections:
         text: "We welcome you at every stage."
       - kind: "p"
         text: "Whether you're looking for help with pregnancy-related back or pelvic discomfort, hoping to stay active, or simply interested in chiropractic care during pregnancy, we'll take the time to understand your goals and develop an approach that makes sense for you."
-  - kind: "note"
-    heading: "Is Chiropractic Care Safe During Pregnancy?"
-    flow:
-      - kind: "p"
-        text: "We take the responsibility of caring for pregnant women seriously, which means understanding how pregnancy changes the body and knowing when care needs to be modified."
-      - kind: "p"
-        text: "Prenatal chiropractic techniques can be adapted to accommodate your growing belly and changing body. We'll review your health history, discuss any complications or concerns, and choose techniques and positioning appropriate for your individual circumstances."
-      - kind: "p"
-        text: "While serious complications appear uncommon in the published literature, pregnancy-specific safety research is limited. Certain symptoms or medical conditions may require additional evaluation or coordination with your prenatal provider."
-      - kind: "p"
-        text: "We want you to feel comfortable asking questions and confident in the care you're receiving."
   - kind: "split"
     heading: "And After Baby Arrives? We're Still Here."
     flow:
