@@ -26,9 +26,6 @@ export function tokensFor(location: Location, lead: TokenLead) {
     /** Their job title, e.g. 'Chiropractor'. */
     leadRole: lead.role,
 
-    doctor: lead.shortName,
-    doctorFull: leadFull,
-
     location: location.name,
     city: location.address.city,
     /** Full state name, e.g. 'Florida'. */

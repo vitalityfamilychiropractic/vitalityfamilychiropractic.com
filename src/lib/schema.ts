@@ -45,7 +45,6 @@ export function localBusinessSchema(
       streetAddress: formatStreet(location),
       addressLocality: location.address.city,
       addressRegion: location.address.stateAbbr,
-      ...(location.hidePostalCode ? {} : { postalCode: location.address.zip }),
       addressCountry: 'US',
     },
     geo: {
