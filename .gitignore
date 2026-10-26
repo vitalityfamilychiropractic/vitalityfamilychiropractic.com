@@ -1,6 +1,8 @@
 # build output
 dist/
 .astro/
+make-images/original/
+make-images/output/
 
 # dependencies
 node_modules/
@@ -23,10 +25,3 @@ pnpm-debug.log*
 # macOS
 .DS_Store
 */.DS_Store
-
-# holdovers from Jekyll
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
