@@ -1,10 +1,12 @@
 ---
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import type { CollectionEntry } from 'astro:content';
 import LocationLayout from './LocationLayout.astro';
 import Icon from '../components/Icon.astro';
-import { products } from '../config/shop';
 import type { Location } from '../config/types';
+
+type Product = NonNullable<CollectionEntry<'pages'>['data']['products']>[number];
 
 interface Props {
   location: Location;
@@ -12,9 +14,10 @@ interface Props {
   description: string;
   path: string;
   intro: string;
+  products: Product[];
 }
 
-const { location, title, description, path, intro } = Astro.props;
+const { location, title, description, path, intro, products } = Astro.props;
 
 for (const product of products) {
   for (const key of ['name', 'description', 'price', 'image', 'href'] as const) {

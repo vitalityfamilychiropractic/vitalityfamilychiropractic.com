@@ -57,7 +57,6 @@ export const locations: Location[] = [
     ],
     services: ['prenatal', 'newborn-infant', 'pediatric', 'adult-family'],
     team: ['christie'],
-    partners: ['pebble-quince', 'bramble-pudding', 'cinder-moth', 'waffle-birch'],
     lead: 'christie',
     areaServed: [
       'Celebration',
@@ -145,7 +144,6 @@ export const locations: Location[] = [
     ],
     services: ['prenatal', 'newborn-infant', 'pediatric', 'adult-family', 'massage-therapy'],
     team: ['mikah', 'christie', 'yvonne', 'mikayla', 'candice'],
-    partners: ['juniper-latchkey', 'noodle-fern', 'pickle-orchid', 'marzipan-gull', 'thistle-bongo'],
     lead: 'christie',
     areaServed: [
       'College Station',

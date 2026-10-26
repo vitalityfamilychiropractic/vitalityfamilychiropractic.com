@@ -37,6 +37,41 @@ const pages = defineCollection({
     aside: z.string().optional(),
     /** Partners page introduction. Shown even when the partner list is empty. */
     intro: z.string().optional(),
+    /** Shop catalog. Every office's shop page shows this list. */
+    products: z
+      .array(
+        z.object({
+          name: z.string(),
+          description: z.string(),
+          /** Display price, including the dollar sign. */
+          price: z.string(),
+          /** Public path, such as `/assets/img/shop/moonbark-tincture.jpg`. */
+          image: z.string(),
+          /** This product on the online store. */
+          href: z.string(),
+        }),
+      )
+      .optional(),
+    /**
+     * Community partner catalog. Each partner's `locations` lists the office
+     * slugs where that partner is shown. Order in this list is display order.
+     */
+    partners: z
+      .array(
+        z.object({
+          slug: z.string(),
+          /** Office slugs from `src/config/locations.ts`. */
+          locations: z.array(z.string()),
+          name: z.string(),
+          profession: z.string(),
+          business: z.string().optional(),
+          summary: z.string(),
+          phone: z.string().optional(),
+          email: z.string().optional(),
+          website: z.string().optional(),
+        }),
+      )
+      .optional(),
     /**
      * Classes and Events: how many days ahead to list from the office calendar.
      * A section with `showEvents: true` reads this.

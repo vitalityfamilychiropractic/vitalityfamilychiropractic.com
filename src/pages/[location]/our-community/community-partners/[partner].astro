@@ -1,16 +1,20 @@
 ---
 import LocationLayout from '../../../../layouts/LocationLayout.astro';
 import { locations, telHref } from '../../../../config/locations';
-import { partnersFor, type Partner } from '../../../../config/partners';
+import { partnersFor, type Partner } from '../../../../lib/partners';
 import type { Location } from '../../../../config/types';
 
-export function getStaticPaths() {
-  return locations.flatMap((location) =>
-    partnersFor(location).map((partner) => ({
-      params: { location: location.slug, partner: partner.slug },
-      props: { location, partner },
-    })),
-  );
+export async function getStaticPaths() {
+  const paths = [];
+  for (const location of locations) {
+    for (const partner of await partnersFor(location)) {
+      paths.push({
+        params: { location: location.slug, partner: partner.slug },
+        props: { location, partner },
+      });
+    }
+  }
+  return paths;
 }
 
 interface Props {

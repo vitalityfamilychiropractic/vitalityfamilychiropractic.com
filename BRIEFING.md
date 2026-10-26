@@ -254,8 +254,10 @@ needs Pillow.
 ## Pricing and partners
 
 `Pricing.astro` reads `location.pricing`. Each row's `values` must have one
-number per tier. Community partners are `src/config/partners.ts`. The list may
-be empty. The partners page still shows its `intro`. The original partner
+number per tier. Community partners are the `partners` list in
+`src/content/pages/partners.md`. Each partner's `locations` array names the
+offices that show them. The list may be empty. The partners page
+still shows its `intro`. The original partner
 directory and digital business cards were templates waiting on owner data.
 Do not invent partners.
 

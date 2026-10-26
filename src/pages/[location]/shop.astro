@@ -23,6 +23,7 @@ const path = `/${location.slug}/shop/`;
 const entry = await getEntry('pages', 'shop');
 if (!entry) throw new Error('Missing src/content/pages/shop.md');
 if (!entry.data.intro) throw new Error('src/content/pages/shop.md is missing intro');
+if (!entry.data.products) throw new Error('src/content/pages/shop.md is missing products');
 const lead = await getMember(location.lead);
 const intro = applyTokens(entry.data.intro, tokensFor(location, lead.data));
 const description = await pageDescription('shop', location);
@@ -34,4 +35,5 @@ const description = await pageDescription('shop', location);
   description={description}
   path={path}
   intro={intro}
+  products={entry.data.products}
 />

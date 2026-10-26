@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import LocationLayout from '../../../../layouts/LocationLayout.astro';
 import Icon from '../../../../components/Icon.astro';
 import { locations } from '../../../../config/locations';
-import { partnersFor } from '../../../../config/partners';
+import { partnersFor } from '../../../../lib/partners';
 import { pageDescription } from '../../../../lib/pages';
 import { getMember } from '../../../../lib/team';
 import { applyTokens, tokensFor } from '../../../../lib/tokens';
@@ -28,7 +28,7 @@ if (!entry.data.intro) throw new Error('src/content/pages/partners.md is missing
 const lead = await getMember(location.lead);
 const tokens = tokensFor(location, lead.data);
 const description = await pageDescription('partners', location);
-const partners = partnersFor(location);
+const partners = await partnersFor(location);
 ---
 
 <LocationLayout

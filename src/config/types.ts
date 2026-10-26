@@ -93,11 +93,6 @@ export interface Location {
    * office is listed in each office's array where that office wants them.
    */
   team: string[];
-  /**
-   * Partner slugs on this office's partners page, in display order.
-   * Each must match a slug in `src/config/partners.ts`.
-   */
-  partners: string[];
   /** The team member whose name fills `{{lead}}` in shared prose. */
   lead: string;
   /**
