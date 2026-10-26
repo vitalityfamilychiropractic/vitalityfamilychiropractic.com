@@ -1,0 +1,354 @@
+/* Additions on top of the College Station design. Loaded after site.css. */
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px 14px;
+  margin-right: auto;
+  min-width: 0;
+}
+.brand {
+  margin-right: 0;
+  flex-direction: row;
+  align-items: center;
+}
+.brand-logo {
+  display: block;
+  height: 54px;
+  width: auto;
+  max-width: none;
+}
+.site-header.is-landing .hdr {
+  justify-content: center;
+}
+.site-header.is-landing .brand-lockup {
+  margin-right: 0;
+}
+
+details[data-switcher] {
+  position: relative;
+}
+details[data-switcher] summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  list-style: none;
+  cursor: pointer;
+  color: #9a5a63;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+details[data-switcher] summary::-webkit-details-marker {
+  display: none;
+}
+details[data-switcher] summary .chev {
+  width: 14px;
+  height: 14px;
+}
+details[data-switcher][open] summary .chev {
+  transform: rotate(180deg);
+}
+.switcher-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 40;
+  min-width: 240px;
+  background: var(--paper);
+  border: 1px solid rgb(53 79 96 / 0.08);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 8px;
+}
+.switcher-menu a {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.switcher-menu a:hover {
+  background: var(--blush-soft);
+}
+.switcher-name {
+  font-weight: 800;
+  color: var(--slate);
+  font-size: 0.95rem;
+}
+.switcher-addr {
+  color: var(--ink-2);
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.nav-link.is-static {
+  cursor: default;
+}
+.nav-link.is-static:hover {
+  background: transparent;
+  color: var(--ink);
+}
+.foot-nav .is-static {
+  font-weight: 750;
+  color: #f3f5f6;
+}
+
+.announce {
+  margin: 0;
+  text-align: center;
+  background: var(--blush);
+  color: var(--slate);
+  font-weight: 750;
+  padding: 10px 16px;
+}
+
+/* Four care cards: the five-card rule would leave the fourth card alone. */
+@media (min-width: 700px) and (max-width: 1099px) {
+  .cards.cards-4 .card:last-child {
+    grid-column: auto;
+  }
+  .cards.cards-4 .card:last-child .card-ph {
+    aspect-ratio: 4 / 3.1;
+  }
+}
+@media (min-width: 1100px) {
+  .cards.cards-4 .card,
+  .cards.cards-4 .card:nth-child(4),
+  .cards.cards-4 .card:nth-child(5) {
+    grid-column: span 3;
+  }
+  .cards.cards-4 .card:nth-child(4) .card-ph,
+  .cards.cards-4 .card:nth-child(5) .card-ph {
+    aspect-ratio: 4 / 3.1;
+  }
+}
+
+.tm-bio > p:first-child {
+  font-size: 1.16em;
+}
+.tm-initials {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--blush);
+  color: var(--slate);
+  font-family: var(--serif);
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  letter-spacing: 0.04em;
+}
+
+.prose {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: clamp(8px, 2vw, 24px) 0 clamp(72px, 10vw, 120px);
+}
+.prose h2 {
+  font-size: clamp(1.6rem, 1.3rem + 1vw, 2.2rem);
+  margin-top: 1.4em;
+}
+.prose h3 {
+  margin-top: 1.2em;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.2em;
+}
+.prose li + li {
+  margin-top: 0.35em;
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid rgb(53 79 96 / 0.12);
+  margin: 2rem 0;
+}
+.prose-updated {
+  color: var(--ink-2);
+  font-size: 0.92rem;
+}
+
+.gate {
+  padding: clamp(48px, 7vw, 88px) 0 clamp(12px, 2vw, 24px);
+}
+.gate-eyebrow {
+  margin: 0 0 0.8rem;
+  max-width: 36rem;
+  font: 800 0.72rem/1.45 var(--sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+.gate h1 {
+  max-width: 11ch;
+}
+.gate-lede,
+.choose-lede {
+  max-width: 38em;
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+.pills li {
+  padding: 0.4rem 0.95rem;
+  background: var(--paper);
+  border: 1.5px solid var(--dusty);
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 750;
+  color: var(--slate);
+}
+.choose {
+  padding: clamp(28px, 4vw, 56px) 0 clamp(72px, 10vw, 120px);
+}
+.offices {
+  list-style: none;
+  margin: 1.8rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+}
+.office {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.office:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1px 2px rgb(53 79 96 / 0.06), 0 18px 36px -14px rgb(53 79 96 / 0.32);
+}
+.office:focus-within {
+  outline: 3px solid var(--dusty);
+  outline-offset: 3px;
+}
+.office-figure {
+  flex: none;
+  aspect-ratio: 4 / 3;
+  background: var(--dusty-soft);
+  overflow: hidden;
+}
+.office-figure picture,
+.office-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.office-figure img {
+  object-fit: cover;
+}
+.office-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 22px 24px 26px;
+}
+.office-name {
+  font-size: clamp(1.7rem, 1.4rem + 0.8vw, 2.1rem);
+}
+.office-name a {
+  color: inherit;
+  text-decoration: none;
+}
+.office-name a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.office-name a:focus-visible {
+  outline: none;
+}
+.office-lead {
+  margin: 0.15rem 0 0;
+  color: var(--ink-2);
+}
+.office-address {
+  margin: 0.9rem 0 0;
+  font-style: normal;
+  color: var(--ink-2);
+}
+.office-phone {
+  margin: 0.25rem 0 0;
+  font-weight: 750;
+}
+.office-phone a,
+.office-hours {
+  position: relative;
+  z-index: 1;
+}
+.office-phone a {
+  text-decoration: none;
+}
+.office-phone a:hover {
+  text-decoration: underline;
+}
+.office-hours {
+  margin-top: 1rem;
+  border-top: 1px solid rgb(53 79 96 / 0.12);
+  padding-top: 0.45rem;
+}
+.office-hours summary {
+  cursor: pointer;
+  padding: 0.35rem 0;
+  font-weight: 750;
+  color: var(--slate);
+}
+.office-cta {
+  margin-top: auto;
+  padding-top: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 750;
+  color: var(--slate);
+}
+.office:hover .office-cta {
+  text-decoration: underline;
+}
+
+.missing {
+  text-align: center;
+  padding: clamp(72px, 12vw, 140px) 0;
+}
+.missing h1 {
+  margin-bottom: 0.3em;
+}
+.missing-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 1.6rem;
+}
+
+.pt-intro {
+  max-width: 40em;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .brand-logo {
+    height: 44px;
+  }
+  body {
+    padding-bottom: 0;
+  }
+  body:has(.m-bar) {
+    padding-bottom: 76px;
+  }
+}

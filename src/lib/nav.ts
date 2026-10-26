@@ -1,53 +1,61 @@
 import type { Location } from '../config/types';
-import type { SpecialtySummary } from './specialties';
+import { servicesFor } from './services';
 
 export interface NavItem {
   label: string;
-  href: string;
+  href?: string;
   children?: NavItem[];
+  /** A button that opens the menu, rather than a link to a section page. */
+  heading?: boolean;
 }
 
 /**
  * The navigation for a single office. Every href is prefixed with the
  * location's slug, so each office reads as a standalone site.
  *
- * `specialties` is passed in rather than imported because the set differs
- * between offices — resolve it with `getSpecialtiesFor(location)`.
+ * Massage is a child of Our Care, and only at offices that offer it.
+ * Shop stays in the menu as a non-link when `href` is null.
  */
-export function buildNav(
-  location: Location,
-  specialties: SpecialtySummary[],
-): NavItem[] {
+export async function buildNav(location: Location): Promise<NavItem[]> {
+  const services = await servicesFor(location);
   const base = `/${location.slug}`;
 
   const items: NavItem[] = [
-    { label: 'Home', href: `${base}/` },
     {
-      label: 'About Us',
-      href: `${base}/our-values/`,
+      label: 'Our Care',
+      heading: true,
+      children: services.map((service) => ({
+        label: service.data.navLabel,
+        href: `${base}/our-care/${service.id}/`,
+      })),
+    },
+    { label: 'Meet Our Team', href: `${base}/meet-our-team/` },
+    {
+      label: 'Our Community',
+      href: `${base}/our-community/`,
       children: [
-        { label: 'Our Values', href: `${base}/our-values/` },
-        { label: 'Team', href: `${base}/team/` },
-        { label: 'Pricing', href: `${base}/pricing/` },
+        { label: 'Classes & Events', href: `${base}/our-community/classes-events/` },
+        { label: 'Community Partners', href: `${base}/our-community/community-partners/` },
+      ],
+    },
+    {
+      label: 'New Patients',
+      heading: true,
+      children: [
+        { label: 'Your First Visit', href: `${base}/new-patients/first-visit/` },
+        { label: 'Pricing & Insurance', href: `${base}/new-patients/pricing-insurance/` },
       ],
     },
   ];
 
-  // An office with no specialty pages simply has no Specialties menu, rather
-  // than an empty dropdown.
-  if (specialties.length > 0) {
+  if (location.shop?.inNav) {
     items.push({
-      label: 'Specialties',
-      href: `${base}/specialties/${specialties[0]!.slug}/`,
-      children: specialties.map((s) => ({
-        label: s.title,
-        href: `${base}/specialties/${s.slug}/`,
-      })),
+      label: location.shop.label,
+      ...(location.shop.href ? { href: location.shop.href } : {}),
     });
   }
 
-  items.push({ label: 'Contact Us', href: `${base}/contact/` });
-
+  items.push({ label: 'Contact', href: `${base}/contact/` });
   return items;
 }
 
@@ -58,12 +66,13 @@ function normalise(path: string): string {
 }
 
 /** True when `href` is the page currently being rendered. */
-export function isCurrent(href: string, pathname: string): boolean {
+export function isCurrent(href: string | undefined, pathname: string): boolean {
+  if (!href) return false;
   return normalise(href) === normalise(pathname);
 }
 
 /** True when `item` is, or contains, the page currently being rendered. */
 export function isAncestor(item: NavItem, pathname: string): boolean {
   if (isCurrent(item.href, pathname)) return true;
-  return (item.children ?? []).some((c) => isCurrent(c.href, pathname));
+  return (item.children ?? []).some((child) => isCurrent(child.href, pathname));
 }

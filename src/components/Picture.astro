@@ -1,0 +1,30 @@
+---
+import { photoFor, webpSrc, type ImageUse } from '../config/photos';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+  use: ImageUse;
+  sizes: string;
+  priority?: boolean;
+}
+
+const { location, use, sizes, priority = false } = Astro.props;
+const photo = photoFor(location, use);
+const srcset = photo.widths.map((width) => `${webpSrc(photo.src, width)} ${width}w`).join(', ');
+---
+
+<picture class="ph">
+  {srcset && <source type="image/webp" srcset={srcset} sizes={sizes} />}
+  <img
+    src={photo.src}
+    alt={photo.alt}
+    width={photo.width}
+    height={photo.height}
+    style={`object-position:${photo.position}`}
+    decoding="async"
+    loading={priority ? undefined : 'lazy'}
+    fetchpriority={priority ? 'high' : undefined}
+    role={photo.alt ? undefined : 'presentation'}
+  />
+</picture>

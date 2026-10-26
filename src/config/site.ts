@@ -18,7 +18,6 @@ export const site = {
   logoRaster: '/assets/img/logo-square.png',
   /** Default Open Graph image. */
   ogImage: '/assets/img/logo.png',
-  spineGraphic: '/assets/img/spine-2.webp',
   social: {
     facebook: 'vitalityfamilychiropractic',
   },

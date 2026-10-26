@@ -1,0 +1,24 @@
+---
+import { applyTokens } from '../lib/tokens';
+
+interface Item {
+  kind: string;
+  text: string;
+}
+
+interface Props {
+  flow?: Item[];
+  tokens: Record<string, string>;
+}
+
+const { flow = [], tokens } = Astro.props;
+---
+
+{
+  flow.map((item) => {
+    const html = applyTokens(item.text, tokens);
+    if (/<p[\s>]/i.test(html)) return <Fragment set:html={html} />;
+    const cls = item.kind === 'p' ? undefined : item.kind;
+    return <p class={cls} set:html={html} />;
+  })
+}

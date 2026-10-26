@@ -1,32 +1,17 @@
 import { site } from '../config/site';
-import { formatAddress, facebookHref } from '../config/locations';
-import type { TeamMember, Location } from '../config/types';
-
-const DAY_NAMES: Record<string, string> = {
-  Mon: 'Monday',
-  Tue: 'Tuesday',
-  Wed: 'Wednesday',
-  Thu: 'Thursday',
-  Fri: 'Friday',
-  Sat: 'Saturday',
-  Sun: 'Sunday',
-  Monday: 'Monday',
-  Tuesday: 'Tuesday',
-  Wednesday: 'Wednesday',
-  Thursday: 'Thursday',
-  Friday: 'Friday',
-  Saturday: 'Saturday',
-  Sunday: 'Sunday',
-};
+import { facebookHref, formatAddress, formatStreet } from '../config/locations';
+import { photoFor } from '../config/photos';
+import type { Location, StaffSummary } from '../config/types';
 
 /**
- * schema.org markup for one office, generated entirely from its config entry —
- * a new location gets correct structured data with no extra work.
+ * schema.org markup for one office, generated entirely from its config entry.
+ * Hours come only from machine-readable ranges, so a display-only Saturday
+ * stays out of the structured data.
  */
 export function localBusinessSchema(
   location: Location,
-  team: TeamMember[],
-  /** Titles of the specialties this office offers, e.g. 'Pregnancy Care'. */
+  team: StaffSummary[],
+  /** Titles of the services this office offers. */
   services: string[],
   /** Office home-page description, already filled in for this location. */
   description: string,
@@ -36,7 +21,7 @@ export function localBusinessSchema(
   const openingHours = location.hours.flatMap((entry) =>
     (entry.machine ?? []).map(([opens, closes]) => ({
       '@type': 'OpeningHoursSpecification',
-      dayOfWeek: `https://schema.org/${DAY_NAMES[entry.day] ?? entry.day}`,
+      dayOfWeek: `https://schema.org/${entry.day}`,
       opens,
       closes,
     })),
@@ -52,17 +37,15 @@ export function localBusinessSchema(
     url,
     telephone: location.phone,
     email: location.email,
-    image: `${site.url}${location.images.portraitStudio}`,
+    image: new URL(photoFor(location, { id: 'landing-office' }).src, site.url).href,
     logo: `${site.url}${site.logoRaster}`,
     priceRange: '$$',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: [location.address.street, location.address.street2]
-        .filter(Boolean)
-        .join(' '),
+      streetAddress: formatStreet(location),
       addressLocality: location.address.city,
       addressRegion: location.address.stateAbbr,
-      postalCode: location.address.zip,
+      ...(location.hidePostalCode ? {} : { postalCode: location.address.zip }),
       addressCountry: 'US',
     },
     geo: {
@@ -78,22 +61,17 @@ export function localBusinessSchema(
       '@type': 'AdministrativeArea',
       name,
     })),
-    // Taken from the office's own specialty list, so each office advertises
-    // only the services it actually offers.
     availableService: services.map((name) => ({
       '@type': 'MedicalTherapy',
       name,
     })),
-    employee: team.map((m) => ({
-      // Only licensed clinicians are `Physician`. Everyone else is a `Person`.
-      '@type': m.schemaType,
-      name: m.credentials ? `${m.name}, ${m.credentials}` : m.name,
-      jobTitle: m.role,
-      url: `${url}team/${m.slug}/`,
-      email: m.email,
-      ...(m.schemaType === 'Physician'
-        ? { medicalSpecialty: 'Chiropractic' }
-        : {}),
+    employee: team.map((member) => ({
+      '@type': member.schemaType,
+      name: member.credentials ? `${member.name}, ${member.credentials}` : member.name,
+      jobTitle: member.role,
+      url: `${url}meet-our-team/#${member.slug}`,
+      ...(member.email ? { email: member.email } : {}),
+      ...(member.schemaType === 'Physician' ? { medicalSpecialty: 'Chiropractic' } : {}),
     })),
     potentialAction: {
       '@type': 'ReserveAction',
@@ -108,9 +86,7 @@ export function localBusinessSchema(
 }
 
 /** Breadcrumb trail for a page inside a location. */
-export function breadcrumbSchema(
-  crumbs: Array<{ name: string; href: string }>,
-) {
+export function breadcrumbSchema(crumbs: Array<{ name: string; href: string }>) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -124,7 +100,7 @@ export function breadcrumbSchema(
 }
 
 /** Organization-level markup for the location chooser at the site root. */
-export function organizationSchema(locations: Location[]) {
+export function organizationSchema(offices: Location[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -135,13 +111,13 @@ export function organizationSchema(locations: Location[]) {
     logo: `${site.url}${site.logoRaster}`,
     email: site.email,
     sameAs: [facebookHref(site)],
-    department: locations.map((l) => ({
+    department: offices.map((office) => ({
       '@type': 'Chiropractor',
-      '@id': `${site.url}/${l.slug}/`,
-      name: `${site.name} — ${l.name}`,
-      url: `${site.url}/${l.slug}/`,
-      telephone: l.phone,
-      address: formatAddress(l),
+      '@id': `${site.url}/${office.slug}/`,
+      name: `${site.name} — ${office.name}`,
+      url: `${site.url}/${office.slug}/`,
+      telephone: office.phone,
+      address: formatAddress(office),
     })),
   };
 }

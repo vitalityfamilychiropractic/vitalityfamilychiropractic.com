@@ -1,0 +1,100 @@
+---
+import { render } from 'astro:content';
+import LocationLayout from '../../layouts/LocationLayout.astro';
+import Icon from '../../components/Icon.astro';
+import Picture from '../../components/Picture.astro';
+import { locations } from '../../config/locations';
+import { pageDescription } from '../../lib/pages';
+import { getEntry } from 'astro:content';
+import { initials, teamFor } from '../../lib/team';
+import type { Location } from '../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/meet-our-team/`;
+const page = await getEntry('pages', 'team');
+if (!page) throw new Error('Missing src/content/pages/team.md');
+const description = await pageDescription('team', location);
+const members = await teamFor(location);
+const rendered = await Promise.all(
+  members.map(async (member) => {
+    const { Content } = await render(member);
+    return { member, Content };
+  }),
+);
+---
+
+<LocationLayout
+  location={location}
+  title={page.data.title}
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: page.data.title, href: path },
+  ]}
+>
+  <section class="tm-hero" aria-labelledby="tm-title">
+    <div class="wrap">
+      <div class="tm-hero-inner reveal">
+        <Icon name="sprig" class="sprig" />
+        <h1 id="tm-title">{page.data.title}</h1>
+      </div>
+    </div>
+  </section>
+  {
+    rendered.map(({ member, Content }, index) => {
+      const doctor = member.data.schemaType === 'Physician';
+      return (
+        <section class:list={['tm-person', index % 2 === 1 && 'tm-alt']} id={member.id} aria-labelledby={`tm-${member.id}`}>
+          <div class="wrap tm-grid">
+            <div class="tm-photo reveal">
+              <div class="arch tm-portrait">
+                {member.data.photo ? (
+                  <Picture
+                    location={location}
+                    use={{ id: member.data.photo }}
+                    sizes="(min-width: 960px) 30vw, 70vw"
+                  />
+                ) : (
+                  <span class="tm-initials" aria-hidden="true">
+                    {initials(member.data.name)}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div class="tm-copy reveal">
+              <h2 id={`tm-${member.id}`}>
+                Meet {doctor ? member.data.shortName : member.data.name}
+                {!doctor && <span class="tm-role">| {member.data.role}</span>}
+              </h2>
+              {member.data.tagline && <p class="tm-tagline">{member.data.tagline}</p>}
+              <div class="tm-bio">
+                <Content />
+              </div>
+              <div class="tm-things">
+                <p class="tm-eyebrow">Beyond the Adjustment</p>
+                <h3>{member.data.factsTitle}</h3>
+                <ol class="tm-list tm-ol">
+                  {member.data.facts.map((fact) => (
+                    <li set:html={fact} />
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    })
+  }
+</LocationLayout>

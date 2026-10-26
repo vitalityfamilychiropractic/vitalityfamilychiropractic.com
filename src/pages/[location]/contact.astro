@@ -1,9 +1,12 @@
 ---
+import { getEntry } from 'astro:content';
 import LocationLayout from '../../layouts/LocationLayout.astro';
-import PageHeader from '../../components/PageHeader.astro';
-import ContactForm from '../../components/ContactForm.astro';
-import { locations } from '../../config/locations';
+import Hours from '../../components/Hours.astro';
+import Icon from '../../components/Icon.astro';
+import { formatCityLine, formatStreet, locations, telHref } from '../../config/locations';
 import { pageDescription } from '../../lib/pages';
+import { getMember } from '../../lib/team';
+import { applyTokens, tokensFor } from '../../lib/tokens';
 import type { Location } from '../../config/types';
 
 export function getStaticPaths() {
@@ -19,25 +22,69 @@ interface Props {
 
 const { location } = Astro.props;
 const path = `/${location.slug}/contact/`;
+const entry = await getEntry('pages', 'contact');
+if (!entry) throw new Error('Missing src/content/pages/contact.md');
+if (!entry.data.asideTitle || !entry.data.aside) {
+  throw new Error('src/content/pages/contact.md is missing asideTitle or aside');
+}
+const lead = await getMember(location.lead);
+const tokens = tokensFor(location, lead.data);
 const description = await pageDescription('contact', location);
+const phone = telHref(location.phone);
 ---
 
 <LocationLayout
   location={location}
-  title="Contact Us"
+  title={entry.data.title}
   description={description}
   path={path}
   crumbs={[
     { name: location.name, href: `/${location.slug}/` },
-    { name: 'Contact Us', href: path },
+    { name: entry.data.title, href: path },
   ]}
 >
-  <PageHeader title="Contact Us" />
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col p-5">
-        <ContactForm location={location} />
+  <section class="tm-hero" aria-labelledby="ct-title">
+    <div class="wrap">
+      <div class="tm-hero-inner reveal">
+        <Icon name="sprig" class="sprig" />
+        <h1 id="ct-title">{entry.data.title}</h1>
       </div>
     </div>
-  </div>
+  </section>
+  <section class="ct-main">
+    <div class="wrap ct-grid">
+      <div class="ct-info reveal">
+        <div class="ct-block">
+          <h2>Phone</h2>
+          <p class="ct-big"><a href={`tel:${phone}`}>{location.phone}</a></p>
+        </div>
+        <div class="ct-block">
+          <h2>Address</h2>
+          <address set:html={`${formatStreet(location)}<br>${formatCityLine(location)}`} />
+          <p><a class="ct-link" href={location.mapUrl} target="_blank" rel="noopener">Get Directions</a></p>
+        </div>
+        <div class="ct-block">
+          <h2>Office Hours</h2>
+          <Hours hours={location.hours} />
+        </div>
+        <div class="ct-block ct-appt">
+          <h3 set:html={applyTokens(entry.data.asideTitle, tokens)} />
+          <p set:html={applyTokens(entry.data.aside, tokens)} />
+          <div class="ctas">
+            <a class="btn" href={`tel:${phone}`}>
+              <Icon name="phone" />
+              <span>Call to Schedule Your First Visit</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="ct-map reveal">
+        <iframe
+          title={`Map to ${location.name}`}
+          src={location.mapEmbedUrl}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
 </LocationLayout>

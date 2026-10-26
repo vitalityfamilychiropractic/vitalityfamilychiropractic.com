@@ -1,0 +1,38 @@
+---
+import Icon from './Icon.astro';
+import { applyTokens } from '../lib/tokens';
+
+interface Cta {
+  label: string;
+  action?: string;
+  href: string;
+  ghost?: boolean;
+}
+
+interface Props {
+  ctas?: Cta[];
+  tokens: Record<string, string>;
+  class?: string;
+}
+
+const { ctas = [], tokens, class: className } = Astro.props;
+---
+
+{
+  ctas.length > 0 && (
+    <div class:list={['ctas', className]}>
+      {ctas.map((cta) => {
+        let href = applyTokens(cta.href, tokens);
+        const phone = cta.action === 'phone';
+        if (phone && !/^tel:/i.test(href)) href = `tel:${href}`;
+        return (
+          <a class:list={['btn', cta.ghost && 'btn-ghost']} href={href}>
+            {phone && <Icon name="phone" />}
+            <span set:html={applyTokens(cta.label, tokens)} />
+            {!phone && <Icon name="arrow" />}
+          </a>
+        );
+      })}
+    </div>
+  )
+}

@@ -1,0 +1,118 @@
+---
+title: "Adult & Family Chiropractic"
+navLabel: "Adult & Family"
+order: 4
+summary: "Adult and family chiropractic in {{city}}, {{stateAbbr}}. Individualized care for every season of life, with family-centered care options."
+cardTitle: "Adult &amp; Family Chiropractic"
+cardText: "Because grown-ups need care, too! Whether you're navigating everyday aches or making wellness a family affair, we're happy to have you on the table."
+cardImage: "adult-adjustment"
+sections:
+  - kind: "intro"
+    heading: "Because Grown-Ups Need Care, Too."
+    flow:
+      - kind: "lead"
+        text: "We may be known for caring for pregnant moms and tiny babies, but the majority of our patients are families choosing to make wellness a family affair."
+    sub: "Adult &amp; Family Chiropractic Care at Vitality Family Chiropractic"
+    image:
+      id: "adult-adjustment"
+      position: "40% 50%"
+    bloom:
+      id: "mural-detail"
+    band:
+      kind: "story"
+      flow:
+        - kind: "p"
+          text: "At Vitality, we believe chiropractic care isn't just something you seek out when something hurts. It's an opportunity to take care of your body, support healthy movement, and make your wellness a priority through every season of life."
+        - kind: "p"
+          text: "Whether you're chasing toddlers, training for a half marathon, spending long days behind a desk, or simply hoping to keep doing the things you love for years to come, there's a place for you here."
+  - kind: "split"
+    heading: "Your Body Does a Lot. Let's Take Care of It."
+    flow:
+      - kind: "p"
+        text: "Your nervous system is constantly working behind the scenes, helping your body respond to movement, physical demands, and the world around you."
+      - kind: "p"
+        text: "Your spine and joints provide important sensory information that helps your brain understand where your body is in space and coordinate movement."
+      - kind: "p"
+        text: "Our chiropractic approach focuses on spinal and joint function, mobility, and the relationship between your musculoskeletal and nervous systems."
+      - kind: "p"
+        text: "Sometimes that means addressing an area that's uncomfortable. Other times, it means evaluating movement restrictions or changes in how your body is functioning before they become bigger frustrations."
+      - kind: "signoff"
+        text: "We believe taking care of your body should be part of everyday life, not something you only think about when it starts complaining."
+    reverse: true
+    image:
+      id: "treatment-room"
+      position: "55% 55%"
+    frame: "frame"
+  - kind: "centered"
+    heading: "More Than Just Back Pain."
+    flow:
+      - kind: "lead"
+        text: "Of course, we see plenty of people who come to us because something hurts."
+      - kind: "p"
+        text: "Neck and back discomfort, headaches, stiffness, and everyday aches are common reasons adults schedule their first visit. We also work with people navigating physically demanding jobs, repetitive movements, sports-related soreness, and the effects of spending a little too much time sitting."
+      - kind: "quip"
+        text: "But not everyone comes to Vitality with a complaint."
+      - kind: "p"
+        text: "Many of our patients choose regular wellness care because they've experienced the difference it makes in their everyday lives. They tell us they feel better, move better, and simply function better when chiropractic care is part of their routine."
+  - kind: "split"
+    heading: "From Desk Chairs to Pickleball Courts."
+    flow:
+      - kind: "p"
+        text: "Modern life can be surprisingly demanding on our bodies."
+      - kind: "p"
+        text: "Maybe you spend eight hours at a computer, carry a toddler on one hip, squeeze in a workout when you can, or recently discovered that pickleball is considerably more athletic than it looks."
+      - kind: "p"
+        text: "We assess joint mobility, movement patterns, and physical limitations that may be contributing to discomfort or affecting the activities you enjoy."
+      - kind: "p"
+        text: "Our goal is to help you move comfortably and confidently, whether that means getting through a workday without feeling stiff or staying active enough to keep up with your family."
+      - kind: "signoff"
+        text: "And if your competitive spirit occasionally exceeds your flexibility, we've seen that before, too."
+    tone: "slate"
+    solo: true
+  - kind: "split"
+    heading: "Wellness Is a Family Affair."
+    flow:
+      - kind: "lead"
+        text: "One of the things that makes Vitality special is the number of families who choose to make chiropractic care part of their regular wellness routine."
+      - kind: "p"
+        text: "Sometimes Mom finds us during pregnancy, then brings her newborn, and eventually Dad and the older kids join in. Other families come to us because they're looking for a place where everyone, from toddlers to grandparents, can receive individualized care."
+      - kind: "signoff"
+        text: "However your family finds us, we're glad you're here."
+      - kind: "p"
+        text: "We offer family-centered care options, including discounted rates for additional family members, because we want regular chiropractic care to be a realistic part of your family's wellness routine."
+    tone: "paper"
+    image:
+      id: "family-wellness"
+      position: "50% 40%"
+    frame: "frame"
+  - kind: "note"
+    heading: "What Can You Expect?"
+    flow:
+      - kind: "lead"
+        text: "First, we'll talk about you."
+      - kind: "p"
+        text: "Your health history, lifestyle, goals, and any concerns you have all help us understand what you're looking for from chiropractic care."
+      - kind: "p"
+        text: "We'll assess spinal and joint function, explain our findings, and recommend an individualized approach based on your needs and preferences."
+      - kind: "p"
+        text: "Some people are looking for help with a specific problem. Others want ongoing wellness care. We'll talk through your options together so you can make informed decisions about your care."
+      - kind: "p"
+        text: "And whether it's your first adjustment or your five-hundredth, we want you to feel comfortable, heard, and genuinely happy to be here."
+  - kind: "closing"
+    heading: "Your Family. Your Wellness. Your Vitality."
+    flow:
+      - kind: "p"
+        text: "We love the newborn snuggles and pregnancy announcements, but we also love hearing about your golf game, your latest adventure, the race you're training for, or the grandkids you're trying to keep up with."
+      - kind: "p"
+        text: "Because taking care of families means taking care of everyone in them."
+      - kind: "p"
+        text: "Whether you're here for a specific concern or simply want to make chiropractic part of your wellness routine, we'd love to welcome you to Vitality."
+    ctas:
+      - label: "Schedule Your Visit"
+        action: "phone"
+        href: "{{phoneHref}}"
+    soft: true
+    image:
+      id: "mom-and-baby"
+      position: "50% 45%"
+---

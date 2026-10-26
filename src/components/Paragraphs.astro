@@ -1,0 +1,18 @@
+---
+import { applyTokens } from '../lib/tokens';
+
+interface Props {
+  items?: string[];
+  tokens: Record<string, string>;
+}
+
+const { items = [], tokens } = Astro.props;
+---
+
+{
+  items.map((text) => {
+    const html = applyTokens(text, tokens);
+    if (/<p[\s>]/i.test(html)) return <Fragment set:html={html} />;
+    return <p set:html={html} />;
+  })
+}

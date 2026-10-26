@@ -1,9 +1,8 @@
 /**
  * Shape of the site's editable configuration.
  *
- * These types are what make adding a location safe: leave out a required field
- * in `locations.ts` and `bun run build` fails with the field name, rather than
- * quietly publishing a page with a blank phone number.
+ * Leave out a required field in `locations.ts` and `bun run build` fails with
+ * the field name, rather than publishing a page with a blank phone number.
  */
 
 /** A single day's opening hours. Multiple blocks = a midday break. */
@@ -11,16 +10,16 @@ export interface HoursEntry {
   /** Full day name, e.g. 'Monday'. Order in the array is display order. */
   day: string;
   /**
-   * Human-readable time ranges, e.g. ['8:30am - 1pm', '1:45pm - 4pm'].
+   * Human-readable time ranges, e.g. ['8:30 AM–4:00 PM'].
    * Use an empty array for a closed day and set `note` instead.
    */
   blocks: string[];
-  /** Shown in place of times, e.g. 'By Appointment' or 'Closed'. */
+  /** Shown in place of times, or after the times when both are set. */
   note?: string;
   /**
    * Machine-readable ranges for schema.org, as ['HH:MM', 'HH:MM'] pairs in
-   * 24-hour time. Omit for closed / by-appointment days so they are simply
-   * absent from the structured data.
+   * 24-hour time. Omit for closed, by-appointment, and display-only days so
+   * they stay out of the structured data.
    */
   machine?: Array<[string, string]>;
 }
@@ -58,34 +57,12 @@ export interface FeeLine {
   amount: string;
 }
 
-/** Overrides for one specialty page's contact card at one office. */
-export interface SpecialtyLead {
-  /** Team member slug. Omit to keep the office's usual lead. */
-  member?: string;
-  /**
-   * Heading on the card. Omit to derive it from the member's `role`.
-   */
-  label?: string;
-}
-
-export interface LocationImages {
-  /** Wide photo behind the home-page welcome banner. */
-  banner: string;
-  /** Wide photo behind the "Why choose me?" panel at large breakpoints. */
-  whyMe: string;
-  /** Photo behind this office on the location chooser. */
-  landing: string;
-  /** Portrait used as the LocalBusiness image in JSON-LD. */
-  portraitStudio: string;
-  portraitStudioAlt: string;
-  values: string;
-  valuesAlt: string;
-  /** Home-page feature card photo, keyed by specialty slug. */
-  specialties: Record<string, string>;
-  specialtiesAlt: Record<string, string>;
-  /** Large photo at the top of the specialty page, keyed by specialty slug. */
-  specialtyPages: Record<string, string>;
-  specialtyPagesAlt: Record<string, string>;
+/** A nav item that is present even when it does not link anywhere yet. */
+export interface ShopLink {
+  label: string;
+  /** Null keeps the label in the menu without making it a link. */
+  href: string | null;
+  inNav: boolean;
 }
 
 export interface Location {
@@ -94,6 +71,11 @@ export interface Location {
   /** Short label used in nav, page titles and the location switcher. */
   name: string;
   address: PostalAddress;
+  /**
+   * When true, the visible address and schema.org PostalAddress omit the ZIP.
+   * The map query can still include it.
+   */
+  hidePostalCode?: boolean;
   /** Formatted for display, e.g. '(407) 584-7900'. */
   phone: string;
   email: string;
@@ -103,140 +85,70 @@ export interface Location {
   analyticsId: string;
   /** Google Maps place link, opened from the address. */
   mapUrl: string;
-  /** Google Maps embed URL for the iframe in the footer. */
+  /** Google Maps embed URL for the contact-page iframe. */
   mapEmbedUrl: string;
   /** Latitude/longitude for LocalBusiness structured data. */
   geo: { lat: number; lng: number };
   /** This office's own Jane App booking site. */
   bookingUrl: string;
-  /**
-   * Where the contact form posts. Each office can have its own endpoint so
-   * enquiries land in the right inbox.
-   */
-  form: { endpoint: string };
   hours: HoursEntry[];
   /**
-   * Slugs of the specialty pages this office offers, in display order. Each
-   * must match a file in `src/content/specialties/`.
+   * Service slugs this office offers, in display order. Each must match a file
+   * in `src/content/services/`. Massage is included only where it is offered.
    */
-  specialties: string[];
+  services: string[];
   /**
-   * Who a given specialty page's contact card should name at this office.
-   * Anything not listed falls back to `lead`. The current pages do not render
-   * that card; the field is here so a later service can name someone else
-   * without a template change.
+   * Team member slugs on this office's team page, in display order.
+   * This array is the only order. A person who works at more than one
+   * office is listed in each office's array where that office wants them.
    */
-  specialtyLeads?: Partial<Record<string, SpecialtyLead>>;
-  /** Team member slugs on this office's team page, in display order. */
   team: string[];
-  /**
-   * The team member whose portrait, signature and voice lead this office's
-   * pages.
-   */
+  /** The team member whose name fills `{{lead}}` in shared prose. */
   lead: string;
   /**
    * Towns and counties this office serves, used in LocalBusiness structured
    * data.
    */
   areaServed: string[];
-  /** Intro copy above the pricing tabs. */
+  /** Intro copy under the pricing page title. */
   pricingIntro: string;
-  /** 'p' or 'h3' — each office's pricing page introduces itself differently. */
-  pricingIntroLevel: 'p' | 'h3';
-  /** Insurance paragraph. Omitted when the intro already covers it. */
+  /** Insurance paragraph on the pricing page. May contain inline HTML. */
   insuranceNote?: string;
-  /** Green notice above the tabs. */
-  pricingNotice: string;
+  /** Badge above the fee list, e.g. 'Pricing Effective September 1, 2026'. */
+  pricingEffective?: string;
   /** Heading above `fees`, e.g. 'Out of pocket pricing:'. */
   feesHeading?: string;
+  /** Note under the fee rows, e.g. the child add-on clarification. */
+  feesNote?: string;
   fees: FeeLine[];
   pricing: Pricing;
-  images: LocationImages;
-  /** Optional alert across the top of this office's home page. */
+  /**
+   * Photo id replacements for this office. When a page asks for a College
+   * Station interior or staff-group photo, the substitute is used instead,
+   * including that photo's own default crop.
+   */
+  photoAliases?: Record<string, string>;
+  /** First paragraph of the home "family" section. May contain inline HTML. */
+  homeClaim: string;
+  /** Sentence appended to the home meta description. */
+  homeBlurb: string;
+  /**
+   * Answer to "Do you take insurance?" on the first-visit page.
+   * HTML, one or more `<p>` elements, so it is not wrapped again.
+   */
+  insuranceFaq: string;
+  /** Optional sentence above `<main>` on this office's pages. */
   announcement?: string;
-  /** Elfsight Google Reviews widget id, when this office shows reviews. */
-  reviewsWidgetId?: string;
+  /** Shop menu item. Omitted from the nav when `inNav` is false. */
+  shop?: ShopLink;
 }
 
-export interface PracticeMix {
-  label: string;
-  /** Percentage of practice, 0–100. */
-  percent: number;
-}
-
-/**
- * What everyone in `team.ts` has, whatever their job.
- *
- * A team member is a discriminated union on `schemaType`. Clinical fields are
- * required of a `Physician`, because they get a full profile page, and
- * optional for a `Person`.
- */
-interface TeamMemberBase {
+/** Fields schema.org needs from a team member. Bios live in the content collection. */
+export interface StaffSummary {
   slug: string;
-  /** Full name without credentials, e.g. 'Christie McLarty'. */
   name: string;
-  /** Informal name used in body copy, e.g. 'Dr. Christie'. */
-  shortName: string;
-  /** Name shown in the home banner when this person leads an office, e.g. 'Dr Christie'. */
-  welcomeName: string;
-  /**
-   * Job title in singular, capitalised: 'Chiropractor'.
-   * Drives the default heading on a specialty contact card.
-   */
   role: string;
-  /**
-   * ISO date (`YYYY-MM-DD`) they began practising. Years in practice are
-   * derived from this at build time and refreshed in the browser on load.
-   */
-  practiceStartDate: string;
-  email: string;
-  /** Facebook page name, not a full URL. */
-  facebook?: string;
-  signature?: string;
-  signatureAlt?: string;
-  /**
-   * Extra "Why choose me?" bullets for one office, keyed by location slug.
-   * Shown above `highlights`, and only at that office. May contain inline HTML.
-   */
-  locationHighlights?: Partial<Record<string, string[]>>;
-  /** "Why choose me?" experience bullets shown at every office. May contain inline HTML for a link. */
-  highlights?: string[];
-  /** "Why choose me?" passion bullets. */
-  passions?: string[];
-  /**
-   * Meta description for this person's profile at every office. May use
-   * content tokens: `{{lead}}` is this person, and the office name, place,
-   * and phone come from the office page being rendered.
-   */
-  summary?: string;
-}
-
-interface Clinician extends TeamMemberBase {
-  schemaType: 'Physician';
-  /** Post-nominals, e.g. 'DC'. */
-  credentials: string;
-  certifications: string;
-  specialty: string;
-  photo: string;
-  /** Body paragraphs, in order. */
-  bio: string[];
-  practiceMix: PracticeMix[];
-  /** "What's important to me" list. */
-  priorities: string[];
-  /** "In the office and in the community" paragraphs. */
-  community: string[];
-}
-
-interface Associate extends TeamMemberBase {
-  schemaType: 'Person';
+  schemaType: 'Physician' | 'Person';
   credentials?: string;
-  certifications?: string;
-  specialty?: string;
-  photo?: string;
-  bio?: string[];
-  practiceMix?: PracticeMix[];
-  priorities?: string[];
-  community?: string[];
+  email?: string;
 }
-
-export type TeamMember = Clinician | Associate;

@@ -1,0 +1,51 @@
+---
+import { getEntry } from 'astro:content';
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import Blocks from '../../../components/Blocks.astro';
+import { locations } from '../../../config/locations';
+import { servicesFor } from '../../../lib/services';
+import { getMember } from '../../../lib/team';
+import { applyTokens, tokensFor } from '../../../lib/tokens';
+import type { Location } from '../../../config/types';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const location of locations) {
+    const services = await servicesFor(location);
+    for (const service of services) {
+      paths.push({
+        params: { location: location.slug, service: service.id },
+        props: { location },
+      });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const slug = Astro.params.service;
+if (!slug) throw new Error('Missing service param');
+const entry = await getEntry('services', slug);
+if (!entry) throw new Error(`Missing src/content/services/${slug}.md`);
+const lead = await getMember(location.lead);
+const tokens = tokensFor(location, lead.data);
+const path = `/${location.slug}/our-care/${entry.id}/`;
+const description = applyTokens(entry.data.summary, tokens).trim();
+---
+
+<LocationLayout
+  location={location}
+  title={entry.data.title}
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: entry.data.title, href: path },
+  ]}
+>
+  <Blocks sections={entry.data.sections} location={location} tokens={tokens} />
+</LocationLayout>

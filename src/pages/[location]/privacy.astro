@@ -1,7 +1,7 @@
 ---
 import { getEntry, render } from 'astro:content';
 import LocationLayout from '../../layouts/LocationLayout.astro';
-import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
 import { locations } from '../../config/locations';
 import { pageDescription } from '../../lib/pages';
 import type { Location } from '../../config/types';
@@ -19,7 +19,6 @@ interface Props {
 
 const { location } = Astro.props;
 const path = `/${location.slug}/privacy/`;
-
 const entry = await getEntry('pages', 'privacy');
 if (!entry) throw new Error('Missing src/content/pages/privacy.md');
 const { Content } = await render(entry);
@@ -37,12 +36,16 @@ const description = await pageDescription('privacy', location);
     { name: entry.data.title, href: path },
   ]}
 >
-  <PageHeader title={entry.data.title} />
-  <div class="container-fluid">
-    <div class="row my-5">
-      <div class="col px-5 content">
-        <Content />
+  <section class="tm-hero" aria-labelledby="privacy-title">
+    <div class="wrap">
+      <div class="tm-hero-inner reveal">
+        <Icon name="sprig" class="sprig" />
+        <h1 id="privacy-title">{entry.data.title}</h1>
       </div>
     </div>
+  </section>
+  <div class="wrap prose">
+    {entry.data.updated && <p class="prose-updated">Updated {entry.data.updated}</p>}
+    <Content />
   </div>
 </LocationLayout>

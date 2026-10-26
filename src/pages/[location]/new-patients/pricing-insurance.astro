@@ -1,0 +1,38 @@
+---
+import { getEntry } from 'astro:content';
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import Pricing from '../../../components/Pricing.astro';
+import { locations } from '../../../config/locations';
+import { pageDescription } from '../../../lib/pages';
+import type { Location } from '../../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/new-patients/pricing-insurance/`;
+const entry = await getEntry('pages', 'pricing');
+if (!entry) throw new Error('Missing src/content/pages/pricing.md');
+const description = await pageDescription('pricing', location);
+---
+
+<LocationLayout
+  location={location}
+  title={entry.data.title}
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: entry.data.title, href: path },
+  ]}
+>
+  <Pricing location={location} />
+</LocationLayout>

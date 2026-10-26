@@ -6,27 +6,12 @@ import { glob } from 'astro/loaders';
 
 /**
  * Shared prose. These files are written once and rendered for every location.
+ * Body copy and `summary` may use tokens such as `{{city}}` and `{{phone}}`,
+ * replaced at render time. See `src/lib/tokens.ts`.
  *
- * Body copy and the `summary` meta description may use the token `{{lead}}`,
- * which is replaced at render time with the office lead's short name for the
- * location being rendered — so the pregnancy page reads "Dr. Christie" from
- * one source file. See `src/lib/tokens.ts` for the full list of tokens.
+ * `sections` is validated loosely on purpose. The renderer walks the array,
+ * and an unknown key should survive the build rather than being stripped.
  */
-
-const specialties = defineCollection({
-  loader: glob({ base: './src/content/specialties', pattern: '**/*.md' }),
-  schema: z.object({
-    title: z.string(),
-    /** Short label on the home-page feature card, e.g. "Pregnancy". */
-    cardLabel: z.string(),
-    /** Meta description. May use tokens filled from the office being rendered. */
-    summary: z.string(),
-    /** Optional standfirst shown above the body copy. */
-    standfirst: z.string().optional(),
-    /** Sort order for listings that are not scoped to one office. */
-    order: z.number(),
-  }),
-});
 
 const pages = defineCollection({
   loader: glob({ base: './src/content/pages', pattern: '**/*.md' }),
@@ -39,10 +24,57 @@ const pages = defineCollection({
      * Used by the brand privacy page, whose summary names a city.
      */
     brandSummary: z.string().optional(),
-    standfirst: z.string().optional(),
     /** Last substantive revision — shown on the privacy policy. */
     updated: z.string().optional(),
+    /** Contact page aside heading. */
+    asideTitle: z.string().optional(),
+    /** Contact page aside body. */
+    aside: z.string().optional(),
+    /** Partners page introduction. Shown even when the partner list is empty. */
+    intro: z.string().optional(),
+    sections: z.array(z.any()).optional(),
   }),
 });
 
-export const collections = { specialties, pages };
+const services = defineCollection({
+  loader: glob({ base: './src/content/services', pattern: '**/*.md' }),
+  schema: z.object({
+    title: z.string(),
+    /** Label in the Our Care menu. */
+    navLabel: z.string(),
+    order: z.number(),
+    summary: z.string(),
+    /** Home-page card title. May contain HTML entities for `set:html`. */
+    cardTitle: z.string(),
+    cardText: z.string(),
+    /** Photo id from `src/config/photos.ts`. */
+    cardImage: z.string(),
+    cardSoft: z.boolean().optional(),
+    sections: z.array(z.any()).optional(),
+  }),
+});
+
+/**
+ * One file per person. Name, role, portrait, facts, and bio live here.
+ * Which offices include them, and in what order, is only `location.team`.
+ */
+const team = defineCollection({
+  loader: glob({ base: './src/content/team', pattern: '**/*.md' }),
+  schema: z
+    .object({
+      name: z.string(),
+      shortName: z.string(),
+      role: z.string(),
+      schemaType: z.enum(['Physician', 'Person']),
+      tagline: z.string().optional(),
+      factsTitle: z.string(),
+      facts: z.array(z.string()),
+      /** Photo id. Omit when no portrait exists; the page shows initials. */
+      photo: z.string().optional(),
+      credentials: z.string().optional(),
+      email: z.string().optional(),
+    })
+    .strict(),
+});
+
+export const collections = { pages, services, team };

@@ -1,0 +1,68 @@
+---
+import Icon from './Icon.astro';
+import { isAncestor, isCurrent, type NavItem } from '../lib/nav';
+
+interface Item extends NavItem {
+  subId?: string;
+}
+
+interface Props {
+  items: Item[];
+  pathname: string;
+  /** Desktop menu or the mobile drawer. */
+  variant: 'desktop' | 'mobile';
+  label: string;
+}
+
+const { items, pathname, variant, label } = Astro.props;
+const mobile = variant === 'mobile';
+---
+
+<nav class={mobile ? undefined : 'primary'} aria-label={label}>
+  <ul class:list={['nav', mobile && 'nav-m']} data-nav={mobile ? undefined : true}>
+    {
+      items.map((item) => {
+        const here = isAncestor(item, pathname);
+        const current = isCurrent(item.href, pathname);
+        return (
+          <li class:list={[item.children && 'has-sub', here && 'in-section']}>
+            {item.heading && item.children && (
+              <button class="nav-link nav-heading sub-toggle" type="button" aria-expanded="false" aria-controls={item.subId}>
+                {item.label}
+                <Icon name="chevron" class="i chev" />
+              </button>
+            )}
+            {!item.heading && item.children && item.href && (
+              <div class="nav-pair">
+                <a class="nav-link" href={item.href} aria-current={current ? 'page' : undefined}>
+                  {item.label}
+                </a>
+                <button class="sub-toggle" type="button" aria-expanded="false" aria-controls={item.subId}>
+                  <span class="sr">{item.label} menu</span>
+                  <Icon name="chevron" class="i chev" />
+                </button>
+              </div>
+            )}
+            {!item.children && item.href && (
+              <a class="nav-link" href={item.href} aria-current={current ? 'page' : undefined}>
+                {item.label}
+              </a>
+            )}
+            {!item.children && !item.href && <span class="nav-link is-static">{item.label}</span>}
+            {item.children && (
+              <ul class="sub" id={item.subId}>
+                {item.children.map((child) => (
+                  <li>
+                    <a href={child.href} aria-current={isCurrent(child.href, pathname) ? 'page' : undefined}>
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

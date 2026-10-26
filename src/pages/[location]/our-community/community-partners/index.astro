@@ -1,0 +1,75 @@
+---
+import { getEntry } from 'astro:content';
+import LocationLayout from '../../../../layouts/LocationLayout.astro';
+import Icon from '../../../../components/Icon.astro';
+import { locations } from '../../../../config/locations';
+import { partners } from '../../../../config/partners';
+import { pageDescription } from '../../../../lib/pages';
+import { getMember } from '../../../../lib/team';
+import { applyTokens, tokensFor } from '../../../../lib/tokens';
+import type { Location } from '../../../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/our-community/community-partners/`;
+const entry = await getEntry('pages', 'partners');
+if (!entry) throw new Error('Missing src/content/pages/partners.md');
+if (!entry.data.intro) throw new Error('src/content/pages/partners.md is missing intro');
+const lead = await getMember(location.lead);
+const tokens = tokensFor(location, lead.data);
+const description = await pageDescription('partners', location);
+---
+
+<LocationLayout
+  location={location}
+  title={entry.data.title}
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Our Community', href: `/${location.slug}/our-community/` },
+    { name: entry.data.title, href: path },
+  ]}
+>
+  <section class="tm-hero" aria-labelledby="pt-title">
+    <div class="wrap">
+      <div class="tm-hero-inner reveal">
+        <Icon name="sprig" class="sprig" />
+        <h1 id="pt-title">{entry.data.title}</h1>
+      </div>
+    </div>
+  </section>
+  <section class="pt-main">
+    <div class="wrap">
+      <p class="pt-intro" set:html={applyTokens(entry.data.intro, tokens)} />
+      {
+        partners.length > 0 && (
+          <div class="pt-grid">
+            {partners.map((partner) => (
+              <article class="pt-item reveal">
+                <h2>
+                  <a href={`/${location.slug}/our-community/community-partners/${partner.slug}/`}>{partner.name}</a>
+                </h2>
+                <p>
+                  {partner.profession}
+                  {partner.business && ` · ${partner.business}`}
+                </p>
+                <p>{partner.summary}</p>
+              </article>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</LocationLayout>

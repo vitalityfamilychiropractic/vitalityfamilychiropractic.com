@@ -1,80 +1,93 @@
 ---
-import HoursTable from './HoursTable.astro';
+import { locations, formatCityLine, formatStreet, telHref } from '../config/locations';
 import { site } from '../config/site';
-import { locations, telHref } from '../config/locations';
+import { buildNav, isCurrent, type NavItem } from '../lib/nav';
 import type { Location } from '../config/types';
 
 interface Props {
   location?: Location;
+  pathname?: string;
 }
 
-const { location } = Astro.props;
+const { location, pathname = '/' } = Astro.props;
+const items: NavItem[] = location ? await buildNav(location) : [];
 const privacyHref = location ? `/${location.slug}/privacy/` : '/privacy/';
+const year = new Date().getFullYear();
+
+function current(href: string | undefined) {
+  return isCurrent(href, pathname) ? 'page' : undefined;
+}
 ---
 
-<div class="container contact">
-  <div class="row py-3">
-    <div class="col"><hr /></div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <h3>Our Locations</h3>
+<footer class="site-footer">
+  <div class="wrap foot">
+    <div class="foot-brand">
+      <span class="brand-mark">Vitality</span>
+      <span class="brand-sub">Family Chiropractic</span>
+      {
+        location && (
+          <>
+            <address set:html={`${formatStreet(location)}<br>${formatCityLine(location)}`} />
+            <p>
+              <a href={`tel:${telHref(location.phone)}`}>{location.phone}</a>
+            </p>
+          </>
+        )
+      }
     </div>
-  </div>
-  <div class="row">
     {
-      locations.map((office) => (
-        <div class="col-md-6 py-3 d-flex flex-column">
-          <h4>
-            <i class="bi bi-geo-alt-fill text-primary" aria-hidden="true" />{' '}
-            <a href={`/${office.slug}/`}>{office.name}</a>
-          </h4>
-          <p class="px-3">
-            {office.address.street}
-            <br />
-            {office.address.city}, {office.address.stateAbbr} {office.address.zip}
-            <br />
-          </p>
-          <p class="px-3">
-            <i class="bi bi-telephone-fill text-primary" aria-hidden="true" />{' '}
-            <a href={`tel:${telHref(office.phone)}`}>{office.phone}</a>
-          </p>
-          <p class="px-3">
-            <i class="bi bi-envelope-fill text-primary" aria-hidden="true" />{' '}
-            <a href={`mailto:${office.email}`}>{office.email}</a>
-          </p>
-          <h5 class="px-3">
-            <i class="bi bi-clock-fill text-primary" aria-hidden="true" /> Open Hours
-          </h5>
-          <div class="px-3">
-            <HoursTable hours={office.hours} />
-          </div>
-          <iframe
-            class="location-map mt-3 mt-md-auto"
-            src={office.mapEmbedUrl}
-            title={`Map of Vitality Family Chiropractic in ${office.address.city}, ${office.address.state}`}
-            allowfullscreen
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          />
-        </div>
-      ))
+      items.length > 0 && (
+        <nav aria-label="Footer">
+          <ul class="foot-nav">
+            {items.map((item) => (
+              <li>
+                {item.heading ? (
+                  <span class="foot-heading">{item.label}</span>
+                ) : item.href ? (
+                  <a href={item.href} aria-current={current(item.href)}>
+                    {item.label}
+                  </a>
+                ) : (
+                  <span class="is-static">{item.label}</span>
+                )}
+                {item.children && (
+                  <ul>
+                    {item.children.map((child) => (
+                      <li>
+                        <a href={child.href} aria-current={current(child.href)}>
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
     }
-  </div>
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col"><hr /></div>
-  </div>
-  <div class="row justify-content-end">
-    <div class="col-12 copyright">
-      <a href={privacyHref}>Privacy Policy</a> &middot; Copyright &copy; {site.name}
+    <div class="foot-locs">
+      <p class="foot-h">Locations</p>
+      <ul>
+        {
+          locations.map((office) => (
+            <li>
+              <a
+                href={`/${office.slug}/`}
+                aria-current={office.slug === location?.slug ? 'page' : undefined}
+              >
+                {office.address.city}, {office.address.stateAbbr}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
-</div>
-<script
-  is:inline
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-  crossorigin="anonymous"
-></script>
+  <div class="wrap foot-legal">
+    <p>
+      © {year} {site.name} · <a href={privacyHref}>Privacy</a>
+    </p>
+  </div>
+</footer>

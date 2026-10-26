@@ -1,0 +1,25 @@
+---
+import type { HoursEntry } from '../config/types';
+
+interface Props {
+  hours: HoursEntry[];
+}
+
+const { hours } = Astro.props;
+---
+
+<table class="ct-hours">
+  {
+    hours.map((entry) => (
+      <tr>
+        <th scope="row">{entry.day}</th>
+        <td>
+          {entry.blocks.length > 0 && entry.blocks.join(', ')}
+          {entry.blocks.length > 0 && entry.note && ', '}
+          {entry.note && entry.blocks.length > 0 && <span class="ct-note">{entry.note}</span>}
+          {entry.note && entry.blocks.length === 0 && entry.note}
+        </td>
+      </tr>
+    ))
+  }
+</table>

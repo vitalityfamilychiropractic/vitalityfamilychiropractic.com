@@ -2,17 +2,17 @@
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getMember } from '../config/team';
 import { localBusinessSchema, breadcrumbSchema } from '../lib/schema';
-import { homeCopy } from '../lib/home';
-import { getSpecialtiesFor } from '../lib/specialties';
+import { pageDescription } from '../lib/pages';
+import { servicesFor } from '../lib/services';
+import { teamFor } from '../lib/team';
 import type { Location } from '../config/types';
 
 interface Props {
   location: Location;
   title: string;
   description: string;
-  /** Absolute path of this page, e.g. '/celebration/pricing/'. */
+  /** Absolute path of this page, e.g. '/celebration/contact/'. */
   path: string;
   /**
    * home — office front page
@@ -24,8 +24,6 @@ interface Props {
   crumbs?: Array<{ name: string; href: string }>;
   /** Extra JSON-LD for this page. */
   schemas?: unknown[];
-  /** Landing-style header: logo only, no navigation. */
-  landing?: boolean;
 }
 
 const {
@@ -36,15 +34,26 @@ const {
   titleStyle = 'placed',
   crumbs = [],
   schemas = [],
-  landing = false,
 } = Astro.props;
 
-const teamMembers = location.team.map(getMember);
-const services = (await getSpecialtiesFor(location)).map((specialty) => specialty.title);
-const { description: officeDescription } = await homeCopy(location);
+const members = await teamFor(location);
+const services = await servicesFor(location);
+const officeDescription = await pageDescription('home', location);
 
 const allSchemas = [
-  localBusinessSchema(location, teamMembers, services, officeDescription),
+  localBusinessSchema(
+    location,
+    members.map((member) => ({
+      slug: member.id,
+      name: member.data.name,
+      role: member.data.role,
+      schemaType: member.data.schemaType,
+      credentials: member.data.credentials,
+      email: member.data.email,
+    })),
+    services.map((service) => service.data.title),
+    officeDescription,
+  ),
   ...(crumbs.length > 1 ? [breadcrumbSchema(crumbs)] : []),
   ...schemas,
 ];
@@ -59,13 +68,10 @@ const allSchemas = [
   analyticsId={location.analyticsId}
   schemas={allSchemas}
 >
-  <header>
-    <Header location={location} pathname={path} landing={landing} />
-  </header>
+  <Header location={location} pathname={path} />
+  {location.announcement && <p class="announce">{location.announcement}</p>}
   <main id="main" tabindex="-1">
     <slot />
   </main>
-  <footer>
-    <Footer location={location} />
-  </footer>
+  <Footer location={location} pathname={path} />
 </BaseLayout>

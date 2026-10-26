@@ -1,42 +1,91 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Hours from '../components/Hours.astro';
+import Icon from '../components/Icon.astro';
+import Picture from '../components/Picture.astro';
 import { site } from '../config/site';
-import { locations } from '../config/locations';
+import { locations, formatAddress, telHref } from '../config/locations';
 import { organizationSchema } from '../lib/schema';
+import { displayName, getMember } from '../lib/team';
+
+const services = await getCollection('services');
+const offered = new Set(locations.flatMap((office) => office.services));
+const pills = services
+  .filter((service) => offered.has(service.id))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const offices = await Promise.all(
+  locations.map(async (location) => ({
+    location,
+    lead: await getMember(location.lead),
+  })),
+);
 ---
 
 <BaseLayout
-  title={site.name}
+  title="Chiropractic care for growing families"
   description={site.description}
   path="/"
-  noindex
   schemas={[organizationSchema(locations)]}
 >
-  <header>
-    <Header landing />
-  </header>
-  <main id="main" tabindex="-1">
-    <h1 class="visually-hidden">Choose your Vitality Family Chiropractic office</h1>
-    <div class="container-fluid landing-page">
-      <div class="row">
-        {
-          locations.map((office) => (
-            <div
-              class="col-md align-self-center text-center landing-office"
-              style={`--landing-image: url('${office.images.landing}')`}
-            >
-              <a class="btn btn-primary btn-lg" href={`/${office.slug}/`}>
-                {office.address.city}, {office.address.stateAbbr}
-              </a>
-            </div>
-          ))
-        }
+  <Header landing />
+  <main id="main">
+    <section class="gate" aria-labelledby="gate-title">
+      <div class="wrap">
+        <p class="gate-eyebrow">{site.tagline}</p>
+        <h1 id="gate-title">Chiropractic care for growing families</h1>
+        <p class="lead gate-lede">{site.description}</p>
+        <ul class="pills">
+          {pills.map((service) => <li>{service.data.navLabel}</li>)}
+        </ul>
       </div>
-    </div>
+    </section>
+
+    <section class="choose" aria-labelledby="choose-heading">
+      <div class="wrap">
+        <h2 id="choose-heading">Choose your office</h2>
+        <p class="lead choose-lede">
+          Each office has its own team, hours, and pricing. Pick the one nearest you to see the details.
+        </p>
+        <ul class="offices">
+          {
+            offices.map(({ location, lead }) => (
+              <li class="office">
+                <div class="office-figure">
+                  <Picture
+                    location={location}
+                    use={{ id: 'landing-office' }}
+                    sizes="(min-width: 760px) 36rem, 92vw"
+                  />
+                </div>
+                <div class="office-body">
+                  <h3 class="office-name">
+                    <a href={`/${location.slug}/`}>
+                      {location.name}, {location.address.stateAbbr}
+                    </a>
+                  </h3>
+                  <p class="office-lead">with {displayName(lead.data)}</p>
+                  <address class="office-address">{formatAddress(location)}</address>
+                  <p class="office-phone">
+                    <a href={`tel:${telHref(location.phone)}`}>{location.phone}</a>
+                  </p>
+                  <details class="office-hours">
+                    <summary>Opening hours</summary>
+                    <Hours hours={location.hours} />
+                  </details>
+                  <span class="office-cta" aria-hidden="true">
+                    Visit this office <Icon name="arrow" />
+                  </span>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
   </main>
-  <footer>
-    <Footer />
-  </footer>
+  <Footer />
 </BaseLayout>

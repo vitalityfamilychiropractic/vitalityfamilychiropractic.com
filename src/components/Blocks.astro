@@ -1,0 +1,393 @@
+---
+import Ctas from './Ctas.astro';
+import Flow from './Flow.astro';
+import Icon from './Icon.astro';
+import Paragraphs from './Paragraphs.astro';
+import Picture from './Picture.astro';
+import { applyTokens } from '../lib/tokens';
+import type { Location } from '../config/types';
+
+interface FlowItem {
+  kind: string;
+  text: string;
+}
+interface Cta {
+  label: string;
+  action?: string;
+  href: string;
+  ghost?: boolean;
+}
+interface ImageUse {
+  id: string;
+  position?: string;
+}
+interface TopicItem {
+  heading: string;
+  paragraphs?: string[];
+  image?: ImageUse;
+  wide?: boolean;
+}
+interface Section {
+  kind: string;
+  heading?: string;
+  sub?: string;
+  flow?: FlowItem[];
+  paragraphs?: string[];
+  ctas?: Cta[];
+  image?: ImageUse;
+  image2?: ImageUse;
+  bloom?: ImageUse;
+  band?: { kind: string; items?: Array<{ text: string }>; flow?: FlowItem[] };
+  items?: TopicItem[];
+  tone?: string;
+  reverse?: boolean;
+  solo?: boolean;
+  frame?: string;
+  soft?: boolean;
+  columns?: number;
+}
+interface ServiceCard {
+  id: string;
+  data: {
+    cardTitle: string;
+    cardText: string;
+    cardImage: string;
+    cardSoft?: boolean;
+  };
+}
+
+interface Props {
+  sections?: Section[];
+  location: Location;
+  tokens: Record<string, string>;
+  services?: ServiceCard[];
+}
+
+const { sections = [], location, tokens, services = [] } = Astro.props;
+
+function html(value: string | undefined): string {
+  return value ? applyTokens(value, tokens) : '';
+}
+
+function frameClass(frame?: string): string {
+  if (frame === 'tall') return 'arch arch-tall';
+  if (frame === 'arch') return 'arch';
+  return 'frame pg-frame';
+}
+
+const cardSizes = '(min-width: 1100px) 30vw, (min-width: 700px) 46vw, 92vw';
+const splitSizes = '(min-width: 960px) 40vw, 88vw';
+---
+
+{
+  sections.map((section, index) => {
+    const id = `s${index}`;
+    const priority = index === 0 && (section.kind === 'hero' || section.kind === 'intro');
+    const heading = html(section.heading);
+
+    if (section.kind === 'hero') {
+      return (
+        <section class="hero" aria-labelledby={id}>
+          <div class="wrap hero-grid">
+            <div class="hero-copy reveal">
+              <h1 id={id} set:html={heading} />
+              <Flow flow={section.flow} tokens={tokens} />
+              <Ctas ctas={section.ctas} tokens={tokens} />
+            </div>
+            <div class="hero-art reveal">
+              {section.image && (
+                <div class="arch arch-hero">
+                  <Picture location={location} use={section.image} sizes="(min-width: 960px) 46vw, 92vw" priority={priority} />
+                </div>
+              )}
+              {section.bloom && (
+                <div class="hero-bloom" aria-hidden="true">
+                  <Picture location={location} use={section.bloom} sizes="220px" />
+                </div>
+              )}
+              <Icon name="sprig" class="sprig" />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'family') {
+      return (
+        <section class="family" aria-labelledby={id}>
+          <div class="wrap split">
+            <div class="collage reveal">
+              {section.image && (
+                <div class="frame frame-a">
+                  <Picture location={location} use={section.image} sizes={splitSizes} />
+                </div>
+              )}
+              {section.image2 && (
+                <div class="frame frame-b">
+                  <Picture location={location} use={section.image2} sizes="(min-width: 960px) 22vw, 50vw" />
+                </div>
+              )}
+            </div>
+            <div class="copy reveal">
+              <h2 id={id} set:html={heading} />
+              <Flow flow={section.flow} tokens={tokens} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'care') {
+      return (
+        <section class="care" aria-labelledby={id}>
+          <div class="wrap">
+            <div class="intro reveal">
+              <h2 id={id} set:html={heading} />
+              <Paragraphs items={section.paragraphs} tokens={tokens} />
+            </div>
+            {section.sub && <h3 class="care-h reveal" set:html={html(section.sub)} />}
+            <div class:list={['cards', services.length === 4 && 'cards-4']}>
+              {services.map((service) => (
+                <article class:list={['card', 'reveal', service.data.cardSoft && 'card-soft']}>
+                  <div class="card-ph">
+                    <Picture location={location} use={{ id: service.data.cardImage }} sizes={cardSizes} />
+                  </div>
+                  <div class="card-body">
+                    <h4>
+                      <a href={`/${location.slug}/our-care/${service.id}/`} set:html={html(service.data.cardTitle)} />
+                    </h4>
+                    <p set:html={html(service.data.cardText)} />
+                    <span class="card-go" aria-hidden="true">
+                      <Icon name="arrow" />
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div class="center reveal">
+              <Ctas ctas={section.ctas} tokens={tokens} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'best') {
+      return (
+        <section class="best" aria-labelledby={id}>
+          <div class="wrap split split-rev">
+            <div class="copy reveal">
+              <h2 id={id} set:html={heading} />
+              <Flow flow={section.flow} tokens={tokens} />
+            </div>
+            <div class="duo reveal">
+              {section.image && (
+                <div class="arch arch-tall">
+                  <Picture location={location} use={section.image} sizes="(min-width: 960px) 34vw, 70vw" />
+                </div>
+              )}
+              {section.image2 && (
+                <div class="round">
+                  <Picture location={location} use={section.image2} sizes="(min-width: 960px) 18vw, 40vw" />
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'community') {
+      return (
+        <section class="community" aria-labelledby={id}>
+          <div class="wrap split">
+            <div class="mosaic reveal">
+              {section.image && (
+                <div class="m1">
+                  <Picture location={location} use={section.image} sizes="(min-width: 960px) 24vw, 46vw" />
+                </div>
+              )}
+              {section.image2 && (
+                <div class="m2">
+                  <Picture location={location} use={section.image2} sizes="(min-width: 960px) 24vw, 46vw" />
+                </div>
+              )}
+            </div>
+            <div class="copy reveal">
+              <h2 id={id} set:html={heading} />
+              <Flow flow={section.flow} tokens={tokens} />
+              <Ctas ctas={section.ctas} tokens={tokens} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'closing') {
+      return (
+        <section class:list={['meet', 'pg-closing', section.soft && 'pg-closing-soft']} aria-labelledby={id}>
+          {section.image && !section.soft && (
+            <div class="meet-bg">
+              <Picture location={location} use={section.image} sizes="100vw" />
+            </div>
+          )}
+          <div class="wrap">
+            <div class="meet-card reveal">
+              {section.image && section.soft ? (
+                <div class="pg-inset">
+                  <Picture location={location} use={section.image} sizes="180px" />
+                </div>
+              ) : (
+                <Icon name="sprig" class="sprig" />
+              )}
+              <h2 id={id} set:html={heading} />
+              <Flow flow={section.flow} tokens={tokens} />
+              <Ctas ctas={section.ctas} tokens={tokens} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'intro') {
+      return (
+        <section class="pg-intro" aria-labelledby={id}>
+          <div class="wrap pg-intro-grid">
+            <div class="pg-intro-copy reveal">
+              <h1 id={id} set:html={heading} />
+              {section.sub && <h2 class="pg-sub" set:html={html(section.sub)} />}
+              <Flow flow={section.flow} tokens={tokens} />
+              <Ctas ctas={section.ctas} tokens={tokens} />
+            </div>
+            {section.image && (
+              <div class="pg-intro-art reveal">
+                <div class="arch">
+                  <Picture location={location} use={section.image} sizes={splitSizes} priority={priority} />
+                </div>
+                {section.bloom && (
+                  <div class="hero-bloom" aria-hidden="true">
+                    <Picture location={location} use={section.bloom} sizes="220px" />
+                  </div>
+                )}
+                <Icon name="sprig" class="sprig" />
+              </div>
+            )}
+          </div>
+          {section.band?.kind === 'trio' && (
+            <div class="pg-trio-band">
+              <div class="wrap pg-trio">
+                {section.band.items?.map((item) => (
+                  <div class="pg-trio-item reveal">
+                    <Icon name="sprig" class="sprig" />
+                    <p set:html={html(item.text)} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {section.band?.kind === 'story' && (
+            <div class="pg-story-band">
+              <div class="wrap pg-story reveal">
+                <Flow flow={section.band.flow} tokens={tokens} />
+              </div>
+            </div>
+          )}
+        </section>
+      );
+    }
+
+    if (section.kind === 'split') {
+      return (
+        <section class:list={['pg-split', section.tone === 'slate' && 'pg-slate', section.tone === 'paper' && 'tone-paper']} aria-labelledby={id}>
+          <div class:list={['wrap', !section.solo && 'split', section.reverse && 'split-rev', section.solo && 'pg-solo']}>
+            {!section.solo && section.image && (
+              <div class="pg-photo reveal">
+                <div class={frameClass(section.frame)}>
+                  <Picture location={location} use={section.image} sizes={splitSizes} />
+                </div>
+              </div>
+            )}
+            <div class="copy reveal">
+              <h2 id={id} set:html={heading} />
+              <Flow flow={section.flow} tokens={tokens} />
+              <Ctas ctas={section.ctas} tokens={tokens} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'centered') {
+      return (
+        <section class="pg-centered" aria-labelledby={id}>
+          <div class="wrap">
+            <div class="pg-centered-inner reveal">
+              <Icon name="sprig" class="sprig" />
+              <h2 id={id} set:html={heading} />
+              <Flow flow={section.flow} tokens={tokens} />
+              <Ctas ctas={section.ctas} tokens={tokens} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'note') {
+      return (
+        <section class="pg-note" aria-labelledby={id}>
+          <div class="wrap">
+            <div class="pg-note-card reveal">
+              <h2 id={id} set:html={heading} />
+              <Flow flow={section.flow} tokens={tokens} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'topics') {
+      return (
+        <section class="pg-topics" aria-labelledby={id}>
+          <div class="wrap">
+            <div class="intro reveal">
+              <h2 id={id} set:html={heading} />
+              <Paragraphs items={section.paragraphs} tokens={tokens} />
+            </div>
+            <div class:list={['pg-topic-list', section.columns === 3 && 'cols-3']}>
+              {section.items?.map((item, itemIndex) => (
+                <article class:list={['pg-topic', 'reveal', (item.wide || item.image) && 'has-photo']} aria-labelledby={`${id}-t${itemIndex}`}>
+                  {item.image && (
+                    <div class="pg-topic-ph">
+                      <Picture location={location} use={item.image} sizes="(min-width: 960px) 34vw, 88vw" />
+                    </div>
+                  )}
+                  <div class="pg-topic-body">
+                    <h3 id={`${id}-t${itemIndex}`} set:html={html(item.heading)} />
+                    <div class="pg-topic-text">
+                      <Paragraphs items={item.paragraphs} tokens={tokens} />
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.kind === 'page-hero') {
+      return (
+        <section class="tm-hero" aria-labelledby={id}>
+          <div class="wrap">
+            <div class="tm-hero-inner reveal">
+              <Icon name="sprig" class="sprig" />
+              <h1 id={id} set:html={heading} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    return null;
+  })
+}

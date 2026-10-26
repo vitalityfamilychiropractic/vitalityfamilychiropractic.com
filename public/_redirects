@@ -1,77 +1,122 @@
-# Serve brand assets at the site root. These files do not live at `/`.
+# Brand assets and the public homepage.
 /favicon.ico /assets/img/favicon.ico 200
 /apple-touch-icon.png /assets/img/apple-touch-icon.png 200
-
-# The public homepage is the College Station office. Cloudflare Pages applies
-# this even though the office chooser is still built at `/`.
 / /college-station/ 301
 
-# URLs from the previous Jekyll site. Cloudflare Pages applies these even when
-# a matching file exists.
-
-# --- Contact: old plural path and Jekyll .html ---
+# Old draft URLs, Jekyll .html paths, and Christie root paths.
+/celebration/our-values /celebration/ 301
+/celebration/our-values/ /celebration/ 301
+/celebration/pricing /celebration/new-patients/pricing-insurance/ 301
+/celebration/pricing/ /celebration/new-patients/pricing-insurance/ 301
+/celebration/new-pricing /celebration/new-patients/pricing-insurance/ 301
+/celebration/new-pricing/ /celebration/new-patients/pricing-insurance/ 301
+/celebration/team /celebration/meet-our-team/ 301
+/celebration/team/ /celebration/meet-our-team/ 301
+/celebration/team/christie-mclarty /celebration/meet-our-team/ 301
+/celebration/team/christie-mclarty/ /celebration/meet-our-team/ 301
+/celebration/specialties/pregnancy-care /celebration/our-care/prenatal/ 301
+/celebration/specialties/pregnancy-care/ /celebration/our-care/prenatal/ 301
+/celebration/specialties/pediatric-care /celebration/our-care/pediatric/ 301
+/celebration/specialties/pediatric-care/ /celebration/our-care/pediatric/ 301
+/celebration/specialties/family-wellness-care /celebration/our-care/adult-family/ 301
+/celebration/specialties/family-wellness-care/ /celebration/our-care/adult-family/ 301
 /celebration/contacts /celebration/contact/ 301
 /celebration/contacts/ /celebration/contact/ 301
+/celebration/index.html /celebration/ 301
+/celebration/our-values.html /celebration/ 301
+/celebration/pricing.html /celebration/new-patients/pricing-insurance/ 301
+/celebration/new-pricing.html /celebration/new-patients/pricing-insurance/ 301
+/celebration/team.html /celebration/meet-our-team/ 301
+/celebration/team/christie-mclarty.html /celebration/meet-our-team/ 301
+/celebration/specialties/pregnancy-care.html /celebration/our-care/prenatal/ 301
+/celebration/specialties/pediatric-care.html /celebration/our-care/pediatric/ 301
+/celebration/specialties/family-wellness-care.html /celebration/our-care/adult-family/ 301
 /celebration/contacts.html /celebration/contact/ 301
 /celebration/contact /celebration/contact/ 301
 /celebration/contact.html /celebration/contact/ 301
+/celebration/privacy.html /celebration/privacy/ 301
+/college-station/our-values /college-station/ 301
+/college-station/our-values/ /college-station/ 301
+/college-station/pricing /college-station/new-patients/pricing-insurance/ 301
+/college-station/pricing/ /college-station/new-patients/pricing-insurance/ 301
+/college-station/new-pricing /college-station/new-patients/pricing-insurance/ 301
+/college-station/new-pricing/ /college-station/new-patients/pricing-insurance/ 301
+/college-station/team /college-station/meet-our-team/ 301
+/college-station/team/ /college-station/meet-our-team/ 301
+/college-station/team/christie-mclarty /college-station/meet-our-team/ 301
+/college-station/team/christie-mclarty/ /college-station/meet-our-team/ 301
+/college-station/specialties/pregnancy-care /college-station/our-care/prenatal/ 301
+/college-station/specialties/pregnancy-care/ /college-station/our-care/prenatal/ 301
+/college-station/specialties/pediatric-care /college-station/our-care/pediatric/ 301
+/college-station/specialties/pediatric-care/ /college-station/our-care/pediatric/ 301
+/college-station/specialties/family-wellness-care /college-station/our-care/adult-family/ 301
+/college-station/specialties/family-wellness-care/ /college-station/our-care/adult-family/ 301
 /college-station/contacts /college-station/contact/ 301
 /college-station/contacts/ /college-station/contact/ 301
+/college-station/index.html /college-station/ 301
+/college-station/our-values.html /college-station/ 301
+/college-station/pricing.html /college-station/new-patients/pricing-insurance/ 301
+/college-station/new-pricing.html /college-station/new-patients/pricing-insurance/ 301
+/college-station/team.html /college-station/meet-our-team/ 301
+/college-station/team/christie-mclarty.html /college-station/meet-our-team/ 301
+/college-station/specialties/pregnancy-care.html /college-station/our-care/prenatal/ 301
+/college-station/specialties/pediatric-care.html /college-station/our-care/pediatric/ 301
+/college-station/specialties/family-wellness-care.html /college-station/our-care/adult-family/ 301
 /college-station/contacts.html /college-station/contact/ 301
 /college-station/contact /college-station/contact/ 301
 /college-station/contact.html /college-station/contact/ 301
-
-# --- Jekyll .html pages → directory URLs ---
-/celebration/index.html /celebration/ 301
-/celebration/our-values.html /celebration/our-values/ 301
-/celebration/pricing.html /celebration/pricing/ 301
-/celebration/privacy.html /celebration/privacy/ 301
-/celebration/team.html /celebration/team/ 301
-/celebration/team/christie-mclarty.html /celebration/team/christie-mclarty/ 301
-/celebration/specialties/family-wellness-care.html /celebration/specialties/family-wellness-care/ 301
-/celebration/specialties/pediatric-care.html /celebration/specialties/pediatric-care/ 301
-/celebration/specialties/pregnancy-care.html /celebration/specialties/pregnancy-care/ 301
-/college-station/index.html /college-station/ 301
-/college-station/our-values.html /college-station/our-values/ 301
-/college-station/pricing.html /college-station/pricing/ 301
 /college-station/privacy.html /college-station/privacy/ 301
-/college-station/team.html /college-station/team/ 301
-/college-station/team/christie-mclarty.html /college-station/team/christie-mclarty/ 301
-/college-station/specialties/family-wellness-care.html /college-station/specialties/family-wellness-care/ 301
-/college-station/specialties/pediatric-care.html /college-station/specialties/pediatric-care/ 301
-/college-station/specialties/pregnancy-care.html /college-station/specialties/pregnancy-care/ 301
-
-# Preview pricing page that was never meant to rank.
-/college-station/new-pricing /college-station/pricing/ 301
-/college-station/new-pricing/ /college-station/pricing/ 301
-/college-station/new-pricing.html /college-station/pricing/ 301
-
-# --- Root paths that used to alias College Station ---
-/our-values /college-station/our-values/ 301
-/our-values/ /college-station/our-values/ 301
-/our-values.html /college-station/our-values/ 301
-/team /college-station/team/ 301
-/team/ /college-station/team/ 301
-/team.html /college-station/team/ 301
-/team/christie-mclarty /college-station/team/christie-mclarty/ 301
-/team/christie-mclarty/ /college-station/team/christie-mclarty/ 301
-/team/christie-mclarty.html /college-station/team/christie-mclarty/ 301
-/pricing /college-station/pricing/ 301
-/pricing/ /college-station/pricing/ 301
-/pricing.html /college-station/pricing/ 301
-/contacts /college-station/contact/ 301
-/contacts/ /college-station/contact/ 301
-/contacts.html /college-station/contact/ 301
+/our-care/prenatal /college-station/our-care/prenatal/ 301
+/our-care/prenatal/ /college-station/our-care/prenatal/ 301
+/our-care/newborn-infant /college-station/our-care/newborn-infant/ 301
+/our-care/newborn-infant/ /college-station/our-care/newborn-infant/ 301
+/our-care/pediatric /college-station/our-care/pediatric/ 301
+/our-care/pediatric/ /college-station/our-care/pediatric/ 301
+/our-care/adult-family /college-station/our-care/adult-family/ 301
+/our-care/adult-family/ /college-station/our-care/adult-family/ 301
+/our-care/massage-therapy /college-station/our-care/massage-therapy/ 301
+/our-care/massage-therapy/ /college-station/our-care/massage-therapy/ 301
+/massage-therapy /college-station/our-care/massage-therapy/ 301
+/massage-therapy/ /college-station/our-care/massage-therapy/ 301
+/meet-our-team /college-station/meet-our-team/ 301
+/meet-our-team/ /college-station/meet-our-team/ 301
+/our-community /college-station/our-community/ 301
+/our-community/ /college-station/our-community/ 301
+/our-community/classes-events /college-station/our-community/classes-events/ 301
+/our-community/classes-events/ /college-station/our-community/classes-events/ 301
+/our-community/community-partners /college-station/our-community/community-partners/ 301
+/our-community/community-partners/ /college-station/our-community/community-partners/ 301
+/new-patients/first-visit /college-station/new-patients/first-visit/ 301
+/new-patients/first-visit/ /college-station/new-patients/first-visit/ 301
+/new-patients/pricing-insurance /college-station/new-patients/pricing-insurance/ 301
+/new-patients/pricing-insurance/ /college-station/new-patients/pricing-insurance/ 301
+/our-values /college-station/ 301
+/our-values/ /college-station/ 301
+/pricing /college-station/new-patients/pricing-insurance/ 301
+/pricing/ /college-station/new-patients/pricing-insurance/ 301
+/new-pricing /college-station/new-patients/pricing-insurance/ 301
+/new-pricing/ /college-station/new-patients/pricing-insurance/ 301
+/team /college-station/meet-our-team/ 301
+/team/ /college-station/meet-our-team/ 301
+/team/christie-mclarty /college-station/meet-our-team/ 301
+/team/christie-mclarty/ /college-station/meet-our-team/ 301
+/specialties/pregnancy-care /college-station/our-care/prenatal/ 301
+/specialties/pregnancy-care/ /college-station/our-care/prenatal/ 301
+/specialties/pediatric-care /college-station/our-care/pediatric/ 301
+/specialties/pediatric-care/ /college-station/our-care/pediatric/ 301
+/specialties/family-wellness-care /college-station/our-care/adult-family/ 301
+/specialties/family-wellness-care/ /college-station/our-care/adult-family/ 301
 /contact /college-station/contact/ 301
 /contact/ /college-station/contact/ 301
+/contacts /college-station/contact/ 301
+/contacts/ /college-station/contact/ 301
+/our-values.html /college-station/ 301
+/pricing.html /college-station/new-patients/pricing-insurance/ 301
+/team.html /college-station/meet-our-team/ 301
+/team/christie-mclarty.html /college-station/meet-our-team/ 301
+/specialties/pregnancy-care.html /college-station/our-care/prenatal/ 301
+/specialties/pediatric-care.html /college-station/our-care/pediatric/ 301
+/specialties/family-wellness-care.html /college-station/our-care/adult-family/ 301
+/contacts.html /college-station/contact/ 301
 /contact.html /college-station/contact/ 301
 /privacy.html /privacy/ 301
-/specialties/pregnancy-care /college-station/specialties/pregnancy-care/ 301
-/specialties/pregnancy-care/ /college-station/specialties/pregnancy-care/ 301
-/specialties/pregnancy-care.html /college-station/specialties/pregnancy-care/ 301
-/specialties/pediatric-care /college-station/specialties/pediatric-care/ 301
-/specialties/pediatric-care/ /college-station/specialties/pediatric-care/ 301
-/specialties/pediatric-care.html /college-station/specialties/pediatric-care/ 301
-/specialties/family-wellness-care /college-station/specialties/family-wellness-care/ 301
-/specialties/family-wellness-care/ /college-station/specialties/family-wellness-care/ 301
-/specialties/family-wellness-care.html /college-station/specialties/family-wellness-care/ 301

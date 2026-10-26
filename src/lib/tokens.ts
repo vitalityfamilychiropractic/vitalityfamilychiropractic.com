@@ -1,28 +1,33 @@
-import { displayName } from '../config/team';
-import type { TeamMember, Location } from '../config/types';
+import { telHref } from '../config/locations';
+import type { Location } from '../config/types';
+
+/** The office lead, as stored on a team content entry. */
+export interface TokenLead {
+  shortName: string;
+  name: string;
+  role: string;
+  credentials?: string;
+}
 
 /**
  * Shared prose is written once for every office, so anywhere it needs to name
- * a person or a place it uses a token instead. The pregnancy page says
- * "{{lead}} is certified in the Webster technique" and renders as
- * "Dr. Christie" at every office she leads.
+ * a person or a place it uses a token instead.
  *
  * Applied to the rendered HTML rather than the markdown source so tokens keep
  * working inside links and emphasis.
  */
-export function tokensFor(location: Location, lead: TeamMember) {
+export function tokensFor(location: Location, lead: TokenLead) {
+  const leadFull = lead.credentials ? `${lead.name}, ${lead.credentials}` : lead.name;
   return {
     /** The office's lead, e.g. 'Dr. Christie'. */
     lead: lead.shortName,
     /** The office's lead with post-nominals, e.g. 'Christie McLarty, DC'. */
-    leadFull: displayName(lead),
+    leadFull,
     /** Their job title, e.g. 'Chiropractor'. */
     leadRole: lead.role,
 
-    // Kept working so existing pages do not break. `lead` reads better now
-    // that an office's lead need not be a doctor.
     doctor: lead.shortName,
-    doctorFull: displayName(lead),
+    doctorFull: leadFull,
 
     location: location.name,
     city: location.address.city,
@@ -31,6 +36,13 @@ export function tokensFor(location: Location, lead: TeamMember) {
     /** Two-letter abbreviation, e.g. 'FL'. */
     stateAbbr: location.address.stateAbbr,
     phone: location.phone,
+    /** Full telephone link, e.g. 'tel:+14075847900'. */
+    phoneHref: `tel:${telHref(location.phone)}`,
+    base: `/${location.slug}`,
+    bookingUrl: location.bookingUrl,
+    homeClaim: location.homeClaim,
+    homeBlurb: location.homeBlurb,
+    insuranceFaq: location.insuranceFaq,
   } satisfies Record<string, string>;
 }
 

@@ -1,0 +1,105 @@
+---
+import Icon from './Icon.astro';
+import { telHref } from '../config/locations';
+import type { Location } from '../config/types';
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+
+function rowClass(label: string): string {
+  if (label === 'Per Visit') return 'pr-perVisit pr-feature';
+  if (label === 'Weekly Visits') return 'pr-weekly';
+  if (label === 'Biweekly Visits') return 'pr-biweekly';
+  if (label === 'Weekly Prepaid Visits') return 'pr-weeklyPrepaid';
+  if (label === 'Biweekly Prepaid Visits') return 'pr-biweeklyPrepaid';
+  return '';
+}
+---
+
+<section class="pr-hero" aria-labelledby="pr-title">
+  <div class="wrap">
+    <div class="pr-hero-inner reveal">
+      <Icon name="sprig" class="sprig" />
+      <h1 id="pr-title">Pricing &amp; Insurance</h1>
+      <p class="lead">{location.pricingIntro}</p>
+    </div>
+  </div>
+</section>
+
+<section class="pr-main" aria-label="Pricing and insurance">
+  <div class="wrap">
+    {
+      location.fees.length > 0 && (
+        <div class="pr-np reveal">
+          {location.pricingEffective && <p class="pr-effective">{location.pricingEffective}</p>}
+          {location.feesHeading && <p class="pr-oop">{location.feesHeading}</p>}
+          <div class="pr-np-rows">
+            {location.fees.map((fee) => (
+              <p class:list={['pr-np-row', !/^\$\d+$/.test(fee.amount) && 'pr-np-addon']}>
+                <span class="pr-np-label">{fee.label}:</span>{' '}
+                <span class="pr-np-price">{fee.amount}</span>
+              </p>
+            ))}
+            {location.feesNote && <p class="pr-np-note">{location.feesNote}</p>}
+          </div>
+        </div>
+      )
+    }
+
+    <div class="pr-picker reveal" data-tabs>
+      <div class="pr-tabs" role="tablist" aria-label="Family size">
+        {
+          location.pricing.tiers.map((tier, index) => (
+            <button
+              type="button"
+              role="tab"
+              class="pr-tab"
+              id={`pr-tab-${index}`}
+              aria-controls={`pr-panel-${index}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? 0 : -1}
+            >
+              {tier}
+            </button>
+          ))
+        }
+      </div>
+      <div class="pr-panels">
+        {
+          location.pricing.tiers.map((tier, index) => (
+            <div class="pr-panel" role="tabpanel" id={`pr-panel-${index}`} aria-labelledby={`pr-tab-${index}`}>
+              <h2 class="pr-tier-h">{tier}</h2>
+              <div class="pr-cards">
+                {location.pricing.rows.map((row) => (
+                  <div class:list={['pr-card', rowClass(row.label)]}>
+                    <h3>{row.label}</h3>
+                    <p class="pr-price">
+                      <span class="pr-amt">${row.values[index]}</span> <span class="pr-unit">{row.unit}</span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    {
+      location.insuranceNote && (
+        <div class="pr-ins reveal">
+          <p set:html={location.insuranceNote} />
+        </div>
+      )
+    }
+    <div class="ctas pr-ctas">
+      <a class="btn" href={`tel:${telHref(location.phone)}`}>
+        <Icon name="phone" />
+        <span>Call to Schedule Your First Visit</span>
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,6 +1,6 @@
 import { getEntry } from 'astro:content';
-import { getMember } from '../config/team';
 import { applyTokens, tokensFor } from './tokens';
+import { getMember } from './team';
 import type { Location } from '../config/types';
 
 /**
@@ -11,11 +11,9 @@ import type { Location } from '../config/types';
 export async function pageDescription(id: string, location: Location): Promise<string> {
   const entry = await getEntry('pages', id);
   if (!entry) throw new Error(`Missing src/content/pages/${id}.md`);
+  const lead = await getMember(location.lead);
 
-  const description = applyTokens(
-    entry.data.summary,
-    tokensFor(location, getMember(location.lead)),
-  ).trim();
+  const description = applyTokens(entry.data.summary, tokensFor(location, lead.data)).trim();
   if (!description) {
     throw new Error(`src/content/pages/${id}.md has no summary to use as the meta description.`);
   }

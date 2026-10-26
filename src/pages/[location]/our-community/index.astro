@@ -1,0 +1,41 @@
+---
+import { getEntry } from 'astro:content';
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import Blocks from '../../../components/Blocks.astro';
+import { locations } from '../../../config/locations';
+import { pageDescription } from '../../../lib/pages';
+import { getMember } from '../../../lib/team';
+import { tokensFor } from '../../../lib/tokens';
+import type { Location } from '../../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/our-community/`;
+const entry = await getEntry('pages', 'community');
+if (!entry) throw new Error('Missing src/content/pages/community.md');
+const lead = await getMember(location.lead);
+const description = await pageDescription('community', location);
+---
+
+<LocationLayout
+  location={location}
+  title={entry.data.title}
+  description={description}
+  path={path}
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: entry.data.title, href: path },
+  ]}
+>
+  <Blocks sections={entry.data.sections} location={location} tokens={tokensFor(location, lead.data)} />
+</LocationLayout>

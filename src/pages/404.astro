@@ -2,10 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import PageHeader from '../components/PageHeader.astro';
-import { getLocation } from '../config/locations';
-
-const navLocation = getLocation('college-station');
+import { locations } from '../config/locations';
 ---
 
 <BaseLayout
@@ -14,18 +11,23 @@ const navLocation = getLocation('college-station');
   path="/404/"
   noindex
 >
-  <header>
-    <Header navLocation={navLocation} pathname="/404/" logoHref="/" />
-  </header>
+  <Header landing />
   <main id="main" tabindex="-1">
-    <PageHeader title="Page not found" />
-    <div class="container" style="margin: 10px auto; max-width: 600px; text-align: center;">
-      <p style="margin: 30px 0; color: #3b4b68; font-size: 4em; font-weight: 500; line-height: 1; letter-spacing: -1px;">404</p>
-      <p><strong>Page not found :(</strong></p>
-      <p>The requested page could not be found.</p>
+    <div class="wrap missing">
+      <h1>Page not found</h1>
+      <p>The page you requested is not on this site.</p>
+      <div class="missing-links">
+        {
+          locations.map((office) => (
+            <a class="btn" href={`/${office.slug}/`}>
+              <span>
+                {office.address.city}, {office.address.stateAbbr}
+              </span>
+            </a>
+          ))
+        }
+      </div>
     </div>
   </main>
-  <footer>
-    <Footer />
-  </footer>
+  <Footer />
 </BaseLayout>
