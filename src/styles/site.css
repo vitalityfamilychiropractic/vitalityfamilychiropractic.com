@@ -196,6 +196,13 @@ section { position: relative; }
 .frame-b { position: absolute; right: 0; bottom: 0; width: 50%; aspect-ratio: 1; border-radius: 50%; border: 7px solid var(--paper); }
 .claim strong { background: linear-gradient(transparent 62%, var(--blush) 62%, var(--blush) 92%, transparent 92%); padding: 0 .1em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .copy p { max-width: 34em; }
+.care-list { list-style: none; margin: 0 0 1.2em; padding: 0; max-width: 34em; }
+.pg-solo .care-list { max-width: none; }
+.care-list li { position: relative; padding-left: 1.2em; margin: 0 0 .35em; }
+.care-list li::before { content: ""; position: absolute; left: 0; top: .65em; width: 7px; height: 7px; border-radius: 50%; background: var(--rose); }
+.pg-slate .care-list li::before { background: var(--blush); }
+.svc-kicker { display: block; margin: 0 0 .7em; font: 800 .74rem/1.45 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: #9A5A63; }
+.pg-slate .svc-kicker { color: var(--blush); }
 
 /* ---------- Care ---------- */
 .care { padding: clamp(72px, 9vw, 140px) 0; background: linear-gradient(180deg, var(--ivory), var(--sage-soft) 140%); }
@@ -481,6 +488,7 @@ section { position: relative; }
 .pg-topic:nth-child(3) h3::before { background: var(--sage); opacity: 1; }
 .pg-topic-text p { font-size: .98rem; color: var(--ink-2); }
 .pg-topic-text p:last-child { margin-bottom: 0; }
+.pg-topics .intro .signoff { color: #9A5A63; margin-top: 0; margin-bottom: .8em; }
 
 .pg-closing-soft { background: var(--blush-soft); padding: clamp(80px, 10vw, 140px) 0; }
 .pg-closing-soft .meet-card { box-shadow: var(--shadow); }
