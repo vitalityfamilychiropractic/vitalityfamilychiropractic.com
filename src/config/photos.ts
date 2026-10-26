@@ -125,7 +125,7 @@ export const photos: Record<string, Photo> = {
     position: "50% 35%",
   },
   "portrait-candice": {
-    src: "/assets/img/locations/college-station/portrait-candice-1200.jpg",
+    src: "/assets/img/staff/portrait-candice-1200.jpg",
     alt: "Candice smiling in front of a stone wall",
     width: 1536,
     height: 2048,
@@ -133,7 +133,7 @@ export const photos: Record<string, Photo> = {
     position: "50% 28%",
   },
   "portrait-christie": {
-    src: "/assets/img/locations/college-station/portrait-christie-853.jpg",
+    src: "/assets/img/staff/portrait-christie-853.jpg",
     alt: "Dr. Christie smiling in front of a stone wall",
     width: 853,
     height: 1065,
@@ -141,7 +141,7 @@ export const photos: Record<string, Photo> = {
     position: "50% 30%",
   },
   "portrait-mikah": {
-    src: "/assets/img/locations/college-station/portrait-mikah-1200.jpg",
+    src: "/assets/img/staff/portrait-mikah-1200.jpg",
     alt: "Dr. Mikah smiling in front of a stone wall",
     width: 1536,
     height: 2048,
@@ -149,7 +149,7 @@ export const photos: Record<string, Photo> = {
     position: "45% 35%",
   },
   "portrait-yvonne": {
-    src: "/assets/img/locations/college-station/portrait-yvonne-1200.jpg",
+    src: "/assets/img/staff/portrait-yvonne-1200.jpg",
     alt: "Yvonne smiling in front of a stone wall",
     width: 1536,
     height: 2048,
