@@ -15,7 +15,6 @@ const { hours } = Astro.props;
         <th scope="row">{entry.day}</th>
         <td>
           {entry.blocks.length > 0 && entry.blocks.join(', ')}
-          {entry.blocks.length > 0 && entry.note && ', '}
           {entry.note && entry.blocks.length > 0 && <span class="ct-note">{entry.note}</span>}
           {entry.note && entry.blocks.length === 0 && entry.note}
         </td>

@@ -11,6 +11,9 @@ import type { Location } from './types';
  * Array order is display order.
  */
 
+const collegeStationInsurance =
+  '<strong>Insurance:</strong> We are in-network with Blue Cross Blue Shield PPO and BCBS HealthSelect plans. Specific information regarding your insurance coverage will be reviewed during your new patient appointment. Insurance does not cover chiropractic care for children under 5 years of age or maintenance/wellness care.';
+
 const collegeStationInsuranceFaq = [
   '<p>Yes! Our College Station office is in network with BCBS PPO plans and BCBS HealthSelect plans.</p>',
   "<p>If we're not in network with your insurance, we're happy to provide a superbill that you can submit to your insurance company for possible out-of-network reimbursement.</p>",
@@ -18,7 +21,7 @@ const collegeStationInsuranceFaq = [
 ].join('');
 
 const celebrationInsurance =
-  'We are out of network with all insurance plans, but will gladly provide you with documentation to submit for reimbursement to your insurance. We accept HSA cards and health sharing plans.';
+  '<p>We are out of network with all insurance plans, but will gladly provide you with documentation to submit for reimbursement to your insurance. We accept HSA cards and health sharing plans.</p>';
 
 export const locations: Location[] = [
   {
@@ -69,6 +72,7 @@ export const locations: Location[] = [
     pricingIntro:
       'Our goal is to provide affordable family chiropractic care with up front pricing so you are never waiting on a mystery medical bill from us.',
     insuranceNote: celebrationInsurance,
+    insuranceFaq: celebrationInsurance,
     feesHeading: 'Out of pocket pricing:',
     fees: [{ label: 'New Patient Consultation, Exam, and First Adjustment', amount: '$150' }],
     pricing: {
@@ -97,18 +101,10 @@ export const locations: Location[] = [
     },
     photoAliases: {
       'landing-office': 'celebration-pregnancy',
-      'office-reception': 'celebration-pregnancy',
-      'office-waiting-room': 'celebration-family',
-      'treatment-room': 'celebration-pediatric',
-      'mural-detail': 'celebration-portrait',
-      'family-wellness': 'celebration-family',
-      'team-with-little-ones': 'celebration-portrait',
-      'babies-at-sign': 'celebration-pediatric',
     },
     homeClaim:
       'Vitality Family Chiropractic offers prenatal and pediatric chiropractic care in Celebration. Dr. Christie founded the practice and spent more than a decade caring for families in College Station before opening this office.',
     homeBlurb: 'Now welcoming new patients.',
-    insuranceFaq: `<p>${celebrationInsurance}</p>`,
     shop: { label: 'Shop', href: null, inNav: false },
   },
   {
@@ -162,8 +158,8 @@ export const locations: Location[] = [
     ],
     pricingIntro:
       'We strive to make our pricing affordable for families to receive regular chiropractic care',
-    insuranceNote:
-      '<strong>Insurance:</strong> We are in-network with Blue Cross Blue Shield PPO and BCBS HealthSelect plans. Specific information regarding your insurance coverage will be reviewed during your new patient appointment. Insurance does not cover chiropractic care for children under 5 years of age or maintenance/wellness care.',
+    insuranceNote: collegeStationInsurance,
+    insuranceFaq: collegeStationInsuranceFaq,
     pricingEffective: 'Pricing Effective September 1, 2026',
     feesHeading: 'Out of pocket pricing:',
     feesNote: 'The child add-on price covers all of your children together, not each child.',
@@ -204,7 +200,6 @@ export const locations: Location[] = [
     homeClaim:
       'Vitality Family Chiropractic is <strong>the leader in prenatal and pediatric chiropractic care in the Brazos Valley</strong>, and we\'ve been caring for families here for over 13 years.',
     homeBlurb: 'Caring for Brazos Valley families for over 13 years.',
-    insuranceFaq: collegeStationInsuranceFaq,
     shop: { label: 'Shop', href: null, inNav: true },
   },
 ];
