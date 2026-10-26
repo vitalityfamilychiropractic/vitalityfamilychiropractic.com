@@ -471,6 +471,7 @@ section { position: relative; }
 .tm-grid { display: grid; gap: clamp(36px, 5vw, 88px); align-items: start; }
 @media (min-width: 960px) {
   .tm-grid { grid-template-columns: .8fr 1.2fr; }
+  .tm-rev { grid-template-columns: 1.2fr .8fr; }
   .tm-rev > .tm-photo { order: 2; }
   .tm-photo { position: sticky; top: 112px; }
 }

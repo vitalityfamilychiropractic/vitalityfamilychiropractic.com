@@ -57,7 +57,7 @@ const rendered = await Promise.all(
       const doctor = member.data.schemaType === 'Physician';
       return (
         <section class:list={['tm-person', index % 2 === 1 && 'tm-alt']} id={member.id} aria-labelledby={`tm-${member.id}`}>
-          <div class="wrap tm-grid">
+          <div class:list={['wrap', 'tm-grid', index % 2 === 1 && 'tm-rev']}>
             <div class="tm-photo reveal">
               <div class="arch tm-portrait">
                 {member.data.photo ? (
