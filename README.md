@@ -2,7 +2,8 @@
 
 One static site for both offices. Each office has its own hours, prices, photos,
 team, and booking link. Shared writing — services, page descriptions, and the
-privacy policy — is written once and filled in for the office that is showing it.
+privacy policy — is written once. Most tokens fill in for the office that is
+showing the page. The privacy contact block fills from `primaryOffice`.
 
 Built with [Astro](https://astro.build). The design is Fraunces and Nunito Sans,
 in `src/styles/site.css` and `src/styles/extras.css`. There is no contact form.
@@ -65,7 +66,7 @@ Each office is a directory under its slug.
 | `/` | Brand landing page |
 | `/{office}/` | Office home |
 | `/{office}/our-care/{service}/` | A service, such as prenatal or massage-therapy |
-| `/{office}/meet-our-team/` | Team, in `location.team` order |
+| `/{office}/meet-our-team/` | Team, in `location.team` order. On a wide screen the portrait switches sides for each person. |
 | `/{office}/our-community/` | Community, plus classes and partners |
 | `/{office}/new-patients/first-visit/` | First visit |
 | `/{office}/new-patients/pricing-insurance/` | Pricing and insurance |
@@ -97,8 +98,8 @@ and Chiropractor structured data.
 `team` is the only display order. Do not put an order field on the person.
 `lead` is who shared prose calls `{{lead}}`, and whose name the landing card uses.
 
-Set `hidePostalCode` when the visible address and the schema.org postal address
-should omit the ZIP. The map link can still include it. College Station does this.
+The visible address and the schema.org postal address omit the ZIP. The map
+link can still include it. Keep `address.zip` for that.
 
 ## Photos
 
@@ -117,7 +118,23 @@ larger than the original. A file whose name already ends in `-1200.jpg` becomes
 `pregnancy-care.jpg`, becomes `pregnancy-care-480.webp`. List every width you
 generate in the photo's `widths` array.
 
-The header uses `site.logo` (`/assets/img/logo.svg`). The footer wordmark is text.
+The header uses `site.logo` (`/assets/img/logo.svg`). The footer uses the same
+logo, covered in white so it reads on the dark background.
+
+To make the width variants, put source photos in `make-images/originals/` and
+run `python3 make-images/make-images.py`. The script needs Pillow. It leaves
+`originals/` and `photos.ts` alone. Exports go to `make-images/output/`: WebP
+at 480, 800, 1200, and 1800 (never wider than the source) and one JPEG fallback
+at `min(1200, source width)`. `output/manifest.json` lists each slug, its
+widths, and the fallback name. Copy the files into
+`public/assets/img/locations/{office}/` and add the entry in `photos.ts` by
+hand. A filename becomes the slug: lowercase, with anything that is not a
+letter or digit turned into a hyphen. Two files that would share a slug stop
+the script.
+
+While `bun run dev` is running, hover a catalog photo to see its id. An aliased
+photo also names the id the page asked for. That label is left out of the
+production build.
 
 ## Hours
 
@@ -156,12 +173,178 @@ Where the wording needs to name a person or place, use a token:
 | `{{homeBlurb}}` | Sentence appended to the home description |
 | `{{insuranceFaq}}` | The first-visit insurance answer, as HTML |
 
-`{{doctor}}` and `{{doctorFull}}` still work as aliases for `{{lead}}` and
-`{{leadFull}}`.
-
 A misspelled token fails the build.
+
+The privacy policy uses a separate set. `primaryOffice` in
+`src/content/pages/privacy.md` names the office, and both `/privacy/` and
+`/{office}/privacy/` fill the contact block from that office. An office privacy
+page still uses `summary` (with the usual tokens) as its meta description.
+`/privacy/` uses `brandSummary`.
+
+| Token | Becomes |
+| --- | --- |
+| `{{formatStreet}}` | Street and suite, e.g. `3012 Barron Road, Suite 300` |
+| `{{formatCityLine}}` | City and state abbreviation, e.g. `College Station, TX` |
+| `{{zip}}` | `address.zip`, for this contact line |
+| `{{email}}` | That office's email |
+| `{{telHrefFormatted}}` | The phone with spaces, e.g. `+1 979 703 7977` |
+
+`telHrefFormatted` is the display form of `telHref`. Links keep the compact
+form, such as `tel:+19797037977`. A trailing backslash on a contact line keeps
+that line on its own row. The policy body only accepts the tokens in this
+table. Visible addresses and schema.org still omit the ZIP. The contact line
+prints it because the copy includes `{{zip}}`.
 
 Each office chooses which services it offers, and in what order, with its
 `services` array. A file no office lists is not published. Facebook handles on
 the site and on each office are the `sameAs` URL in JSON-LD. The pages do not
 show a Facebook link.
+
+## Page front matter
+
+Shared pages live in `src/content/pages/`. The file name is the id the route
+loads. Service pages live in `src/content/services/` and use the same `sections`
+list. A string in the front matter may contain tokens and inline HTML.
+
+| File | Route |
+| --- | --- |
+| `home.md` | `/{office}/` |
+| `first-visit.md` | `/{office}/new-patients/first-visit/` |
+| `community.md` | `/{office}/our-community/` |
+| `classes-events.md` | `/{office}/our-community/classes-events/` |
+| `partners.md` | `/{office}/our-community/community-partners/` |
+| `contact.md` | `/{office}/contact/` |
+| `team.md` | `/{office}/meet-our-team/` (title and summary only; bios are team files) |
+| `pricing.md` | `/{office}/new-patients/pricing-insurance/` (title and summary only; numbers come from the office) |
+| `privacy.md` | `/{office}/privacy/` and `/privacy/`. The Markdown body is the policy. The contact block is filled from `primaryOffice`. |
+| `services/{id}.md` | `/{office}/our-care/{id}/` |
+
+Every page and service file needs `title` and `summary`. `summary` is the meta
+description. These fields are optional, and only some routes read them:
+
+| Field | Used by |
+| --- | --- |
+| `brandSummary` | `/privacy/`, because `summary` names a city. It must not contain a token. |
+| `updated` | The "Updated …" line on the privacy policy |
+| `primaryOffice` | Location slug for the privacy contact block, on every privacy URL |
+| `asideTitle`, `aside` | The contact page. Both are required there. |
+| `intro` | The partners page, shown even when the partner list is empty |
+| `sections` | Home, first visit, community, classes, and every service page |
+
+A service file also needs `navLabel`, `order`, `cardTitle`, `cardText`, and
+`cardImage` (a photo id). `cardSoft` gives that home-page card the softer
+background. `order` is the menu order.
+
+A team file is one person. The schema is strict.
+
+| Field | |
+| --- | --- |
+| `name`, `shortName`, `role` | Display name, `{{lead}}` name, and job title |
+| `schemaType` | `Physician` or `Person` |
+| `tagline` | Italic line under the heading. Optional. |
+| `factsTitle`, `facts` | The numbered list. Each fact is HTML. |
+| `photo` | Photo id. Omit it and the page shows initials. |
+| `credentials`, `email` | Optional. Credentials are appended to the full name. |
+
+The Markdown body under the team front matter is the bio.
+
+`sections` is a list. Each item needs `kind`. An unknown kind renders nothing.
+Text fields are `heading`, `sub`, `flow`, `paragraphs`, and `ctas`. Photo
+fields are `image`, `image2`, and `bloom`, each `{ id, position }`. `id` is a
+photo id. `position` is an optional CSS object-position, such as `55% 30%`.
+
+A `flow` item is `{ kind, text }`. If `text` already contains a `<p>` tag, it
+is inserted as written. Otherwise the kind is the paragraph's class:
+
+| Flow kind | Result |
+| --- | --- |
+| `p` | A normal paragraph |
+| `lead` | The larger opening line |
+| `claim` | A paragraph. `<strong>` inside it gets the highlight |
+| `quip` | An italic pull line |
+| `signoff` | An italic closing line |
+| anything else | A paragraph with that kind as its class |
+
+A button is `{ label, href, action, ghost }`. `action: phone` dials the office
+(`href` is usually `{{phoneHref}}`). `action: url` is a normal link. `ghost:
+true` draws the outline button.
+
+### Section kinds
+
+`hero`. Home opening. `heading` is the h1. `flow`, `ctas`, `image` (the arch),
+and `bloom` (the small photo overlapping it).
+
+`family`. Two photos beside the copy. `heading`, `flow`, `image`, `image2`.
+
+`care`. The office's service cards. `heading`, `paragraphs`, `sub` (a smaller
+heading above the cards), and `ctas`. Card text and photos come from each
+service file, not from this section.
+
+`best`. Copy on the right, a tall arch and a round photo on the left.
+`heading`, `flow`, `image`, `image2`.
+
+`community`. Two photos in a mosaic, then copy. `heading`, `flow`, `ctas`,
+`image`, `image2`.
+
+`closing`. A centered card. `heading`, `flow`, `ctas`, `image`. Without
+`soft`, the image is the full-bleed background and the card shows a sprig.
+With `soft: true`, the image sits inside the card.
+
+`intro`. Interior-page opening. `heading` is the h1. `sub`, `flow`, `ctas`,
+`image`, `bloom`. `band` adds a strip under the opening:
+
+| `band.kind` | |
+| --- | --- |
+| `trio` | `band.items`, a list of `{ text }`, each with a sprig |
+| `story` | `band.flow`, the same flow items as anywhere else |
+
+`split`. Copy beside one photo. `heading`, `flow`, `ctas`, `image`.
+
+| Option | |
+| --- | --- |
+| `frame` | `tall` (a tall arch), `arch`, or omit it for a rectangle |
+| `tone` | `slate`, `paper`, or omit it for the default background |
+| `reverse` | Puts the photo on the right |
+| `solo` | Drops the photo column and centers the copy |
+
+`centered`. A sprig, then `heading`, `flow`, and `ctas`.
+
+`note`. A boxed note. `heading` and `flow`.
+
+`topics`. A heading, optional `paragraphs`, then `items`. Set `columns: 3` for
+three columns. Each item has `heading` and `paragraphs`. `image` adds a photo.
+`wide: true` uses the photo layout even when there is no image.
+
+`page-hero`. A centered sprig and h1. Only `heading`.
+
+```yaml
+---
+title: "Your First Visit"
+summary: "What to expect at your first visit in {{city}}, {{stateAbbr}}."
+sections:
+  - kind: "intro"
+    heading: "Come on in."
+    sub: "We'll take it from here."
+    flow:
+      - kind: "lead"
+        text: "Your first visit in {{city}} is unhurried."
+      - kind: "p"
+        text: "Call us at {{phone}} and we'll find a time."
+    ctas:
+      - label: "Call to Schedule"
+        action: "phone"
+        href: "{{phoneHref}}"
+    image:
+      id: "office-reception"
+  - kind: "split"
+    heading: "What happens next"
+    reverse: true
+    frame: "arch"
+    flow:
+      - kind: "p"
+        text: "We listen first."
+    image:
+      id: "prenatal-visit"
+      position: "50% 30%"
+---
+```
