@@ -181,7 +181,7 @@ and pages. Preview fills it:
   is "Vitality Family Chiropractic, home".
 - The footer uses that same logo, painted white with a CSS mask, 70px tall,
   shifted 10px left. It is not the old two-line text wordmark.
-- Fonts are Fraunces and Nunito Sans, in `src/styles/site.css` then
+- Fonts are Playfair Display and Nunito Sans, in `src/styles/site.css` then
   `extras.css`. There is no Bootstrap.
 - The location control in the header is a `details` switcher to the other
   office. The landing page, the 404, and `/privacy/` have no switcher.
