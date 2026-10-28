@@ -385,6 +385,10 @@ section { position: relative; }
 .nav-m .sub-toggle.nav-heading { width: 100%; height: auto; justify-content: space-between; padding: 16px 4px; font: 450 1.15rem/1.7 var(--serif); color: var(--slate); border-radius: 0; }
 .nav-m .in-section > .nav-heading { box-shadow: none; }
 .nav-m .sub-toggle.nav-heading .i { width: 20px; height: 20px; }
+/* Link + toggle pairs (Gather & Grow): match the heading chevrons above. */
+.nav-pair > .sub-toggle { color: var(--ink); }
+.nav-m .nav-pair > .sub-toggle { color: var(--slate); place-items: center end; padding-right: 4px; }
+.nav-m .nav-pair > .sub-toggle .i { width: 20px; height: 20px; }
 .foot-heading { font-weight: 750; color: #F3F5F6; }
 
 /* =====================================================================

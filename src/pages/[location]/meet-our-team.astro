@@ -83,9 +83,8 @@ function factsEyebrow(schemaType: string, role: string): string {
             <div class="tm-copy reveal">
               <h2 id={`tm-${member.id}`}>
                 Meet {doctor ? member.data.shortName : member.data.name}
-                {!doctor && <span class="tm-role">| {member.data.role}</span>}
+                {!doctor && <span class="tm-role">| {member.data.tagline ?? member.data.role}</span>}
               </h2>
-              {member.data.tagline && <p class="tm-tagline">{member.data.tagline}</p>}
               <div class="tm-bio">
                 <Content />
               </div>
