@@ -812,6 +812,7 @@ select.fm-input {
   .m-bar { display: flex; gap: 8px; }
   .m-bar .btn-book { flex: 1; width: auto; background: var(--ivory); }
   .m-bar .m-call { flex: none; width: 52px; padding: 0; }
+  .m-bar .m-call + .m-call { margin: 0; }
   .m-bar .m-call span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 /* With Book Now added, use the compact menu spacing at every desktop width. */
