@@ -45,6 +45,10 @@ export const locations: Location[] = [
       'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3512.3003327520937!2d-81.54208688736924!3d28.31951147573632!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88dd7fcbf0716f75%3A0x41cc63344526be49!2sVitality%20Family%20Chiropractic!5e0!3m2!1sen!2sus!4v1751985277050!5m2!1sen!2sus',
     geo: { lat: 28.31951619812341, lng: -81.54208688774355 },
     bookingUrl: 'https://vfccelebration.janeapp.com/',
+    form: {
+      endpoint: 'https://formspree.io/f/xwpknnaj',
+      accessKey: 'celebration',
+    },
     announcement: 'Now accepting new patient appointments',
     hours: [
       { day: 'Monday', blocks: ['8:30 AM–4:00 PM'], machine: [['08:30', '16:00']] },
@@ -133,6 +137,10 @@ export const locations: Location[] = [
       'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3435.7672416409823!2d-96.29873168731905!3d30.555879574564223!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864684c10ec2e337%3A0xbceeff1fdc978b2!2sVitality%20Family%20Chiropractic!5e0!3m2!1sen!2sus!4v1751984983196!5m2!1sen!2sus',
     geo: { lat: 30.55582, lng: -96.29614 },
     bookingUrl: 'https://vfc.janeapp.com/',
+    form: {
+      endpoint: 'https://formspree.io/f/xwpknnaj',
+      accessKey: 'college-station',
+    },
     hours: [
       { day: 'Monday', blocks: ['8:30 AM–4:00 PM'], machine: [['08:30', '16:00']] },
       { day: 'Tuesday', blocks: ['8:30 AM–4:00 PM'], machine: [['08:30', '16:00']] },

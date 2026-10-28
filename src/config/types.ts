@@ -81,6 +81,12 @@ export interface Location {
   geo: { lat: number; lng: number };
   /** This office's own Jane App booking site. */
   bookingUrl: string;
+  /**
+   * Contact-form mailer. `endpoint` is the URL the form posts to.
+   * `accessKey` is this office's key. A value that still starts with
+   * `REPLACE_WITH` means mail is not set up for that office yet.
+   */
+  form: { endpoint: string; accessKey: string };
   hours: HoursEntry[];
   /**
    * Service slugs this office offers, in display order. Each must match a file

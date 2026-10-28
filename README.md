@@ -6,7 +6,8 @@ privacy policy — is written once. Most tokens fill in for the office that is
 showing the page. The privacy contact block fills from `primaryOffice`.
 
 Built with [Astro](https://astro.build). The design is Fraunces and Nunito Sans,
-in `src/styles/site.css` and `src/styles/extras.css`. There is no contact form.
+in `src/styles/site.css` and `src/styles/extras.css`. The contact page includes
+a message form for a new-patient appointment request or any other note.
 "Call to Schedule" buttons dial the office. Each office's booking link goes to
 its own Jane App site.
 

@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import LocationLayout from '../../layouts/LocationLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
 import Hours from '../../components/Hours.astro';
 import Icon from '../../components/Icon.astro';
 import { formatCityZipLine, formatStreet, locations, telHref } from '../../config/locations';
@@ -78,6 +79,11 @@ const phone = telHref(location.phone);
           </div>
         </div>
       </div>
+      <div class="ct-form-col reveal">
+        <ContactForm location={location} />
+      </div>
+    </div>
+    <div class="wrap ct-map-band">
       <div class="ct-map reveal">
         <iframe
           title={`Map to ${location.name}`}

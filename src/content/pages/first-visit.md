@@ -101,7 +101,7 @@ sections:
     items:
       - heading: "How do I schedule my first appointment?"
         paragraphs:
-          - "Give our office a call! Our office manager will help you find a time reserved specifically for new patients and walk you through the next steps."
+          - 'Give our office a call or <a href="{{base}}/contact/#contact-form">send us a message</a>! Our office manager will help you find a time reserved specifically for new patients and walk you through the next steps.'
       - heading: "Do you take insurance?"
         paragraphs:
           - "{{insuranceFaq}}"
