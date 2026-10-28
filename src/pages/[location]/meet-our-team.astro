@@ -75,14 +75,14 @@ function factsEyebrow(schemaType: string, role: string): string {
                   />
                 ) : (
                   <span class="tm-initials" aria-hidden="true">
-                    {initials(member.data.name)}
+                    {initials(member.data.shortName)}
                   </span>
                 )}
               </div>
             </div>
             <div class="tm-copy reveal">
               <h2 id={`tm-${member.id}`}>
-                Meet {doctor ? member.data.shortName : member.data.name}
+                Meet {member.data.shortName}
                 {!doctor && !member.data.tagline && <span class="tm-role">{member.data.role}</span>}
               </h2>
               {member.data.tagline && <p class="tm-tagline">{member.data.tagline}</p>}
