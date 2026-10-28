@@ -7,11 +7,11 @@ schemaType: "Physician"
 tagline: "Chiropractor. Mama. Professional Baby Snuggler. Eternal Optimist."
 factsTitle: "5 Things You Might Not Know About Dr. Christie"
 facts:
-  - "✈️ She's a pilot! Airplanes, gliders, hot air balloons and pretty much any adventure that gets her off the ground."
-  - "🌎 She's always planning her next adventure. Whether it's exploring a new country, jumping out of an airplane, or making memories with Nick and Mackenzie, she's happiest experiencing something new."
-  - "🧵 She's a needlepoint-loving bookworm. Apparently, even her downtime requires keeping her hands or brain busy."
-  - "🎤 She's forever a Backstreet Boys girl. Although Mackenzie has introduced a little K-pop into the mix."
-  - "🏓 She's always up for a little friendly competition. Whether it's pickleball or golf (where she's still working on keeping the ball out of the woods), she's happiest when she's having fun and making memories."
+  - "She's a pilot! Airplanes, gliders, hot air balloons and pretty much any adventure that gets her off the ground."
+  - "She's always planning her next adventure. Whether it's exploring a new country, jumping out of an airplane, or making memories with Nick and Mackenzie, she's happiest experiencing something new."
+  - "She's a needlepoint-loving bookworm. Apparently, even her downtime requires keeping her hands or brain busy."
+  - "She's forever a Backstreet Boys girl. Although Mackenzie has introduced a little K-pop into the mix."
+  - "She's always up for a little friendly competition. Whether it's pickleball or golf (where she's still working on keeping the ball out of the woods), she's happiest when she's having fun and making memories."
 photo: "portrait-christie"
 ---
 

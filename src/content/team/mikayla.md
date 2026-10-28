@@ -3,7 +3,7 @@ name: "Mikayla"
 shortName: "Mikayla"
 role: "Chiropractic Assistant"
 schemaType: "Person"
-factsTitle: "5 Things You Didn't Know About Mikayla"
+factsTitle: "Beyond the front desk, five things you didn't know about Mikayla"
 facts:
   - "She's been to Antarctica! But her next dream adventure is a little warmer: swimming with whale sharks in the Maldives."
   - "She's never eaten a steak or pork chop. It's a texture thing, and she's perfectly happy keeping it that way!"

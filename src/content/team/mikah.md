@@ -7,11 +7,11 @@ schemaType: "Physician"
 tagline: "Chiropractor. Mama's Biggest Cheerleader. Movie Buff. Professional Overexplainer."
 factsTitle: "5 Things You Might Not Know About Dr. Mikah"
 facts:
-  - "🎬 She's a serious movie buff. She'll watch just about anything, has a special love for Wes Anderson films, and could talk movies for hours. Recommendations are always welcome!"
-  - "☕ Coffee is practically a hobby. From perfecting homemade lattes to discovering new coffee shops, she's always on the hunt for a really good cup."
-  - "🛍️ She loves a good treasure hunt. Thrift stores, antique shops, and unique clothing finds are her happy place."
-  - "🍝 She's an adventurous foodie. She loves cooking, trying new recipes, and exploring new places one restaurant at a time. She'll try just about anything once!"
-  - "😴 She's a champion sleeper (and storyteller). Ten hours of sleep is her sweet spot. And if you ask her about her weekend, prepare for the entire backstory, every detail, and probably a few side stories along the way."
+  - "She's a serious movie buff. She'll watch just about anything, has a special love for Wes Anderson films, and could talk movies for hours. Recommendations are always welcome!"
+  - "Coffee is practically a hobby. From perfecting homemade lattes to discovering new coffee shops, she's always on the hunt for a really good cup."
+  - "She loves a good treasure hunt. Thrift stores, antique shops, and unique clothing finds are her happy place."
+  - "She's an adventurous foodie. She loves cooking, trying new recipes, and exploring new places one restaurant at a time. She'll try just about anything once!"
+  - "She's a champion sleeper (and storyteller). Ten hours of sleep is her sweet spot. And if you ask her about her weekend, prepare for the entire backstory, every detail, and probably a few side stories along the way."
 photo: "portrait-mikah"
 ---
 

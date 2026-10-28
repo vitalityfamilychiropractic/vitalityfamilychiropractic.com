@@ -3,7 +3,7 @@ name: "Yvonne Stephens"
 shortName: "Yvonne"
 role: "Office Manager"
 schemaType: "Person"
-factsTitle: "5 Things You Didn’t Know About Yvonne"
+factsTitle: "Beyond the front desk, five things you didn’t know about Yvonne"
 facts:
   - "You can call her Queen Yvonne! She was crowned queen of St. Teresa’s Fiesta Patrias back in 1985, and her great-aunt called her Queen Yvonne for the rest of her life."
   - "She’s an ’80s trivia contender. Music, movies, you name it. She might just give you a run for your money!"
