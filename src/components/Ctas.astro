@@ -24,10 +24,12 @@ const { ctas = [], tokens, class: className } = Astro.props;
       {ctas.map((cta) => {
         let href = applyTokens(cta.href, tokens);
         const phone = cta.action === 'phone';
+        const message = cta.action === 'message';
         if (phone && !/^tel:/i.test(href)) href = `tel:${href}`;
         return (
           <a class:list={['btn', cta.ghost && 'btn-ghost']} href={href}>
             {phone && <Icon name="phone" />}
+            {message && <Icon name="mail" />}
             <span set:html={applyTokens(cta.label, tokens)} />
             {!phone && <Icon name="arrow" />}
           </a>

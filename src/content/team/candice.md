@@ -4,6 +4,7 @@ shortName: "Candice"
 credentials: "LMT"
 role: "Licensed Massage Therapist"
 schemaType: "Person"
+tagline: "Massage Therapist. Blended-Family Ringmaster. Healing Hands. Big Heart."
 factsTitle: "Five Things You Didn't Know About Candice"
 facts:
   - "<strong>Her dream vacation is a little house overlooking a Norwegian fjord.</strong> Mountains, water, and a cozy place to unwind? Sign her up."

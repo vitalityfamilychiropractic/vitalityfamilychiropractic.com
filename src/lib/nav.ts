@@ -38,10 +38,10 @@ export async function buildNav(location: Location): Promise<NavItem[]> {
     },
     { label: 'Meet Our Team', href: `${base}/meet-our-team/` },
     {
-      label: 'Our Community',
+      label: 'Gather & Grow',
       href: `${base}/our-community/`,
       children: [
-        { label: 'Classes & Events', href: `${base}/our-community/classes-events/` },
+        { label: 'What’s Happening at VFC', href: `${base}/our-community/classes-events/` },
         { label: 'Community Partners', href: `${base}/our-community/community-partners/` },
       ],
     },

@@ -1,6 +1,6 @@
 ---
 interface Props {
-  name: 'phone' | 'calendar' | 'arrow' | 'chevron' | 'menu' | 'close' | 'sprig';
+  name: 'phone' | 'calendar' | 'arrow' | 'chevron' | 'menu' | 'close' | 'sprig' | 'mail';
   class?: string;
 }
 
@@ -47,6 +47,14 @@ const { name, class: className = 'i' } = Astro.props;
   name === 'close' && (
     <svg class={className} aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
       <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  )
+}
+{
+  name === 'mail' && (
+    <svg class={className} aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="5" width="17" height="14" rx="2" />
+      <path d="M3.5 7.5 12 13.2 20.5 7.5" />
     </svg>
   )
 }

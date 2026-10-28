@@ -32,6 +32,13 @@ const rendered = await Promise.all(
     return { member, Content };
   }),
 );
+
+/** Kicker above the numbered facts. Chiropractors keep the original line. */
+function factsEyebrow(schemaType: string, role: string): string {
+  if (schemaType === 'Physician') return 'Beyond the Adjustment';
+  if (role === 'Licensed Massage Therapist') return 'Beyond the massage table';
+  return 'Beyond the front desk';
+}
 ---
 
 <LocationLayout
@@ -83,7 +90,7 @@ const rendered = await Promise.all(
                 <Content />
               </div>
               <div class="tm-things">
-                <p class="tm-eyebrow">Beyond the Adjustment</p>
+                <p class="tm-eyebrow">{factsEyebrow(member.data.schemaType, member.data.role)}</p>
                 <h3>{member.data.factsTitle}</h3>
                 <ol class="tm-list tm-ol">
                   {member.data.facts.map((fact) => (
