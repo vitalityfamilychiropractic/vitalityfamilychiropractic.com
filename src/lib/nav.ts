@@ -38,19 +38,19 @@ export async function buildNav(location: Location): Promise<NavItem[]> {
     },
     { label: 'Meet Our Team', href: `${base}/meet-our-team/` },
     {
-      label: 'Gather & Grow',
-      href: `${base}/our-community/`,
-      children: [
-        { label: 'What’s Happening at VFC', href: `${base}/our-community/classes-events/` },
-        { label: 'Community Partners', href: `${base}/our-community/community-partners/` },
-      ],
-    },
-    {
       label: 'New Patients',
       heading: true,
       children: [
         { label: 'Your First Visit', href: `${base}/new-patients/first-visit/` },
         { label: 'Pricing & Insurance', href: `${base}/new-patients/pricing-insurance/` },
+      ],
+    },
+    {
+      label: 'Gather & Grow',
+      href: `${base}/our-community/`,
+      children: [
+        { label: 'What’s Happening at VFC', href: `${base}/our-community/classes-events/` },
+        { label: 'Community Partners', href: `${base}/our-community/community-partners/` },
       ],
     },
   ];

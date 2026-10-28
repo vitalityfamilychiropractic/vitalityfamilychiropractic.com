@@ -31,7 +31,7 @@ const { ctas = [], tokens, class: className } = Astro.props;
             {phone && <Icon name="phone" />}
             {message && <Icon name="mail" />}
             <span set:html={applyTokens(cta.label, tokens)} />
-            {!phone && <Icon name="arrow" />}
+            {!phone && !message && <Icon name="arrow" />}
           </a>
         );
       })}
