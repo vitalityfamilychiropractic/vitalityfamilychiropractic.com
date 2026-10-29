@@ -1,5 +1,5 @@
 ---
-name: "Mikayla"
+name: "Mikayla Kothmann"
 shortName: "Mikayla"
 role: "Chiropractic Assistant"
 schemaType: "Person"
