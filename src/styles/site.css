@@ -95,7 +95,10 @@ h4 { font-size: 1.42rem; }
 .nav-link { display: inline-block; padding: 10px 9px; font-weight: 700; font-size: .93rem; color: var(--ink); border-radius: 10px; }
 .nav-link:hover { color: var(--slate); background: rgb(130 155 169 / .14); }
 .has-sub { position: relative; }
-.nav-pair { display: flex; align-items: center; }
+.nav-pair { display: flex; align-items: center; border-radius: 10px; }
+.nav-pair:hover { background: rgb(130 155 169 / .14); }
+.nav-pair:hover > .nav-link { background: transparent; color: var(--slate); }
+.nav-pair:hover > .sub-toggle { color: var(--slate); }
 .sub-toggle { background: none; border: 0; padding: 6px 4px 6px 0; margin-left: -6px; color: var(--ink-2); cursor: pointer; display: grid; place-items: center; border-radius: 8px; }
 .sub-toggle .i { width: 15px; height: 15px; transition: transform .2s; }
 .sub-toggle[aria-expanded="true"] .i { transform: rotate(180deg); }
@@ -117,7 +120,7 @@ h4 { font-size: 1.42rem; }
 .nav-m { flex-direction: column; align-items: stretch; gap: 0; }
 .nav-m > li { border-bottom: 1px solid rgb(53 79 96 / .08); }
 .nav-m .nav-link { padding: 16px 4px; font-size: 1.15rem; font-family: var(--serif); font-weight: 450; color: var(--slate); flex: 1; }
-.nav-m .nav-pair { justify-content: space-between; }
+.nav-m .nav-pair { justify-content: space-between; border-radius: 0; }
 .nav-m .sub-toggle { width: 48px; height: 48px; margin: 0; padding: 0; }
 .nav-m .sub { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; border: 0; background: none; padding: 0 0 12px 8px; display: none; }
 .nav-m .sub.open { display: block; }
@@ -373,12 +376,6 @@ section { position: relative; }
 .foot-nav a[aria-current="page"] { text-decoration: underline; }
 .site-footer a.is-off,
 .site-footer a.is-off:hover { color: #9AA6AD; text-decoration: none; }
-
-/* ---------- Preview-only placeholder page (never in production builds) ---------- */
-.pending-page { padding: clamp(72px, 12vw, 160px) 0; }
-.pending-box { max-width: 640px; margin-inline: auto; text-align: center; border: 2px dashed #E0A800; background: #FFFBEA; color: #3a2e00; border-radius: var(--r-lg); padding: clamp(32px, 6vw, 56px); }
-.pending-tag { font: 800 .72rem/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: #8a6a00; }
-.pending-title { font: 700 1.5rem/1.2 var(--sans); margin-bottom: .6em; }
 
 /* ---------- Menu-only headings: Our Care, New Patients (owner decision) ---------- */
 .sub-toggle.nav-heading { display: inline-flex; align-items: center; gap: 4px; margin: 0; padding: 10px 9px; font: 700 .93rem/1.7 var(--sans); color: var(--ink); border-radius: 10px; white-space: nowrap; }
