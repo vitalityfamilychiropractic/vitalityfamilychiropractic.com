@@ -27,6 +27,6 @@ export const site = {
    * still shows the link, in gray.
    */
   shop: {
-    inNav: false,
+    inNav: true,
   },
 } as const;

@@ -92,10 +92,10 @@ sections:
       - label: "Meet Our Team"
         action: "url"
         href: "{{base}}/meet-our-team/"
-#      - label: "Explore Classes &amp; Events"
-#        action: "url"
-#        href: "{{base}}/our-community/classes-events/"
-#        ghost: true
+      - label: "Explore Classes &amp; Events"
+        action: "url"
+        href: "{{base}}/our-community/classes-events/"
+        ghost: true
     image:
       id: "community-kids"
       position: "50% 60%"
