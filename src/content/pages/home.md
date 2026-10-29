@@ -44,8 +44,7 @@ sections:
       id: "family-wellness"
       position: "50% 40%"
     image2:
-      id: "team-with-little-ones"
-      position: "62% 45%"
+      id: "mural-detail"
   - kind: "care"
     heading: "Chiropractic Care for Every Generation."
     paragraphs:
@@ -75,8 +74,7 @@ sections:
       id: "kid-adjustment-laughing"
       position: "40% 45%"
     image2:
-      id: "mom-and-baby"
-      position: "50% 45%"
+      id: "mural-detail"
   - kind: "community"
     heading: "Come for the Chiropractic. Stay for the Community."
     flow:
