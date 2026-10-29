@@ -178,7 +178,9 @@ section { position: relative; }
 }
 .hero-grid { display: grid; gap: clamp(36px, 5vw, 80px); align-items: center; }
 @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.02fr .98fr; } }
-.hero h1 { margin-bottom: .45em; }
+.hero-copy { container-type: inline-size; min-width: 0; }
+/* Keep the hero greeting on one line: cap the size so it fits the copy column (Playfair is wide). */
+.hero h1 { margin-bottom: .45em; white-space: nowrap; font-size: min(clamp(2.7rem, 1.7rem + 4.4vw, 5.4rem), 12.8cqi); }
 .hero-body p { max-width: 36em; }
 .hero-art { position: relative; padding: 0 0 40px 40px; }
 .arch-hero { aspect-ratio: 4 / 4.6; position: relative; z-index: 1; }
