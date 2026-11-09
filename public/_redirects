@@ -3,6 +3,10 @@
 /apple-touch-icon.png /assets/img/apple-touch-icon.png 200
 / /college-station/ 301
 
+# Conventional sitemap path. The build writes sitemap-index.xml.
+/sitemap.xml /sitemap-index.xml 301
+/sitemap.xml/ /sitemap-index.xml 301
+
 # Old draft URLs, Jekyll .html paths, and Christie root paths.
 /celebration/our-values /celebration/ 301
 /celebration/our-values/ /celebration/ 301

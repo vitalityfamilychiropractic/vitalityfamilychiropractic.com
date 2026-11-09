@@ -63,6 +63,9 @@ const rootAliases = [
 ];
 for (const [from, to] of rootAliases) redirect(from, to);
 
+// Keep the extension. The helper above would turn this into `/sitemap.xml/`.
+redirects['/sitemap.xml'] = { status: 301, destination: '/sitemap-index.xml' };
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://www.vitalityfamilychiropractic.com',
