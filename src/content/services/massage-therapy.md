@@ -2,7 +2,17 @@
 title: "Massage Therapy"
 navLabel: "Massage Therapy"
 order: 5
-summary: "Prenatal, postpartum, therapeutic, and lymphatic drainage massage with Candice, our licensed massage therapist, in {{city}}, {{stateAbbr}}."
+summary: "Massage therapy in {{city}}, {{stateAbbr}}: prenatal and postpartum, therapeutic and deep tissue, and lymphatic drainage massage with a licensed massage therapist."
+keywords:
+  - "massage therapy"
+  - "licensed massage therapist"
+  - "prenatal massage"
+  - "postpartum massage"
+  - "pregnancy massage"
+  - "deep tissue massage"
+  - "therapeutic massage"
+  - "lymphatic drainage massage"
+  - "myofascial release"
 cardTitle: "Massage Therapy"
 cardText: "Sometimes your body needs a little extra attention. Our licensed massage therapist offers individualized bodywork to help you relax, recharge, and care for yourself."
 cardImage: "massage-therapy"

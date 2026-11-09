@@ -2,7 +2,17 @@
 title: "Pediatric Chiropractic"
 navLabel: "Pediatric"
 order: 3
-summary: "Gentle, kid-friendly pediatric chiropractic in {{city}}, {{stateAbbr}}. Care for growing bodies, developing nervous systems and young athletes."
+summary: "Pediatric chiropractor in {{city}}, {{stateAbbr}}. Gentle, kid-friendly chiropractic care for growing bodies, posture, development, and young athletes."
+keywords:
+  - "pediatric chiropractor"
+  - "kids chiropractor"
+  - "children's chiropractic"
+  - "chiropractor for kids"
+  - "child posture"
+  - "youth sports chiropractic"
+  - "young athletes"
+  - "teen chiropractic"
+  - "nervous system development"
 cardTitle: "Pediatric Chiropractic"
 cardText: "Big feelings, big adventures, and bodies that seem to grow overnight. We love supporting kids through every stage of childhood."
 cardImage: "pediatric-smile"

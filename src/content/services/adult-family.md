@@ -2,7 +2,16 @@
 title: "Adult & Family Chiropractic"
 navLabel: "Adult & Family"
 order: 4
-summary: "Adult and family chiropractic in {{city}}, {{stateAbbr}}. Individualized care for every season of life, with family-centered care options."
+summary: "Adult and family chiropractor in {{city}}, {{stateAbbr}}. Individualized chiropractic care for adults and families with family-centered care options focused on spinal and joint mobility, everyday aches, and staying active."
+keywords:
+  - "family chiropractor"
+  - "chiropractor near me"
+  - "adult chiropractic care"
+  - "family chiropractic"
+  - "back pain chiropractor"
+  - "neck pain chiropractor"
+  - "headache chiropractor"
+  - "spinal adjustment"
 cardTitle: "Adult &amp; Family Chiropractic"
 cardText: "Because grown-ups need care, too! Whether you're navigating everyday aches or making wellness a family affair, we're happy to have you on the table."
 cardImage: "adult-adjustment"
