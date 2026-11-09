@@ -6,6 +6,7 @@ import { localBusinessSchema, breadcrumbSchema } from '../lib/schema';
 import { pageDescription } from '../lib/pages';
 import { servicesFor } from '../lib/services';
 import { teamFor } from '../lib/team';
+import { site } from '../config/site';
 import type { Location } from '../config/types';
 
 interface Props {
@@ -24,6 +25,8 @@ interface Props {
   crumbs?: Array<{ name: string; href: string }>;
   /** Extra JSON-LD for this page. */
   schemas?: unknown[];
+  /** Keep this page out of search results. */
+  noindex?: boolean;
 }
 
 const {
@@ -34,7 +37,16 @@ const {
   titleStyle = 'placed',
   crumbs = [],
   schemas = [],
+  noindex: noindexProp = false,
 } = Astro.props;
+
+// Sections switched off in `site.ts` still build (the dev server links them),
+// so keep them out of search until they go live. The sitemap filter in
+// `astro.config.mjs` applies the same rule.
+const hiddenSection =
+  (!site.shop.inNav && /^\/[^/]+\/shop\//.test(path)) ||
+  (!site.community.inNav && /^\/[^/]+\/our-community\//.test(path));
+const noindex = noindexProp || hiddenSection;
 
 const members = await teamFor(location);
 const services = await servicesFor(location);
@@ -67,6 +79,7 @@ const allSchemas = [
   place={{ city: location.address.city, state: location.address.state }}
   analyticsId={location.analyticsId}
   schemas={allSchemas}
+  noindex={noindex}
 >
   <Header location={location} pathname={path} />
   {location.announcement && <p class="announce">{location.announcement}</p>}

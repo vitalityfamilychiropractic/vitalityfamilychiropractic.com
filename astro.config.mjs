@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { site as siteConfig } from './src/config/site.ts';
 
 /**
  * Dev and `astro build` redirects. Cloudflare production uses `public/_redirects`,
@@ -116,7 +117,12 @@ export default defineConfig({
     sitemap({
       filter: (page) => {
         const path = new URL(page).pathname;
-        return !path.includes('/404');
+        if (path.includes('/404')) return false;
+        // Sections switched off in site.ts stay out of the sitemap (and are
+        // noindexed by LocationLayout) until they go live.
+        if (!siteConfig.shop.inNav && /^\/[^/]+\/shop\//.test(path)) return false;
+        if (!siteConfig.community.inNav && /^\/[^/]+\/our-community\//.test(path)) return false;
+        return true;
       },
     }),
   ],
