@@ -45,14 +45,14 @@ export async function buildNav(location: Location): Promise<NavItem[]> {
         { label: 'Pricing & Insurance', href: `${base}/new-patients/pricing-insurance/` },
       ],
     },
-    {
+/*    {
       label: 'Gather & Grow',
       href: `${base}/our-community/`,
       children: [
         { label: 'What’s Happening at VFC', href: `${base}/our-community/classes-events/` },
         { label: 'Community Partners', href: `${base}/our-community/community-partners/` },
       ],
-    },
+    }, */
   ];
 
   if (site.shop.inNav || import.meta.env.DEV) {
