@@ -16,6 +16,8 @@ interface Props {
 
 const { items, pathname, variant, label } = Astro.props;
 const mobile = variant === 'mobile';
+// `devOnly` grays a link on the dev server. On a parent it also grays the
+// parent's toggle and every child; a child can also set it for itself.
 ---
 
 <nav class={mobile ? undefined : 'primary'} aria-label={label}>
@@ -27,17 +29,23 @@ const mobile = variant === 'mobile';
         return (
           <li class:list={[item.children && 'has-sub', here && 'in-section']}>
             {item.heading && item.children && (
-              <button class="nav-link nav-heading sub-toggle" type="button" aria-expanded="false" aria-controls={item.subId}>
+              <button
+                class:list={['nav-link', 'nav-heading', 'sub-toggle', item.devOnly && 'is-off']}
+                type="button" aria-expanded="false" aria-controls={item.subId}>
                 {item.label}
                 <Icon name="chevron" class="i chev" />
               </button>
             )}
             {!item.heading && item.children && item.href && (
               <div class="nav-pair">
-                <a class="nav-link" href={item.href} aria-current={current ? 'page' : undefined}>
+                <a
+                  class:list={['nav-link', item.devOnly && 'is-off']}
+                  href={item.href}
+                  aria-current={current ? 'page' : undefined}
+                >
                   {item.label}
                 </a>
-                <button class="sub-toggle" type="button" aria-expanded="false" aria-controls={item.subId}>
+                <button class:list={['sub-toggle', item.devOnly && 'is-off']} type="button" aria-expanded="false" aria-controls={item.subId}>
                   <span class="sr">{item.label} menu</span>
                   <Icon name="chevron" class="i chev" />
                 </button>
@@ -57,7 +65,11 @@ const mobile = variant === 'mobile';
               <ul class="sub" id={item.subId}>
                 {item.children.map((child) => (
                   <li>
-                    <a href={child.href} aria-current={isCurrent(child.href, pathname) ? 'page' : undefined}>
+                    <a
+                      class:list={[(item.devOnly || child.devOnly) && 'is-off']}
+                      href={child.href}
+                      aria-current={isCurrent(child.href, pathname) ? 'page' : undefined}
+                    >
                       {child.label}
                     </a>
                   </li>

@@ -124,3 +124,29 @@
 /contacts.html /college-station/contact/ 301
 /contact.html /college-station/contact/ 301
 /privacy.html /privacy/ 301
+
+# Section hubs with no page of their own.
+/celebration/our-care /celebration/ 301
+/celebration/our-care/ /celebration/ 301
+/celebration/new-patients /celebration/new-patients/first-visit/ 301
+/celebration/new-patients/ /celebration/new-patients/first-visit/ 301
+/college-station/our-care /college-station/ 301
+/college-station/our-care/ /college-station/ 301
+/college-station/new-patients /college-station/new-patients/first-visit/ 301
+/college-station/new-patients/ /college-station/new-patients/first-visit/ 301
+/our-care /college-station/ 301
+/our-care/ /college-station/ 301
+/new-patients /college-station/new-patients/first-visit/ 301
+/new-patients/ /college-station/new-patients/first-visit/ 301
+
+# Former team member and services an office doesn't offer.
+/college-station/team/ashley-harmon /college-station/meet-our-team/ 301
+/college-station/team/ashley-harmon/ /college-station/meet-our-team/ 301
+/college-station/team/ashley-harmon.html /college-station/meet-our-team/ 301
+/celebration/our-care/massage-therapy /celebration/ 301
+/celebration/our-care/massage-therapy/ /celebration/ 301
+
+# Legacy form thank-you pages from the original site.
+/headachethanks.htm /college-station/ 301
+/stressthanks.htm /college-station/ 301
+/newsletterthanks.htm /college-station/ 301

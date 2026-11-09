@@ -2,7 +2,17 @@
 title: "Prenatal Chiropractic"
 navLabel: "Prenatal"
 order: 1
-summary: "Prenatal chiropractic in {{city}}, {{stateAbbr}}, with Webster certification and advanced perinatal training. Caring for moms through every stage."
+summary: "Prenatal chiropractor in {{city}}, {{stateAbbr}}. Webster-certified pregnancy chiropractic care for back and pelvic comfort, from the first trimester through postpartum."
+keywords:
+  - "prenatal chiropractor"
+  - "pregnancy chiropractor"
+  - "prenatal chiropractic care"
+  - "Webster Technique"
+  - "Webster certified chiropractor"
+  - "perinatal chiropractic"
+  - "pregnancy back pain"
+  - "pregnancy pelvic pain"
+  - "postpartum chiropractic"
 cardTitle: "Prenatal Chiropractic"
 cardText: "Growing a tiny human is no small feat. We offer specialized chiropractic care throughout pregnancy, with advanced training and a whole lot of love for the birth community."
 cardImage: "prenatal-visit"

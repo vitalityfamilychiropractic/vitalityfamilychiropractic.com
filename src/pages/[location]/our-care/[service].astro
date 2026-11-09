@@ -6,6 +6,7 @@ import { locations } from '../../../config/locations';
 import { servicesFor } from '../../../lib/services';
 import { getMember } from '../../../lib/team';
 import { applyTokens, tokensFor } from '../../../lib/tokens';
+import { servicePageSchema } from '../../../lib/schema';
 import type { Location } from '../../../config/types';
 
 export async function getStaticPaths() {
@@ -35,6 +36,12 @@ const lead = await getMember(location.lead);
 const tokens = tokensFor(location, lead.data);
 const path = `/${location.slug}/our-care/${entry.id}/`;
 const description = applyTokens(entry.data.summary, tokens).trim();
+const pageSchema = servicePageSchema(location, {
+  title: entry.data.title,
+  description,
+  path,
+  keywords: entry.data.keywords,
+});
 ---
 
 <LocationLayout
@@ -46,6 +53,7 @@ const description = applyTokens(entry.data.summary, tokens).trim();
     { name: location.name, href: `/${location.slug}/` },
     { name: entry.data.title, href: path },
   ]}
+  schemas={[pageSchema]}
 >
   <Blocks sections={entry.data.sections} location={location} tokens={tokens} />
 </LocationLayout>

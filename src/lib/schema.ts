@@ -45,6 +45,7 @@ export function localBusinessSchema(
       streetAddress: formatStreet(location),
       addressLocality: location.address.city,
       addressRegion: location.address.stateAbbr,
+      postalCode: location.address.zip,
       addressCountry: 'US',
     },
     geo: {
@@ -118,5 +119,35 @@ export function organizationSchema(offices: Location[]) {
       telephone: office.phone,
       address: formatAddress(office),
     })),
+  };
+}
+
+/**
+ * Page-level markup for one Our Care service at one office. Ties the page to
+ * the office's Chiropractor entity and carries the service's search terms.
+ */
+export function servicePageSchema(
+  location: Location,
+  service: { title: string; description: string; path: string; keywords?: string[] },
+) {
+  const officeUrl = `${site.url}/${location.slug}/`;
+  const url = `${site.url}${service.path}`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalWebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: `${service.title} in ${location.address.city}, ${location.address.state}`,
+    description: service.description,
+    inLanguage: 'en-US',
+    isPartOf: { '@type': 'WebSite', name: site.name, url: site.url },
+    ...(service.keywords?.length ? { keywords: service.keywords.join(', ') } : {}),
+    mainEntity: {
+      '@type': 'MedicalTherapy',
+      name: service.title,
+      relevantSpecialty: 'Chiropractic',
+    },
+    provider: { '@id': officeUrl },
+    audience: { '@type': 'PeopleAudience', geographicArea: location.areaServed.join(', ') },
   };
 }

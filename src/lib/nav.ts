@@ -9,7 +9,7 @@ export interface NavItem {
   /** A button that opens the menu, rather than a link to a section page. */
   heading?: boolean;
   /**
-   * Drawn in gray. Set when Shop is turned off in `site.ts` and this is the
+   * Drawn in gray. Set when link is turned off in `site.ts` and this is the
    * dev server, so the link can still be opened.
    */
   devOnly?: boolean;
@@ -45,15 +45,19 @@ export async function buildNav(location: Location): Promise<NavItem[]> {
         { label: 'Pricing & Insurance', href: `${base}/new-patients/pricing-insurance/` },
       ],
     },
-/*    {
+  ];
+
+  if (site.community.inNav || import.meta.env.DEV) {
+    items.push({
       label: 'Gather & Grow',
       href: `${base}/our-community/`,
       children: [
         { label: 'What’s Happening at VFC', href: `${base}/our-community/classes-events/` },
         { label: 'Community Partners', href: `${base}/our-community/community-partners/` },
       ],
-    }, */
-  ];
+      devOnly: !site.community.inNav,
+    });
+  }
 
   if (site.shop.inNav || import.meta.env.DEV) {
     items.push({

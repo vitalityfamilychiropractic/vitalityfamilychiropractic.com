@@ -34,7 +34,14 @@ for (const office of offices) {
   redirect(`${base}/specialties/pediatric-care`, `${base}/our-care/pediatric/`);
   redirect(`${base}/specialties/family-wellness-care`, `${base}/our-care/adult-family/`);
   redirect(`${base}/contacts`, `${base}/contact/`);
+  // Section hubs with no page of their own.
+  redirect(`${base}/our-care`, `${base}/`);
+  redirect(`${base}/new-patients`, `${base}/new-patients/first-visit/`);
 }
+
+// Former team member and services an office doesn't offer.
+redirect('/college-station/team/ashley-harmon', '/college-station/meet-our-team/');
+redirect('/celebration/our-care/massage-therapy', '/celebration/');
 
 const collegeStation = '/college-station';
 const rootAliases = [
@@ -60,6 +67,8 @@ const rootAliases = [
   ['/specialties/family-wellness-care', `${collegeStation}/our-care/adult-family/`],
   ['/contact', `${collegeStation}/contact/`],
   ['/contacts', `${collegeStation}/contact/`],
+  ['/our-care', `${collegeStation}/`],
+  ['/new-patients', `${collegeStation}/new-patients/first-visit/`],
 ];
 for (const [from, to] of rootAliases) redirect(from, to);
 

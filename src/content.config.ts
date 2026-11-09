@@ -89,6 +89,8 @@ const services = defineCollection({
     navLabel: z.string(),
     order: z.number(),
     summary: z.string(),
+    /** Search terms for this service, emitted as `keywords` in the page's structured data. */
+    keywords: z.array(z.string()).optional(),
     /** Home-page card title. May contain HTML entities for `set:html`. */
     cardTitle: z.string(),
     cardText: z.string(),

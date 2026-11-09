@@ -23,7 +23,7 @@ function current(href: string | undefined) {
   <div class="wrap foot">
     <div class="foot-brand">
       <p class="foot-logo">
-        <img src={site.logo} alt="Vitality Family Chiropractic" width="422" height="150" />
+        <img src={site.logo} alt="Vitality Family Chiropractic" width="383" height="135" />
       </p>
       {
         location && (
@@ -55,7 +55,11 @@ function current(href: string | undefined) {
                   <ul>
                     {item.children.map((child) => (
                       <li>
-                        <a href={child.href} aria-current={current(child.href)}>
+                        <a
+                          class:list={[(item.devOnly || child.devOnly) && 'is-off']}
+                          href={child.href}
+                          aria-current={current(child.href)}
+                        >
                           {child.label}
                         </a>
                       </li>
