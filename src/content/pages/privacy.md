@@ -3,7 +3,7 @@ title: Privacy Policy
 summary: "Privacy policy for Vitality Family Chiropractic's {{city}}, {{state}} office."
 brandSummary: How Vitality Family Chiropractic collects, uses, discloses, and safeguards your personal and health information.
 primaryOffice: "college-station"
-updated: October 1, 2025
+updated: November 19, 2026
 ---
 
 ## **1. Introduction**
@@ -33,6 +33,8 @@ When you visit our website or contact us electronically, we may collect:
 * IP address, browser type, and device identifiers
 * Contact information voluntarily submitted (e.g., through forms)
 * SMS communications under our **10DLC messaging program**
+
+Section 6.1 names the website tools that receive information from a visit or from the contact form.
 
 We do not knowingly collect information from individuals under 13 years of age without parental consent, consistent with the **Children’s Online Privacy Protection Act (COPPA)**.
 
@@ -85,6 +87,16 @@ We may disclose data only:
 
 All third parties handling PHI or personal data must comply with HIPAA and GDPR confidentiality obligations.
 
+### **6.1 Tools on this website**
+
+When you use the public website, these third parties receive the information described below.
+
+* **Google Analytics 4** (Google). Google Analytics records the pages you visit, an approximate location derived from your IP address, device and browser information, and cookies. You can opt out with [Google’s opt-out browser add-on](https://tools.google.com/dlpage/gaoptout). You can also block or delete cookies in your browser.
+
+* **Formspree**. The contact form sends your submission to Formspree so the office can read it and reply. A submission includes your name, email address, phone number if you include one, and your message. Please do not send health information through the form.
+
+* **Jane App**. Online booking and the patient portal are provided by Jane App. Book Now opens that office’s Jane site. Information you enter there is handled under [Jane’s privacy notice](https://jane.app/legal/privacy-notice).
+
 ---
 
 ## **7. Data Retention and Security**
@@ -117,8 +129,9 @@ Requests under GDPR may be submitted via the contact details below.
 
 ## **9. Cookies and Tracking Technologies**
 
-We use cookies and similar technologies for website analytics, functionality, and security purposes.
-You can manage or disable cookies through your browser settings, though doing so may affect website functionality.
+We use cookies and similar technologies for website analytics and for the site to work.
+Google Analytics 4, described in section 6.1, uses cookies. It records the pages you visit, an approximate location derived from your IP address, and device and browser information. You can opt out with [Google’s opt-out browser add-on](https://tools.google.com/dlpage/gaoptout).
+You can also manage or disable cookies through your browser settings. Blocking cookies may limit some parts of the website.
 
 ---
 
