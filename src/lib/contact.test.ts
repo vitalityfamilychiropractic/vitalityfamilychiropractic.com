@@ -351,6 +351,85 @@ test('rejects an oversized body without copying it into a URL', async () => {
   expect(await response.text()).not.toContain('x'.repeat(20));
 });
 
+test('allows a same-origin preview host and still rejects a cross-site origin', async () => {
+  const preview = 'https://cursor-native-contact-form-a.vitalityfamilychiro.pages.dev/api/contact';
+  const sent: unknown[] = [];
+  const sameOrigin = await handleContact(
+    post(validFields(), {
+      accept: 'application/json',
+      ip: '203.0.113.180',
+      url: preview,
+      origin: 'https://cursor-native-contact-form-a.vitalityfamilychiro.pages.dev',
+    }),
+    readyEnv(),
+    { fetch: mockFetch(sent) },
+  );
+  expect(sameOrigin.status).toBe(200);
+  expect(sent).toHaveLength(1);
+
+  const crossSite = await handleContact(
+    post(validFields(), {
+      accept: 'application/json',
+      ip: '203.0.113.181',
+      url: preview,
+      origin: 'https://evil.example',
+    }),
+    readyEnv(),
+  );
+  expect(crossSite.status).toBe(403);
+  expect(await crossSite.json()).toEqual({
+    ok: false,
+    error: 'This form only accepts messages from the practice website.',
+  });
+});
+
+test('accepts a Turnstile hostname that matches the request host', async () => {
+  const preview = 'https://cursor-native-contact-form-a.vitalityfamilychiro.pages.dev/api/contact';
+  const sent: unknown[] = [];
+  const accepted = await handleContact(
+    post(
+      { ...validFields(), 'cf-turnstile-response': 'token' },
+      {
+        accept: 'application/json',
+        ip: '203.0.113.182',
+        url: preview,
+        origin: 'https://cursor-native-contact-form-a.vitalityfamilychiro.pages.dev',
+      },
+    ),
+    { ...readyEnv(), TURNSTILE_SECRET: 'turnstile-secret' },
+    {
+      fetch: mockFetch(sent, {
+        turnstile: {
+          success: true,
+          action: 'contact',
+          hostname: 'cursor-native-contact-form-a.vitalityfamilychiro.pages.dev',
+        },
+      }),
+    },
+  );
+  expect(accepted.status).toBe(200);
+  expect(sent).toHaveLength(1);
+
+  const mismatched = await handleContact(
+    post(
+      { ...validFields(), 'cf-turnstile-response': 'token' },
+      {
+        accept: 'application/json',
+        ip: '203.0.113.183',
+        url: preview,
+        origin: 'https://cursor-native-contact-form-a.vitalityfamilychiro.pages.dev',
+      },
+    ),
+    { ...readyEnv(), TURNSTILE_SECRET: 'turnstile-secret' },
+    {
+      fetch: mockFetch([], {
+        turnstile: { success: true, action: 'contact', hostname: 'other.pages.dev' },
+      }),
+    },
+  );
+  expect(mismatched.status).toBe(403);
+});
+
 test('rejects a cross-site origin and a non-form body', async () => {
   const foreign = await handleContact(
     post(validFields(), { origin: 'https://evil.example', ip: '203.0.113.140' }),

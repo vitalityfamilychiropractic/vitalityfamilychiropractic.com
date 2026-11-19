@@ -136,8 +136,9 @@ Turnstile is optional until both of its values are set. The widget is baked
 into the page from `PUBLIC_TURNSTILE_SITE_KEY` at build time. The function
 checks `TURNSTILE_SECRET` with siteverify, and it requires the action
 `contact` and a hostname of `www.vitalityfamilychiropractic.com` or
-`vitalityfamilychiropractic.com`. `TURNSTILE_HOSTNAMES` adds more hostnames
-(a Pages preview host, for example). It does not remove those two. A normal
+`vitalityfamilychiropractic.com`, plus the hostname of the request itself,
+so a Pages preview matches without an extra variable. `TURNSTILE_HOSTNAMES`
+adds more hostnames. It does not remove the production ones. A normal
 browser post, with scripting off, still sends, because Turnstile cannot issue
 a token without JavaScript. A scripted post is refused until the token checks
 out.
@@ -192,8 +193,9 @@ Turnstile, when you want it:
 
 1. Turnstile > Add widget. Widget mode: Managed. Hostnames:
    `www.vitalityfamilychiropractic.com` and `vitalityfamilychiropractic.com`.
-   Add a preview hostname only on a separate widget or via
-   `TURNSTILE_HOSTNAMES`. Do not put `localhost` on the production widget.
+   Add a preview hostname on the widget if the challenge should run there.
+   The function already accepts the hostname of the request, so
+   `TURNSTILE_HOSTNAMES` is only for additional hosts. Do not put `localhost` on the production widget.
 2. Pages > Settings > Environment variables:
    - `PUBLIC_TURNSTILE_SITE_KEY`, plain text, available to the **build**. The
      site key is public. Astro writes it into the form. A new deploy is

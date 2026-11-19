@@ -331,7 +331,8 @@ async function verifyTurnstile(
   if (!token) return { ok: !wantsJson(request) };
   if (token.length > TOKEN_MAX || /[\u0000-\u001F\u007F]/.test(token)) return { ok: false };
 
-  const expected = hostSet(env.TURNSTILE_HOSTNAMES, DEFAULT_TURNSTILE_HOSTS);
+  const requestHost = new URL(request.url).hostname.toLowerCase();
+  const expected = hostSet(env.TURNSTILE_HOSTNAMES, [...DEFAULT_TURNSTILE_HOSTS, requestHost]);
   if (expected.size === 0) return { ok: false };
 
   let response: Response;
@@ -381,6 +382,8 @@ function checkOrigin(request: Request, env: ContactEnv): Response | null {
     return plain(403, 'Forbidden');
   }
   const requestHost = new URL(request.url).hostname.toLowerCase();
+  // The page that served the form is this host, including Pages previews.
+  if (hostname === requestHost) return null;
   const local = requestHost === 'localhost' || requestHost === '127.0.0.1';
   const allowed = hostSet(env.CONTACT_ALLOWED_HOSTS, [
     ...DEFAULT_HOSTS,
