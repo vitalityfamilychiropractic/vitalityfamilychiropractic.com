@@ -9,9 +9,30 @@
  */
 
 import { locations } from '../config/locations';
+import {
+  CONTACT_TO,
+  DEFAULT_CONTACT_FROM_EMAIL,
+  DEFAULT_CONTACT_FROM_NAME,
+  PREVIEW_CONTACT_TO,
+  site,
+} from '../config/site';
 
-export const CONTACT_TO = 'info@vitalityfamilychiropractic.com';
-export const DEFAULT_CONTACT_FROM = 'website@vitalityfamilychiropractic.com';
+/** Cloudflare Pages production branch. Preview branches are everything else. */
+export const PRODUCTION_BRANCH = 'main';
+
+/** Production inbox on `main`. Preview inbox on every other branch, including when the branch is unset. */
+export function contactRecipient(
+  branch: string | undefined,
+  productionTo = CONTACT_TO,
+  previewTo = PREVIEW_CONTACT_TO,
+): string {
+  return branch === PRODUCTION_BRANCH ? productionTo : previewTo;
+}
+
+/** Same subject the previous form sent in its `_subject` field. */
+export function contactSubject(officeName: string): string {
+  return `Message — ${officeName} (${site.name})`;
+}
 
 const FROM_ADDRESS = /^[a-z0-9][a-z0-9._+-]{0,63}@vitalityfamilychiropractic\.com$/i;
 const ACCOUNT_ID = /^[a-f0-9]{32}$/i;
@@ -38,6 +59,8 @@ export interface ContactEnv {
   EMAIL_API_TOKEN?: string;
   /** Optional. Must be an address at vitalityfamilychiropractic.com. */
   CONTACT_FROM?: string;
+  /** Set by Cloudflare Pages. `main` is production; anything else is a preview. */
+  CF_PAGES_BRANCH?: string;
   /** Optional. Runtime secret from the Turnstile widget. */
   TURNSTILE_SECRET?: string;
   /** Optional comma-separated hostnames siteverify must return. */
@@ -49,6 +72,10 @@ export interface ContactEnv {
 export interface ContactDeps {
   fetch?: typeof fetch;
   now?: () => number;
+  /** Inbox override. Defaults to the branch selected in site settings. */
+  to?: string;
+  fromName?: string;
+  fromEmail?: string;
 }
 
 const hits = new Map<string, number[]>();
@@ -65,7 +92,7 @@ export function handleContact(
 ): Promise<Response> {
   const fetchImpl = deps.fetch ?? fetch;
   const now = deps.now ?? Date.now;
-  return handle(request, env, fetchImpl, now);
+  return handle(request, env, fetchImpl, now, deps);
 }
 
 async function handle(
@@ -73,6 +100,7 @@ async function handle(
   env: ContactEnv,
   fetchImpl: typeof fetch,
   now: () => number,
+  deps: ContactDeps,
 ): Promise<Response> {
   if (request.method !== 'POST') {
     return plain(405, 'Method not allowed', { Allow: 'POST' });
@@ -127,9 +155,14 @@ async function handle(
   const parsed = parseFields(form);
   if (!parsed.ok) return clientError(request, form, 400, parsed.error);
 
-  const from = senderAddress(env);
+  const from = senderAddress(env, deps.fromEmail);
   if (!from) {
     console.error('Contact form rejected CONTACT_FROM');
+    return clientError(request, form, 503, NOT_READY);
+  }
+  const fromName = singleLine(deps.fromName ?? DEFAULT_CONTACT_FROM_NAME);
+  if (!fromName) {
+    console.error('Contact form is missing a from name');
     return clientError(request, form, 503, NOT_READY);
   }
 
@@ -141,9 +174,11 @@ async function handle(
   }
 
   const sent = await sendEmail(fetchImpl, accountId, token, {
+    to: deps.to ?? contactRecipient(env.CF_PAGES_BRANCH),
     from,
+    fromName,
     replyTo: parsed.email,
-    subject: `Website message — ${parsed.location.name}`,
+    subject: contactSubject(parsed.location.name),
     text: messageBody(parsed),
   });
   if (!sent) return clientError(request, form, 502, SEND_FAILED);
@@ -211,14 +246,16 @@ function messageBody(fields: ParsedFields): string {
   ].join('\n');
 }
 
-function senderAddress(env: ContactEnv): string | null {
+function senderAddress(env: ContactEnv, fallback = DEFAULT_CONTACT_FROM_EMAIL): string | null {
   const configured = (env.CONTACT_FROM ?? '').trim();
-  if (!configured) return DEFAULT_CONTACT_FROM;
+  if (!configured) return FROM_ADDRESS.test(fallback) ? fallback : null;
   return FROM_ADDRESS.test(configured) ? configured : null;
 }
 
 interface OutboundMail {
+  to: string;
   from: string;
+  fromName: string;
   replyTo: string;
   subject: string;
   text: string;
@@ -245,8 +282,8 @@ async function sendEmail(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          to: [CONTACT_TO],
-          from: mail.from,
+          to: [mail.to],
+          from: { address: mail.from, name: mail.fromName },
           reply_to: replyTo,
           subject,
           text: mail.text,

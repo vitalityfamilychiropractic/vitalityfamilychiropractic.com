@@ -9,7 +9,8 @@
 #   loads googleads.g.doubleclick.net and sends pixels to ad.doubleclick.net
 #   and www.google.com/pagead/. *.g.doubleclick.net does not match
 #   ad.doubleclick.net, so that host is listed on its own.
-# - Contact form POST and fetch() to https://formspree.io.
+# - Contact form posts to this site at /api/contact. Turnstile, when the
+#   site key is set, loads its script and frame from challenges.cloudflare.com.
 # - Google Maps iframe on www.google.com/maps/embed.
 # - Jane App is a normal link (vfc.janeapp.com / vfccelebration.janeapp.com),
 #   not a script, frame, or form target.
@@ -34,7 +35,7 @@
 # work if Cloudflare Fonts is turned off, and in local builds.
 
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.g.doubleclick.net; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://www.google.com https://ad.doubleclick.net https://*.g.doubleclick.net; connect-src 'self' https://formspree.io https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://www.google.com https://ad.doubleclick.net https://*.g.doubleclick.net https://fonts.googleapis.com https://fonts.gstatic.com; frame-src https://www.google.com https://www.googletagmanager.com; form-action 'self' https://formspree.io; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.g.doubleclick.net https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://www.google.com https://ad.doubleclick.net https://*.g.doubleclick.net; connect-src 'self' https://challenges.cloudflare.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://www.google.com https://ad.doubleclick.net https://*.g.doubleclick.net https://fonts.googleapis.com https://fonts.gstatic.com; frame-src https://www.google.com https://www.googletagmanager.com https://challenges.cloudflare.com; form-action 'self'; upgrade-insecure-requests
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=(), browsing-topics=(), interest-cohort=(), clipboard-write=(self)
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload

@@ -95,13 +95,21 @@ forms. Our Values redirects to that office's home. There is no values page.
 ## Contact form
 
 Both offices post to `/api/contact`, a Cloudflare Pages Function
-(`functions/api/contact.ts`, logic in `src/lib/contact.ts`). The message is
-emailed to `info@vitalityfamilychiropractic.com`. The body lists the office
-slug, the contact page, and the submitted fields. Reply-To is the visitor's
-email when that address is valid.
+(`functions/api/contact.ts`, logic in `src/lib/contact.ts`). The addresses
+live in `src/config/site.ts`. On the production branch, `main`, the message
+goes to `CONTACT_TO` (`info@vitalityfamilychiropractic.com`). Every other
+branch, including Pages previews and local `wrangler pages dev`, goes to
+`PREVIEW_CONTACT_TO` (`nick@vitalityfamilychiropractic.com`). The branch is
+`CF_PAGES_BRANCH`. A missing branch is treated as a preview. The body lists
+the office slug, the contact page, and the submitted fields. Reply-To is the
+visitor's email when that address is valid.
 
-The From address is `website@vitalityfamilychiropractic.com` unless
-`CONTACT_FROM` is set to another address at that same domain.
+The subject is `Message — {office} (Vitality Family Chiropractic)`, the same
+text the old form put in `_subject`. The From line is
+`DEFAULT_CONTACT_FROM_NAME` (`Vitality Family Chiropractic website`) at
+`DEFAULT_CONTACT_FROM_EMAIL` (`website@vitalityfamilychiropractic.com`).
+`CONTACT_FROM` can still override the address, and it must stay on
+`vitalityfamilychiropractic.com`. The name stays the settings value.
 
 Pages Functions cannot use a `send_email` binding. The [Pages bindings
 list](https://developers.cloudflare.com/pages/functions/bindings/) does not
@@ -158,19 +166,25 @@ Do this before the form can deliver mail. Nothing below belongs in git.
    - `CLOUDFLARE_ACCOUNT_ID`, secret or plain text: the account id from the
      dashboard overview URL (`https://dash.cloudflare.com/<account-id>`).
      It is 32 hex characters.
-   - `CONTACT_FROM`, optional plain text. Default is
-     `website@vitalityfamilychiropractic.com`. Any other value must be an
-     address at `vitalityfamilychiropractic.com`.
+   - `CONTACT_FROM`, optional plain text. Overrides the From address only.
+     The default is `website@vitalityfamilychiropractic.com` in
+     `src/config/site.ts`. Any override must be an address at
+     `vitalityfamilychiropractic.com`. The From name is not an environment
+     variable. It is `Vitality Family Chiropractic website` in that same file.
 5. Sending to an arbitrary recipient needs the Workers Paid plan once the
    domain is onboarded for Email Sending. On every plan, including Workers
    Free, mail to a verified destination address is allowed and does not count
-   toward the sending quota. Verify `info@vitalityfamilychiropractic.com` if
-   the account is not on Workers Paid, or if you want those messages excluded
-   from the quota: Compute > Email Service > Email Routing > Destination
-   addresses. Enter that address and open the verification email it receives.
-   Verifying a destination does not change MX records. Do not turn on Email
-   Routing for the domain if inbound mail already uses another provider's MX
-   records. Routing would take over delivery.
+   toward the sending quota. Verify both inboxes if the account is not on
+   Workers Paid, or if you want those messages excluded from the quota:
+   `info@vitalityfamilychiropractic.com` (production, the `main` branch) and
+   `nick@vitalityfamilychiropractic.com` (every preview branch). Compute >
+   Email Service > Email Routing > Destination addresses. Enter each address
+   and open the verification email it receives. Verifying a destination does
+   not change MX records. Do not turn on Email Routing for the domain if
+   inbound mail already uses another provider's MX records. Routing would
+   take over delivery. There is no dashboard variable for the recipient. The
+   two addresses are `CONTACT_TO` and `PREVIEW_CONTACT_TO` in
+   `src/config/site.ts`.
 6. Redeploy the Pages project after the variables are saved. Functions read
    them on the next deployment.
 

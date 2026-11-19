@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import { handleContact, resetContactLimits, type ContactEnv } from './contact';
+import { mailForBranch } from '../../functions/api/contact';
+import { contactRecipient, handleContact, resetContactLimits, type ContactEnv } from './contact';
 
 const ACCOUNT = 'a'.repeat(32);
 const TOKEN = 'test-token';
@@ -45,9 +46,12 @@ test('emails the office and redirects without a query string', async () => {
   expect(sent).toHaveLength(1);
   const mail = sent[0];
   expect(mail?.to).toEqual(['info@vitalityfamilychiropractic.com']);
-  expect(mail?.from).toBe('website@vitalityfamilychiropractic.com');
+  expect(mail?.from).toEqual({
+    address: 'website@vitalityfamilychiropractic.com',
+    name: 'Vitality Family Chiropractic website',
+  });
   expect(mail?.reply_to).toBe('jane@example.com');
-  expect(mail?.subject).toBe('Website message — Celebration');
+  expect(mail?.subject).toBe('Message — Celebration (Vitality Family Chiropractic)');
   expect(mail?.text).toContain('office: celebration');
   expect(mail?.text).toContain('page: /celebration/contact/');
   expect(mail?.text).toContain('name: Jane Doe');
@@ -80,7 +84,7 @@ test('names the College Station page in the JSON success path', async () => {
 
   expect(response.status).toBe(200);
   expect(await response.json()).toEqual({ ok: true });
-  expect(sent[0]?.subject).toBe('Website message — College Station');
+  expect(sent[0]?.subject).toBe('Message — College Station (Vitality Family Chiropractic)');
   expect(sent[0]?.text).toContain('office: college-station');
   expect(sent[0]?.text).toContain('page: /college-station/contact/');
   expect(sent[0]?.text).toContain('phone: \n');
@@ -121,7 +125,7 @@ test('strips header-injection characters and keeps them out of headers', async (
   );
 
   expect(response.status).toBe(200);
-  expect(sent[0]?.subject).toBe('Website message — Celebration');
+  expect(sent[0]?.subject).toBe('Message — Celebration (Vitality Family Chiropractic)');
   expect(sent[0]?.reply_to).toBe('ann@example.com');
   expect(sent[0]?.subject).not.toMatch(/[\r\n]/);
   expect(sent[0]?.reply_to).not.toMatch(/[\r\n]/);
@@ -297,7 +301,10 @@ test('uses CONTACT_FROM when it is on the practice domain', async () => {
     { fetch: mockFetch(sent) },
   );
   expect(response.status).toBe(200);
-  expect(sent[0]?.from).toBe('forms@vitalityfamilychiropractic.com');
+  expect(sent[0]?.from).toEqual({
+    address: 'forms@vitalityfamilychiropractic.com',
+    name: 'Vitality Family Chiropractic website',
+  });
 });
 
 test('refuses a sender address outside the practice domain', async () => {
@@ -402,8 +409,53 @@ test('form sources do not send field values to a URL or to analytics', () => {
 
 const BODY_TOO_BIG = 32 * 1024 + 1;
 
+test('sends main to the office inbox and every other branch to the preview inbox', async () => {
+  expect(contactRecipient('main')).toBe('info@vitalityfamilychiropractic.com');
+  expect(contactRecipient(undefined)).toBe('nick@vitalityfamilychiropractic.com');
+  expect(contactRecipient('')).toBe('nick@vitalityfamilychiropractic.com');
+  expect(contactRecipient('cursor/native-contact-form-a46d')).toBe('nick@vitalityfamilychiropractic.com');
+
+  const branches: Array<string | undefined> = [undefined, '', 'cursor/native-contact-form-a46d'];
+  for (const [index, branch] of branches.entries()) {
+    const sent: Array<Record<string, unknown>> = [];
+    const env: ContactEnv = { CLOUDFLARE_ACCOUNT_ID: ACCOUNT, EMAIL_API_TOKEN: TOKEN };
+    if (branch !== undefined) env.CF_PAGES_BRANCH = branch;
+    const response = await handleContact(
+      post(validFields(), { accept: 'application/json', ip: `203.0.113.${160 + index}` }),
+      env,
+      { fetch: mockFetch(sent) },
+    );
+    expect(response.status).toBe(200);
+    expect(sent[0]?.to).toEqual(['nick@vitalityfamilychiropractic.com']);
+    expect(sent[0]?.subject).toBe('Message — Celebration (Vitality Family Chiropractic)');
+    expect(JSON.stringify(sent[0])).not.toContain('jane@example.com?');
+  }
+
+  const previewMail = mailForBranch('cursor/native-contact-form-a46d');
+  const productionMail = mailForBranch('main');
+  expect(previewMail).toEqual({
+    to: 'nick@vitalityfamilychiropractic.com',
+    fromName: 'Vitality Family Chiropractic website',
+    fromEmail: 'website@vitalityfamilychiropractic.com',
+  });
+  expect(productionMail.to).toBe('info@vitalityfamilychiropractic.com');
+
+  const sent: Array<Record<string, unknown>> = [];
+  const wired = await handleContact(
+    post(validFields(), { accept: 'application/json', ip: '203.0.113.171' }),
+    { ...readyEnv(), CF_PAGES_BRANCH: 'cursor/native-contact-form-a46d' },
+    { fetch: mockFetch(sent), ...previewMail },
+  );
+  expect(wired.status).toBe(200);
+  expect(sent[0]?.to).toEqual(['nick@vitalityfamilychiropractic.com']);
+  expect(sent[0]?.from).toEqual({
+    address: previewMail.fromEmail,
+    name: previewMail.fromName,
+  });
+});
+
 function readyEnv(): ContactEnv {
-  return { CLOUDFLARE_ACCOUNT_ID: ACCOUNT, EMAIL_API_TOKEN: TOKEN };
+  return { CLOUDFLARE_ACCOUNT_ID: ACCOUNT, EMAIL_API_TOKEN: TOKEN, CF_PAGES_BRANCH: 'main' };
 }
 
 function validFields(): Record<string, string> {
