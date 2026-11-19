@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { site as siteConfig } from './src/config/site.ts';
 
@@ -80,6 +80,17 @@ redirects['/sitemap.xml'] = { status: 301, destination: '/sitemap-index.xml' };
 export default defineConfig({
   site: 'https://www.vitalityfamilychiropractic.com',
   redirects,
+  env: {
+    schema: {
+      // Public site key, read at build and written into the form. Optional:
+      // with it unset, the widget is left out and the form still posts.
+      TURNSTILE_SITE_KEY: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+      }),
+    },
+  },
   vite: {
     plugins: [
       {
@@ -118,6 +129,8 @@ export default defineConfig({
       filter: (page) => {
         const path = new URL(page).pathname;
         if (path.includes('/404')) return false;
+        // The form's thank-you and error pages carry no content of their own.
+        if (/\/contact\/(thanks|error)\/$/.test(path)) return false;
         // Sections switched off in site.ts stay out of the sitemap (and are
         // noindexed by LocationLayout) until they go live.
         if (!siteConfig.shop.inNav && /^\/[^/]+\/shop\//.test(path)) return false;

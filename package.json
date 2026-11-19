@@ -22,8 +22,13 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "bun test",
+    "pages:dev": "wrangler pages dev dist --compatibility-date 2026-11-19"
   },
-  "trustedDependencies": ["esbuild", "sharp"],
-  "type": "module"
+  "trustedDependencies": ["esbuild", "sharp", "workerd"],
+  "type": "module",
+  "devDependencies": {
+    "wrangler": "^4.165.0"
+  }
 }

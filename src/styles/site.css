@@ -725,6 +725,8 @@ select.fm-input {
 .fm-error:empty { display: none; }
 .fm-input[aria-invalid='true'] { border-color: #8C4E56; border-width: 2px; }
 .fm-required { margin: 14px 0 0; font-size: .9rem; color: var(--ink-2); }
+.fm-turnstile { margin-top: 16px; }
+.fm-turnstile:empty { display: none; }
 .fm-submit { margin-top: 8px; cursor: pointer; }
 .fm-submit:disabled { opacity: .65; cursor: progress; transform: none; box-shadow: none; }
 .fm-status { margin-top: 14px; font-weight: 700; }
