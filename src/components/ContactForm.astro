@@ -1,5 +1,4 @@
 ---
-import { site } from '../config/site';
 import type { Location } from '../config/types';
 
 interface Props {
@@ -7,25 +6,11 @@ interface Props {
 }
 
 const { location } = Astro.props;
-
-// Each office posts to the mailer named in locations.ts. The access key is
-// what tells us that office is ready to receive mail.
-const { endpoint, accessKey } = location.form;
-const configured = !accessKey.startsWith('REPLACE_WITH');
-const subject = `Message — ${location.name} (${site.name})`;
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+const page = `/${location.slug}/contact/`;
 ---
 
 <div class="fm">
-  {
-    !configured && (
-      <p class="fm-warning" role="note">
-        <strong>Setup needed:</strong> this office has no form access key yet, so
-        submissions will not be delivered. Add one to <code>src/config/locations.ts</code>.
-        Until then, please email <a href={`mailto:${location.email}`}>{location.email}</a>.
-      </p>
-    )
-  }
-
   <h2 class="fm-title" id="contact-form-title">Send a message</h2>
   <p class="fm-lead">
     New patients can use this form to request an appointment. You can also use it
@@ -36,26 +21,25 @@ const subject = `Message — ${location.name} (${site.name})`;
   </p>
 
   {/*
-    A plain POST form. With scripting off it submits natively to the form
-    service and the browser's own validation applies. The script below takes
-    over to give inline messages and keep the visitor on the page.
+    A plain POST. With scripting off the browser validates and then navigates
+    to the thank-you page. The script below keeps the visitor on this page.
+    Values stay in the request body. Nothing here is written into the URL or
+    sent to analytics.
   */}
   <form
     class="fm-form"
     id="contact-form"
     method="POST"
-    action={endpoint}
+    action="/api/contact"
     data-fallback-email={location.email}
     aria-labelledby="contact-form-title"
   >
-    <input type="hidden" name="subject" value={subject} />
-    <input type="hidden" name="_subject" value={subject} />
-    <input type="hidden" name="from_name" value={`${site.name} website`} />
-    <input type="hidden" name="location" value={location.name} />
+    <input type="hidden" name="office" value={location.slug} />
+    <input type="hidden" name="page" value={page} />
 
     {/*
-      Honeypot. A person never sees these fields. `botcheck` is the draft
-      field; `_gotcha` is the one Formspree treats as spam.
+      Honeypot. A person never sees these fields. Either one being filled
+      is treated as spam and is not emailed.
     */}
     <div class="fm-honeypot" aria-hidden="true">
       <label for="botcheck">Leave this field empty</label>
@@ -76,6 +60,7 @@ const subject = `Message — ${location.name} (${site.name})`;
           type="text"
           autocomplete="name"
           required
+          maxlength="100"
           aria-describedby="name-error"
           data-error-label="Your name"
         />
@@ -93,6 +78,7 @@ const subject = `Message — ${location.name} (${site.name})`;
           type="email"
           autocomplete="email"
           required
+          maxlength="254"
           aria-describedby="email-error"
           data-error-label="Your email address"
         />
@@ -107,6 +93,7 @@ const subject = `Message — ${location.name} (${site.name})`;
           name="phone"
           type="tel"
           autocomplete="tel"
+          maxlength="40"
           aria-describedby="phone-hint phone-error"
           data-error-label="Your phone number"
         />
@@ -132,6 +119,7 @@ const subject = `Message — ${location.name} (${site.name})`;
           name="comments"
           rows="5"
           required
+          maxlength="4000"
           aria-describedby="comments-hint phi-note comments-error"
           data-error-label="A short message"></textarea>
         <span class="fm-hint" id="comments-hint">
@@ -146,6 +134,17 @@ const subject = `Message — ${location.name} (${site.name})`;
       <span class="sr">with an asterisk</span> are required.
     </p>
 
+    {
+      siteKey && (
+        <div
+          class="fm-turnstile"
+          id="contact-turnstile"
+          data-sitekey={siteKey}
+          data-action="contact"
+        />
+      )
+    }
+
     <button class="btn fm-submit" id="appt-request-form-button" type="submit">
       Send request
     </button>
@@ -153,6 +152,23 @@ const subject = `Message — ${location.name} (${site.name})`;
     <div class="fm-status" id="form-status" role="status" aria-live="polite"></div>
   </form>
 </div>
+
+{
+  siteKey && (
+    <>
+      <script is:inline>
+        window.onContactTurnstile = function () {
+          window.__contactTurnstileReady = true;
+          document.dispatchEvent(new Event('contact-turnstile-ready'));
+        };
+      </script>
+      <script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onContactTurnstile&render=explicit"
+        async
+        defer></script>
+    </>
+  )
+}
 
 <script>
   const form = document.querySelector<HTMLFormElement>('#contact-form');
@@ -168,6 +184,30 @@ const subject = `Message — ${location.name} (${site.name})`;
         'input[required], textarea[required], input[type="email"], input[type="tel"]',
       ),
     );
+
+    type TurnstileApi = {
+      render: (container: HTMLElement, options: { sitekey: string; action: string }) => string;
+      reset: (widgetId: string) => void;
+    };
+
+    let widgetId: string | null = null;
+
+    function turnstileApi(): TurnstileApi | null {
+      const api = (window as Window & { turnstile?: TurnstileApi }).turnstile;
+      return api ?? null;
+    }
+
+    function mountTurnstile() {
+      const container = document.querySelector<HTMLElement>('#contact-turnstile');
+      const api = turnstileApi();
+      const sitekey = container?.getAttribute('data-sitekey') ?? '';
+      if (!container || !api || !sitekey || widgetId) return;
+      widgetId = api.render(container, { sitekey, action: 'contact' });
+    }
+
+    const turnstileWindow = window as Window & { __contactTurnstileReady?: boolean };
+    if (turnstileWindow.__contactTurnstileReady) mountTurnstile();
+    document.addEventListener('contact-turnstile-ready', mountTurnstile);
 
     function errorNode(field: HTMLElement) {
       return form?.querySelector<HTMLElement>(`[data-error-for="${field.id}"]`) ?? null;
@@ -192,6 +232,7 @@ const subject = `Message — ${location.name} (${site.name})`;
       if (field.validity.typeMismatch && field.type === 'email') {
         return 'Please enter a complete email address, like name@example.com.';
       }
+      if (field.validity.tooLong) return `${label} is too long.`;
       return field.validationMessage || `Please check ${label.toLowerCase()}.`;
     }
 
@@ -224,26 +265,35 @@ const subject = `Message — ${location.name} (${site.name})`;
       status.dataset.state = '';
       status.textContent = 'Sending your message…';
 
+      const mailto = form.dataset.fallbackEmail;
+      const fallback = mailto
+        ? `Sorry, we could not send that. Please email us at ${mailto} or give us a call.`
+        : 'Sorry, we could not send that. Please give us a call and we will get you booked in.';
+
       try {
         const response = await fetch(form.action, {
           method: 'POST',
           headers: { Accept: 'application/json' },
           body: new FormData(form),
         });
+        const payload = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
 
-        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+        if (!response.ok || payload?.ok !== true) {
+          const serverMessage = payload && typeof payload.error === 'string' ? payload.error : '';
+          status.dataset.state = 'error';
+          status.textContent = serverMessage || fallback;
+          return;
+        }
 
         status.dataset.state = 'success';
         status.textContent = 'Thank you. Your message has been sent. We will be in touch shortly.';
         form.reset();
         for (const field of fields) field.setAttribute('aria-invalid', 'false');
       } catch {
-        const mailto = form.dataset.fallbackEmail;
         status.dataset.state = 'error';
-        status.textContent = mailto
-          ? `Sorry, we could not send that. Please email us at ${mailto} or give us a call.`
-          : 'Sorry, we could not send that. Please give us a call and we will get you booked in.';
+        status.textContent = fallback;
       } finally {
+        if (widgetId) turnstileApi()?.reset(widgetId);
         if (submit) {
           submit.disabled = false;
           submit.textContent = originalLabel;

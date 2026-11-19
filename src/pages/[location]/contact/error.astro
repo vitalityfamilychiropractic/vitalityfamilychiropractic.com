@@ -1,0 +1,55 @@
+---
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import { locations, telHref } from '../../../config/locations';
+import type { Location } from '../../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/contact/error/`;
+const phone = telHref(location.phone);
+---
+
+<LocationLayout
+  location={location}
+  title="Message not sent"
+  description={`The message to the ${location.name} office was not sent.`}
+  path={path}
+  noindex
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Contact', href: `/${location.slug}/contact/` },
+    { name: 'Message not sent', href: path },
+  ]}
+>
+  <section class="tm-hero" aria-labelledby="error-title">
+    <div class="wrap">
+      <div class="tm-hero-inner reveal">
+        <Icon name="sprig" class="sprig" />
+        <h1 id="error-title">Message not sent</h1>
+      </div>
+    </div>
+  </section>
+  <section class="ct-main">
+    <div class="wrap">
+      <div class="fm">
+        <p class="fm-status" data-state="error" role="status">
+          Sorry, we could not send that. Please email us at
+          <a href={`mailto:${location.email}`}>{location.email}</a>
+          or call <a href={`tel:${phone}`}>{location.phone}</a>.
+        </p>
+        <p><a class="ct-link" href={`/${location.slug}/contact/`}>Back to the form</a></p>
+      </div>
+    </div>
+  </section>
+</LocationLayout>

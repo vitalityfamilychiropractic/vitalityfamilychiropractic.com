@@ -3,7 +3,7 @@
   "include": [".astro/types.d.ts", "**/*"],
   // `public` holds pre-built assets that are copied verbatim; type-checking a
   // minified bundle in there will exhaust the heap.
-  "exclude": ["dist", "public", "node_modules", "vendor"],
+  "exclude": ["dist", "public", "node_modules", "vendor", "**/*.test.ts"],
   "compilerOptions": {
     "strictNullChecks": true,
     "allowJs": true

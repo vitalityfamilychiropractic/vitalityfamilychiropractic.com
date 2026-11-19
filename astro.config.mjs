@@ -118,6 +118,8 @@ export default defineConfig({
       filter: (page) => {
         const path = new URL(page).pathname;
         if (path.includes('/404')) return false;
+        // The form's thank-you and error pages carry no content of their own.
+        if (/\/contact\/(thanks|error)\/$/.test(path)) return false;
         // Sections switched off in site.ts stay out of the sitemap (and are
         // noindexed by LocationLayout) until they go live.
         if (!siteConfig.shop.inNav && /^\/[^/]+\/shop\//.test(path)) return false;

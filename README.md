@@ -7,7 +7,8 @@ showing the page. The privacy contact block fills from `primaryOffice`.
 
 Built with [Astro](https://astro.build). The design is Playfair Display and Nunito Sans,
 in `src/styles/site.css` and `src/styles/extras.css`. The contact page includes
-a message form for a new-patient appointment request or any other note.
+a message form for a new-patient appointment request or any other note. It
+posts to `/api/contact` on this site.
 "Call to Schedule" buttons dial the office. Each office's booking link goes to
 its own Jane App site.
 
@@ -33,6 +34,8 @@ Then open the URL Astro prints (port 4321 by default).
 | `bun run dev` | Local dev server with hot reload |
 | `bun run build` | Type-check, then build to `dist/` |
 | `bun run preview` | Serve the built `dist/` |
+| `bun test` | Contact-form handler tests. No mail is sent. |
+| `bun run pages:dev` | Serve `dist/` with the Pages Function. Run `bun run build` first. |
 
 ## Where everything lives
 
@@ -73,7 +76,8 @@ Each office is a directory under its slug.
 | `/{office}/our-community/community-partners/{partner}/` | One partner. Built only for offices named on that partner. |
 | `/{office}/new-patients/first-visit/` | First visit |
 | `/{office}/new-patients/pricing-insurance/` | Pricing and insurance |
-| `/{office}/contact/` | Phone, address, map, hours |
+| `/{office}/contact/` | Phone, address, map, hours, and the message form |
+| `/{office}/contact/thanks/` and `/{office}/contact/error/` | Form results. Noindex, and left out of the sitemap. |
 | `/{office}/shop/` | Shop. Product cards come from the `products` list in `shop.md` |
 | `/{office}/privacy/` and `/privacy/` | Privacy policy |
 
@@ -87,6 +91,108 @@ Old paths such as `/specialties/`, `/team/`, `/pricing/`, and `/our-values/`
 redirect. Astro redirects are in `astro.config.mjs` (one key per path).
 Cloudflare uses `public/_redirects`, which lists both the slash and no-slash
 forms. Our Values redirects to that office's home. There is no values page.
+
+## Contact form
+
+Both offices post to `/api/contact`, a Cloudflare Pages Function
+(`functions/api/contact.ts`, logic in `src/lib/contact.ts`). The message is
+emailed to `info@vitalityfamilychiropractic.com`. The body lists the office
+slug, the contact page, and the submitted fields. Reply-To is the visitor's
+email when that address is valid.
+
+The From address is `website@vitalityfamilychiropractic.com` unless
+`CONTACT_FROM` is set to another address at that same domain.
+
+Pages Functions cannot use a `send_email` binding. The [Pages bindings
+list](https://developers.cloudflare.com/pages/functions/bindings/) does not
+include Email Sending, and the Email Sending docs say to use the REST API from
+anything that is not a Worker. The function calls
+`POST /accounts/{account_id}/email/sending/send`. No token is stored in the repo.
+
+With scripting off, the browser posts the form and lands on
+`/{office}/contact/thanks/` or `/{office}/contact/error/`. Those addresses are
+paths only. Field values are never copied into a URL. With scripting on, the
+page stays put and shows the same success or error styling it already used.
+The script does not call `gtag` or `dataLayer`. The only analytics call on the
+site is the existing page-view `gtag('config', …)` in `BaseLayout.astro`.
+
+The honeypot fields and the "do not include protected health information" note
+stay. A filled honeypot is not emailed. The server checks the method, the
+content type, the size, required fields, lengths, the email shape, the phone
+shape, and the office slug. Header characters are stripped before anything is
+placed in a subject or address. Five posts from one address are accepted in
+ten minutes; the sixth is refused. That counter lives in the isolate, so it
+slows a burst rather than capping the whole site.
+
+Turnstile is optional until both of its values are set. The widget is baked
+into the page from `PUBLIC_TURNSTILE_SITE_KEY` at build time. The function
+checks `TURNSTILE_SECRET` with siteverify, and it requires the action
+`contact` and a hostname of `www.vitalityfamilychiropractic.com` or
+`vitalityfamilychiropractic.com`. `TURNSTILE_HOSTNAMES` adds more hostnames
+(a Pages preview host, for example). It does not remove those two. A normal
+browser post, with scripting off, still sends, because Turnstile cannot issue
+a token without JavaScript. A scripted post is refused until the token checks
+out.
+
+### What to set in the Cloudflare dashboard
+
+Do this before the form can deliver mail. Nothing below belongs in git.
+
+1. The domain `vitalityfamilychiropractic.com` must use Cloudflare DNS.
+2. Onboard it for Email Sending: Compute > Email Service > Email Sending >
+   Onboard Domain. Cloudflare adds bounce MX, SPF, and DKIM on the
+   `cf-bounce` subdomain. Those records do not replace the domain's inbound
+   MX, so an existing inbox (Google Workspace or anything else) keeps
+   receiving mail. A DMARC record at `_dmarc` is added only when the domain
+   does not already have one. If other services also send mail for the
+   domain, leave an existing DMARC policy alone, or start at `p=none` until
+   every sender passes SPF or DKIM. Confirm the records under Email Sending >
+   Settings. Details are in the [domain configuration
+   guide](https://developers.cloudflare.com/email-service/configuration/domains/).
+3. Create an API token at My Profile > API Tokens > Create Token > Custom
+   token. Permission: Account, Email Sending, Edit. Limit it to the account
+   that owns the domain.
+4. Open the Pages project > Settings > Environment variables. Add the same
+   runtime values for Production and Preview:
+   - `EMAIL_API_TOKEN`, secret: the token from step 3.
+   - `CLOUDFLARE_ACCOUNT_ID`, secret or plain text: the account id from the
+     dashboard overview URL (`https://dash.cloudflare.com/<account-id>`).
+     It is 32 hex characters.
+   - `CONTACT_FROM`, optional plain text. Default is
+     `website@vitalityfamilychiropractic.com`. Any other value must be an
+     address at `vitalityfamilychiropractic.com`.
+5. Sending to an arbitrary recipient needs the Workers Paid plan once the
+   domain is onboarded for Email Sending. On every plan, including Workers
+   Free, mail to a verified destination address is allowed and does not count
+   toward the sending quota. Verify `info@vitalityfamilychiropractic.com` if
+   the account is not on Workers Paid, or if you want those messages excluded
+   from the quota: Compute > Email Service > Email Routing > Destination
+   addresses. Enter that address and open the verification email it receives.
+   Verifying a destination does not change MX records. Do not turn on Email
+   Routing for the domain if inbound mail already uses another provider's MX
+   records. Routing would take over delivery.
+6. Redeploy the Pages project after the variables are saved. Functions read
+   them on the next deployment.
+
+Turnstile, when you want it:
+
+1. Turnstile > Add widget. Widget mode: Managed. Hostnames:
+   `www.vitalityfamilychiropractic.com` and `vitalityfamilychiropractic.com`.
+   Add a preview hostname only on a separate widget or via
+   `TURNSTILE_HOSTNAMES`. Do not put `localhost` on the production widget.
+2. Pages > Settings > Environment variables:
+   - `PUBLIC_TURNSTILE_SITE_KEY`, plain text, available to the **build**. The
+     site key is public. Astro writes it into the form. A new deploy is
+     required after it changes.
+   - `TURNSTILE_SECRET`, secret, **runtime** only. Production and Preview.
+3. Redeploy. Until both values are present, the form still sends and the
+   widget is hidden. After the secret is present, a scripted submit without a
+   valid token is refused.
+
+Local mail needs the same names in `.dev.vars` (gitignored) next to
+`package.json`. `bun test` does not send mail. `bun run build` then
+`bun run pages:dev` serves the built site and the function. A post without
+those variables returns the "not ready" error.
 
 ## Adding a location
 

@@ -1,0 +1,56 @@
+---
+import LocationLayout from '../../../layouts/LocationLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import { locations, telHref } from '../../../config/locations';
+import type { Location } from '../../../config/types';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const path = `/${location.slug}/contact/thanks/`;
+const phone = telHref(location.phone);
+---
+
+<LocationLayout
+  location={location}
+  title="Thank you"
+  description={`Your message to the ${location.name} office has been sent.`}
+  path={path}
+  noindex
+  crumbs={[
+    { name: location.name, href: `/${location.slug}/` },
+    { name: 'Contact', href: `/${location.slug}/contact/` },
+    { name: 'Thank you', href: path },
+  ]}
+>
+  <section class="tm-hero" aria-labelledby="thanks-title">
+    <div class="wrap">
+      <div class="tm-hero-inner reveal">
+        <Icon name="sprig" class="sprig" />
+        <h1 id="thanks-title">Thank you</h1>
+      </div>
+    </div>
+  </section>
+  <section class="ct-main">
+    <div class="wrap">
+      <div class="fm">
+        <p class="fm-status" data-state="success" role="status">
+          Thank you. Your message has been sent. We will be in touch shortly.
+        </p>
+        <p class="fm-lead">
+          If you need us sooner, call <a href={`tel:${phone}`}>{location.phone}</a>.
+        </p>
+        <p><a class="ct-link" href={`/${location.slug}/contact/`}>Back to contact</a></p>
+      </div>
+    </div>
+  </section>
+</LocationLayout>
