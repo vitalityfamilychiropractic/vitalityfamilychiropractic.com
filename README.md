@@ -133,7 +133,7 @@ ten minutes; the sixth is refused. That counter lives in the isolate, so it
 slows a burst rather than capping the whole site.
 
 Turnstile is optional until both of its values are set. The widget is baked
-into the page from `PUBLIC_TURNSTILE_SITE_KEY` at build time. The function
+into the page from `TURNSTILE_SITE_KEY` at build time. The function
 checks `TURNSTILE_SECRET` with siteverify, and it requires the action
 `contact` and a hostname of `www.vitalityfamilychiropractic.com` or
 `vitalityfamilychiropractic.com`, plus the hostname of the request itself,
@@ -197,18 +197,22 @@ Turnstile, when you want it:
    The function already accepts the hostname of the request, so
    `TURNSTILE_HOSTNAMES` is only for additional hosts. Do not put `localhost` on the production widget.
 2. Pages > Settings > Environment variables:
-   - `PUBLIC_TURNSTILE_SITE_KEY`, plain text, available to the **build**. The
-     site key is public. Astro writes it into the form. A new deploy is
-     required after it changes.
+   - `TURNSTILE_SITE_KEY`, plain text, available to the **build**. The
+     site key is public. Astro reads it on the server while building and
+     writes it into the form. It is not a runtime variable, and `.dev.vars`
+     does not supply it. A new deploy is required after it changes.
    - `TURNSTILE_SECRET`, secret, **runtime** only. Production and Preview.
 3. Redeploy. Until both values are present, the form still sends and the
    widget is hidden. After the secret is present, a scripted submit without a
    valid token is refused.
 
-Local mail needs the same names in `.dev.vars` (gitignored) next to
-`package.json`. `bun test` does not send mail. `bun run build` then
+Local mail needs the runtime names in `.dev.vars` (gitignored) next to
+`package.json`: `EMAIL_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, and, when you
+want checks, `TURNSTILE_SECRET`. `TURNSTILE_SITE_KEY` is read only while the
+site is built. Export it in the shell before `bun run build` to include the
+widget locally. `bun test` does not send mail. `bun run build` then
 `bun run pages:dev` serves the built site and the function. A post without
-those variables returns the "not ready" error.
+the mail variables returns the "not ready" error.
 
 ## Adding a location
 
