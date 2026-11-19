@@ -53,7 +53,8 @@ test('emails the office and redirects without a query string', async () => {
   expect(mail?.reply_to).toBe('jane@example.com');
   expect(mail?.subject).toBe('Message — Celebration (Vitality Family Chiropractic)');
   expect(mail?.text).toContain('office: celebration');
-  expect(mail?.text).toContain('page: /celebration/contact/');
+  expect(mail?.text).not.toContain('page:');
+  expect(mail?.text).not.toContain('protected health information');
   expect(mail?.text).toContain('name: Jane Doe');
   expect(mail?.text).toContain('email: jane@example.com');
   expect(mail?.text).toContain('phone: (407) 555-0100');
@@ -86,7 +87,7 @@ test('names the College Station page in the JSON success path', async () => {
   expect(await response.json()).toEqual({ ok: true });
   expect(sent[0]?.subject).toBe('Message — College Station (Vitality Family Chiropractic)');
   expect(sent[0]?.text).toContain('office: college-station');
-  expect(sent[0]?.text).toContain('page: /college-station/contact/');
+  expect(sent[0]?.text).not.toContain('page:');
   expect(sent[0]?.text).toContain('phone: \n');
 });
 

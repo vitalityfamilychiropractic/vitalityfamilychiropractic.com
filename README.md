@@ -101,7 +101,7 @@ goes to `CONTACT_TO` (`info@vitalityfamilychiropractic.com`). Every other
 branch, including Pages previews and local `wrangler pages dev`, goes to
 `PREVIEW_CONTACT_TO` (`nick@vitalityfamilychiropractic.com`). The branch is
 `CF_PAGES_BRANCH`. A missing branch is treated as a preview. The body lists
-the office slug, the contact page, and the submitted fields. Reply-To is the
+the office slug and the submitted fields. Reply-To is the
 visitor's email when that address is valid.
 
 The subject is `Message — {office} (Vitality Family Chiropractic)`, the same

@@ -231,12 +231,8 @@ function parseFields(form: FormData): ParsedFields | { ok: false; error: string 
 }
 
 function messageBody(fields: ParsedFields): string {
-  const page = `/${fields.location.slug}/contact/`;
   return [
-    'Website contact form. The visitor was asked not to include protected health information.',
-    '',
     `office: ${fields.location.slug}`,
-    `page: ${page}`,
     `name: ${fields.name}`,
     `email: ${fields.email}`,
     `phone: ${fields.phone}`,
