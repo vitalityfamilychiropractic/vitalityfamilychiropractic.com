@@ -62,9 +62,17 @@ export async function upcomingEvents(
   now = new Date(),
 ): Promise<CalendarEvent[]> {
   const url = `https://calendar.google.com/calendar/ical/${encodeURIComponent(calendarId)}/public/basic.ics`;
+  // `cache: 'no-store'` throws on older Pages compatibility dates
+  // ("RequestInitializerDict.cache is not implemented"). `cf.cacheTtl: 0`
+  // is the Workers way to skip the cache, and a Cache-Control request
+  // header covers other runtimes. Node's fetch ignores the `cf` field.
+  const init: RequestInit & { cf?: { cacheTtl: number; cacheEverything: boolean } } = {
+    headers: { 'cache-control': 'no-cache' },
+    cf: { cacheTtl: 0, cacheEverything: false },
+  };
   let response: Response;
   try {
-    response = await fetch(url, { cache: 'no-store' });
+    response = await fetch(url, init);
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error);
     throw new Error(`Could not reach the Google Calendar for "${calendarId}": ${reason}`);
