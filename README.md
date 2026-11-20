@@ -101,11 +101,12 @@ goes to `CONTACT_TO` (`info@vitalityfamilychiropractic.com`). Every other
 branch, including Pages previews and local `wrangler pages dev`, goes to
 `PREVIEW_CONTACT_TO` (`nick@vitalityfamilychiropractic.com`). The branch is
 `CF_PAGES_BRANCH`. A missing branch is treated as a preview. The body lists
-the office slug and the submitted fields. Reply-To is the
+the office name and the submitted fields, as HTML with a plain-text copy. Reply-To is the
 visitor's email when that address is valid.
 
-The subject is `Message — {office} (Vitality Family Chiropractic)`, the same
-text the old form put in `_subject`. The From line is
+The subject is `Message - {office} ({name})`, with a hyphen. `{office}` is the
+office's display name and `{name}` is the visitor's name, with line breaks and
+other control characters removed and the name limited to 100 characters. The From line is
 `DEFAULT_CONTACT_FROM_NAME` (`Vitality Family Chiropractic website`) at
 `DEFAULT_CONTACT_FROM_EMAIL` (`website@vitalityfamilychiropractic.com`).
 `CONTACT_FROM` can still override the address, and it must stay on

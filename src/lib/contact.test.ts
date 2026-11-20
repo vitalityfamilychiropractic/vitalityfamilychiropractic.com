@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { mailForBranch } from '../../functions/api/contact';
-import { contactRecipient, handleContact, resetContactLimits, type ContactEnv } from './contact';
+import { contactRecipient, contactSubject, handleContact, resetContactLimits, type ContactEnv } from './contact';
 
 const ACCOUNT = 'a'.repeat(32);
 const TOKEN = 'test-token';
@@ -51,16 +51,22 @@ test('emails the office and redirects without a query string', async () => {
     name: 'Vitality Family Chiropractic website',
   });
   expect(mail?.reply_to).toBe('jane@example.com');
-  expect(mail?.subject).toBe('Message — Celebration (Vitality Family Chiropractic)');
-  expect(mail?.text).toContain('office: celebration');
+  expect(mail?.subject).toBe('Message - Celebration (Jane Doe)');
+  expect(mail?.text).toContain('New form submission');
+  expect(mail?.text).toContain('location\nCelebration');
   expect(mail?.text).not.toContain('page:');
   expect(mail?.text).not.toContain('protected health information');
-  expect(mail?.text).toContain('name: Jane Doe');
-  expect(mail?.text).toContain('email: jane@example.com');
-  expect(mail?.text).toContain('phone: (407) 555-0100');
-  expect(mail?.text).toContain('contactMethod: Email');
+  expect(mail?.text).toContain('name\nJane Doe');
+  expect(mail?.text).toContain('email\njane@example.com');
+  expect(mail?.text).toContain('phone\n(407) 555-0100');
+  expect(mail?.text).toContain('contact method\nEmail');
   expect(mail?.text).toContain('Thursday morning works.');
   expect(mail?.text).not.toContain('should-not-leak');
+  expect(mail?.html).toContain('New form submission');
+  expect(mail?.html).toContain('>location<');
+  expect(mail?.html).toContain('Celebration');
+  expect(mail?.html).toContain('href="mailto:jane@example.com"');
+  expect(mail?.html).toContain('href="tel:4075550100"');
   expect(mail).not.toHaveProperty('bcc');
   expect(JSON.stringify(mail)).not.toContain('?');
 });
@@ -85,10 +91,64 @@ test('names the College Station page in the JSON success path', async () => {
 
   expect(response.status).toBe(200);
   expect(await response.json()).toEqual({ ok: true });
-  expect(sent[0]?.subject).toBe('Message — College Station (Vitality Family Chiropractic)');
-  expect(sent[0]?.text).toContain('office: college-station');
+  expect(sent[0]?.subject).toBe('Message - College Station (Alex Kim)');
+  expect(sent[0]?.text).toContain('location\nCollege Station');
+  expect(sent[0]?.text).not.toContain('college-station');
   expect(sent[0]?.text).not.toContain('page:');
-  expect(sent[0]?.text).toContain('phone: \n');
+  expect(sent[0]?.text).toContain('phone\n\n');
+  expect(sent[0]?.html).toContain('>phone<');
+  expect(sent[0]?.html).not.toContain('tel:');
+});
+
+test('sends an HTML body with escaped values and the plain-text fields', async () => {
+  const sent: Array<Record<string, unknown>> = [];
+  const response = await handleContact(
+    post(
+      {
+        ...validFields(),
+        name: 'Jane & "Jo" <admin>',
+        comments: 'First line\n<script>alert(1)</script>\nThird',
+        phone: '',
+        _gotcha: '',
+        botcheck: '',
+        from_name: 'Vitality Family Chiropractic website',
+        page: '/celebration/contact/',
+      },
+      { accept: 'application/json', ip: '203.0.113.190' },
+    ),
+    readyEnv(),
+    { fetch: mockFetch(sent) },
+  );
+  expect(response.status).toBe(200);
+  const html = String(sent[0]?.html);
+  const text = String(sent[0]?.text);
+  expect(html).toContain('New form submission');
+  expect(html).not.toContain('Someone just submitted');
+  expect(html).toContain('Jane &amp; &quot;Jo&quot; &lt;admin&gt;');
+  expect(html).toContain('First line<br>&lt;script&gt;alert(1)&lt;/script&gt;<br>Third');
+  expect(html).not.toContain('<script>');
+  expect(html).not.toContain('from_name');
+  expect(html).not.toContain('botcheck');
+  expect(html).not.toContain('_gotcha');
+  expect(html).not.toContain('/celebration/contact/');
+  expect(html).not.toContain('protected health information');
+  expect(html.indexOf('>location<')).toBeLessThan(html.indexOf('>name<'));
+  expect(html.indexOf('>name<')).toBeLessThan(html.indexOf('>email<'));
+  expect(html.indexOf('>email<')).toBeLessThan(html.indexOf('>phone<'));
+  expect(html.indexOf('>phone<')).toBeLessThan(html.indexOf('>contact method<'));
+  expect(html.indexOf('>contact method<')).toBeLessThan(html.indexOf('>comments<'));
+  expect(text).toContain('First line\n<script>alert(1)</script>\nThird');
+  expect(text).not.toContain('from_name');
+  expect(text).not.toContain('botcheck');
+  expect(sent[0]?.subject).toBe('Message - Celebration (Jane & "Jo" <admin>)');
+  expect(sent[0]?.subject).not.toMatch(/[—\r\n]/);
+});
+
+test('builds a header-safe subject from the office and the visitor name', () => {
+  expect(contactSubject('College Station', 'Jane Doe')).toBe('Message - College Station (Jane Doe)');
+  expect(contactSubject('College Station', '  Jane\r\nDoe\u0000  ')).toBe('Message - College Station (Jane Doe)');
+  expect(contactSubject('Celebration', 'A'.repeat(150))).toBe(`Message - Celebration (${'A'.repeat(100)})`);
+  expect(contactSubject('College Station', 'Jane Doe')).not.toContain('—');
 });
 
 test('drops a honeypot submission without sending', async () => {
@@ -126,13 +186,15 @@ test('strips header-injection characters and keeps them out of headers', async (
   );
 
   expect(response.status).toBe(200);
-  expect(sent[0]?.subject).toBe('Message — Celebration (Vitality Family Chiropractic)');
+  expect(sent[0]?.subject).toBe('Message - Celebration (Ann Bcc: evil@example.com)');
   expect(sent[0]?.reply_to).toBe('ann@example.com');
   expect(sent[0]?.subject).not.toMatch(/[\r\n]/);
   expect(sent[0]?.reply_to).not.toMatch(/[\r\n]/);
-  expect(sent[0]?.text).toContain('name: Ann Bcc: evil@example.com');
+  expect(sent[0]?.text).toContain('Ann Bcc: evil@example.com');
   expect(sent[0]?.text).toContain('Hello\nthere');
   expect(sent[0]?.text).not.toContain('\r');
+  expect(sent[0]?.html).toContain('Hello<br>there');
+  expect(sent[0]?.html).not.toContain('\r');
 });
 
 test('rejects an email that tries to add a header', async () => {
@@ -507,7 +569,7 @@ test('sends main to the office inbox and every other branch to the preview inbox
     );
     expect(response.status).toBe(200);
     expect(sent[0]?.to).toEqual(['nick@vitalityfamilychiropractic.com']);
-    expect(sent[0]?.subject).toBe('Message — Celebration (Vitality Family Chiropractic)');
+    expect(sent[0]?.subject).toBe('Message - Celebration (Jane Doe)');
     expect(JSON.stringify(sent[0])).not.toContain('jane@example.com?');
   }
 

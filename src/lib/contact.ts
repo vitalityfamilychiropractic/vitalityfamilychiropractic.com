@@ -14,7 +14,6 @@ import {
   DEFAULT_CONTACT_FROM_EMAIL,
   DEFAULT_CONTACT_FROM_NAME,
   PREVIEW_CONTACT_TO,
-  site,
 } from '../config/site';
 
 /** Cloudflare Pages production branch. Preview branches are everything else. */
@@ -29,9 +28,10 @@ export function contactRecipient(
   return branch === PRODUCTION_BRANCH ? productionTo : previewTo;
 }
 
-/** Same subject the previous form sent in its `_subject` field. */
-export function contactSubject(officeName: string): string {
-  return `Message — ${officeName} (${site.name})`;
+/** `Message - Office (Visitor)`, with a hyphen and a header-safe name. */
+export function contactSubject(officeName: string, visitorName: string): string {
+  const name = singleLine(visitorName).slice(0, NAME_MAX);
+  return `Message - ${officeName} (${name})`;
 }
 
 const FROM_ADDRESS = /^[a-z0-9][a-z0-9._+-]{0,63}@vitalityfamilychiropractic\.com$/i;
@@ -173,13 +173,15 @@ async function handle(
     return clientError(request, form, 503, NOT_READY);
   }
 
+  const message = messageBody(parsed);
   const sent = await sendEmail(fetchImpl, accountId, token, {
     to: deps.to ?? contactRecipient(env.CF_PAGES_BRANCH),
     from,
     fromName,
     replyTo: parsed.email,
-    subject: contactSubject(parsed.location.name),
-    text: messageBody(parsed),
+    subject: contactSubject(parsed.location.name, parsed.name),
+    text: message.text,
+    html: message.html,
   });
   if (!sent) return clientError(request, form, 502, SEND_FAILED);
   return clientSuccess(request, form);
@@ -230,16 +232,60 @@ function parseFields(form: FormData): ParsedFields | { ok: false; error: string 
   return { ok: true, location, name, email: emailRaw, phone, contactMethod, comments };
 }
 
-function messageBody(fields: ParsedFields): string {
-  return [
-    `office: ${fields.location.slug}`,
-    `name: ${fields.name}`,
-    `email: ${fields.email}`,
-    `phone: ${fields.phone}`,
-    `contactMethod: ${fields.contactMethod}`,
-    'comments:',
-    fields.comments,
-  ].join('\n');
+const EMAIL_FONT = 'Arial, Helvetica, sans-serif';
+
+function messageBody(fields: ParsedFields): { text: string; html: string } {
+  const phoneLink = telLink(fields.phone);
+  const rows: Array<{ label: string; text: string; html: string }> = [
+    { label: 'location', text: fields.location.name, html: escapeHtml(fields.location.name) },
+    { label: 'name', text: fields.name, html: escapeHtml(fields.name) },
+    { label: 'email', text: fields.email, html: mailLink(fields.email) },
+    {
+      label: 'phone',
+      text: fields.phone,
+      html: phoneLink ?? (fields.phone ? escapeHtml(fields.phone) : '&nbsp;'),
+    },
+    { label: 'contact method', text: fields.contactMethod, html: escapeHtml(fields.contactMethod) },
+    { label: 'comments', text: fields.comments, html: escapeHtml(fields.comments).replace(/\n/g, '<br>') },
+  ];
+
+  const text = ['New form submission', '', ...rows.map((row) => `${row.label}\n${row.text}`)].join('\n\n');
+  const blocks = rows
+    .map(
+      (row) =>
+        `<tr><td style="font-family:${EMAIL_FONT};font-size:13px;line-height:1.4;color:#6b7280;padding:0 0 6px 0;">${row.label}</td></tr>` +
+        `<tr><td style="font-family:${EMAIL_FONT};font-size:16px;line-height:1.5;color:#111111;padding:0 0 28px 0;">${row.html}</td></tr>`,
+    )
+    .join('');
+  const html =
+    '<!DOCTYPE html><html><body style="margin:0;padding:0;background:#ffffff;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' +
+    '<tr><td align="left" style="padding:24px;">' +
+    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">' +
+    `<tr><td style="font-family:${EMAIL_FONT};font-size:28px;line-height:1.2;font-weight:700;color:#333333;padding:0 0 32px 0;">New form submission</td></tr>` +
+    blocks +
+    '</table></td></tr></table></body></html>';
+  return { text, html };
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function mailLink(email: string): string {
+  const safe = escapeHtml(email);
+  return `<a href="mailto:${safe}" style="color:#111111;text-decoration:underline;">${safe}</a>`;
+}
+
+function telLink(phone: string): string | null {
+  const dial = phone.replace(/[^\d+]/g, '');
+  if (!/^\+?\d{7,15}$/.test(dial)) return null;
+  return `<a href="tel:${dial}" style="color:#111111;text-decoration:underline;">${escapeHtml(phone)}</a>`;
 }
 
 function senderAddress(env: ContactEnv, fallback = DEFAULT_CONTACT_FROM_EMAIL): string | null {
@@ -255,6 +301,7 @@ interface OutboundMail {
   replyTo: string;
   subject: string;
   text: string;
+  html: string;
 }
 
 async function sendEmail(
@@ -283,6 +330,7 @@ async function sendEmail(
           reply_to: replyTo,
           subject,
           text: mail.text,
+          html: mail.html,
         }),
         signal: AbortSignal.timeout(10_000),
       },
