@@ -5,13 +5,12 @@ credentials: "LMT"
 role: "Licensed Massage Therapist"
 schemaType: "Person"
 tagline: "Massage Therapist. Blended-Family Ringmaster. Healing Hands. Big Heart."
-factsTitle: "Five Things You Didn't Know About Candice"
 facts:
-  - "Her dream vacation is a little house overlooking a Norwegian fjord. Mountains, water, and a cozy place to unwind? Sign her up."
-  - "She loves industrial music. Not necessarily what you'd expect from a peony-loving mom of seven, but we love a woman with range!"
-  - "Buffalo sauce is practically its own food group. She's currently putting it on just about everything."
-  - "She's been making Promise Bibles for her friends. Her faith is a huge part of her life, and she loves finding meaningful ways to share that encouragement with others."
-  - "Her perfect Saturday is all about the little things. A workout, good coffee, family time at the lake, and a cool evening by the fire pit with her husband. Bonus points if there's a good book involved."
+  - "<strong>Her dream vacation is a little house overlooking a Norwegian fjord.</strong> Mountains, water, and a cozy place to unwind? Sign her up."
+  - "<strong>She loves industrial music.</strong> Not necessarily what you'd expect from a peony-loving mom of seven, but we love a woman with range!"
+  - "<strong>Buffalo sauce is practically its own food group.</strong> She's currently putting it on just about everything."
+  - "<strong>She's been making Promise Bibles for her friends.</strong> Her faith is a huge part of her life, and she loves finding meaningful ways to share that encouragement with others."
+  - "<strong>Her perfect Saturday is all about the little things.</strong> A workout, good coffee, family time at the lake, and a cool evening by the fire pit with her husband. Bonus points if there's a good book involved."
 photo: "portrait-candice"
 ---
 

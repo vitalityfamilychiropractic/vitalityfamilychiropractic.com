@@ -4,13 +4,12 @@ shortName: "Yvonne"
 role: "Office Manager"
 schemaType: "Person"
 tagline: "Office Manager. Boy Mom. Baby Whisperer. Fiercely Loyal."
-factsTitle: "5 Things You Didn’t Know About Yvonne"
 facts:
-  - "You can call her Queen Yvonne! She was crowned queen of St. Teresa’s Fiesta Patrias back in 1985, and her great-aunt called her Queen Yvonne for the rest of her life."
-  - "She’s an ’80s trivia contender. Music, movies, you name it. She might just give you a run for your money!"
-  - "Switzerland is her dream vacation. She’s ready for the mountains, scenery, and a little adventure."
-  - "She’s a lefty! Proud member of the left-handed club."
-  - "Puzzles are her happy place. Give her a good puzzle and some quiet time, and she’s perfectly content."
+  - "<strong>You can call her Queen Yvonne!</strong> She was crowned queen of St. Teresa's Fiesta Patrias back in 1985, and her great-aunt called her Queen Yvonne for the rest of her life."
+  - "<strong>She's an '80s trivia contender.</strong> Music, movies, you name it. She might just give you a run for your money!"
+  - "<strong>Switzerland is her dream vacation.</strong> She's ready for the mountains, scenery, and a little adventure."
+  - "<strong>She's a lefty!</strong> Proud member of the left-handed club."
+  - "<strong>Puzzles are her happy place.</strong> Give her a good puzzle and some quiet time, and she's perfectly content."
 photo: "portrait-yvonne"
 ---
 

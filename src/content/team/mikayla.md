@@ -4,13 +4,12 @@ shortName: "Mikayla"
 role: "Chiropractic Assistant"
 schemaType: "Person"
 tagline: "Chiropractic Assistant. Servant’s Heart. Animal Lover. Overachiever Extraordinaire."
-factsTitle: "5 Things You Didn't Know About Mikayla"
 facts:
-  - "She's been to Antarctica! But her next dream adventure is a little warmer: swimming with whale sharks in the Maldives."
-  - "She's never eaten a steak or pork chop. It's a texture thing, and she's perfectly happy keeping it that way!"
-  - "She's a certified EMT! Because apparently being a full-time student, working, and volunteering wasn't enough to keep her busy."
-  - "She's a certified floral designer. She earned her certificate through Texas A&amp;M's Benz School of Floral Design and loves creating beautiful arrangements."
-  - "She's the mom of her friend group. She's got a plan, a backup plan, and probably a backup plan for that backup plan."
+  - "<strong>She's been to Antarctica!</strong> But her next dream adventure is a little warmer: swimming with whale sharks in the Maldives."
+  - "<strong>She's never eaten a steak or pork chop.</strong> It's a texture thing, and she's perfectly happy keeping it that way!"
+  - "<strong>She's a certified EMT!</strong> Because apparently being a full-time student, working, and volunteering wasn't enough to keep her busy."
+  - "<strong>She's a certified floral designer.</strong> She earned her certificate through Texas A&amp;M's Benz School of Floral Design and loves creating beautiful arrangements."
+  - "<strong>She's the mom of her friend group.</strong> She's got a plan, a backup plan, and probably a backup plan for that backup plan."
 photo: "portrait-mikayla"
 ---
 

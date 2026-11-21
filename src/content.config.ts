@@ -114,7 +114,6 @@ const team = defineCollection({
       role: z.string(),
       schemaType: z.enum(['Physician', 'Person']),
       tagline: z.string().optional(),
-      factsTitle: z.string(),
       facts: z.array(z.string()),
       /** Photo id. Omit when no portrait exists; the page shows initials. */
       photo: z.string().optional(),

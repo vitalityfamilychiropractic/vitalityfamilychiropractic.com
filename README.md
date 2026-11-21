@@ -382,7 +382,7 @@ A team file is one person. The schema is strict.
 | `name`, `shortName`, `role` | Display name, `{{lead}}` name, and job title |
 | `schemaType` | `Physician` or `Person` |
 | `tagline` | Italic line under the heading. Optional. |
-| `factsTitle`, `facts` | The numbered list. Each fact is HTML. |
+| `facts` | The numbered list. Each fact is HTML. |
 | `photo` | Photo id. Omit it and the page shows initials. |
 | `credentials`, `email` | Optional. Credentials are appended to the full name. |
 

@@ -91,7 +91,7 @@ function factsEyebrow(schemaType: string, role: string): string {
               </div>
               <div class="tm-things">
                 <p class="tm-eyebrow">{factsEyebrow(member.data.schemaType, member.data.role)}</p>
-                <h3>{member.data.factsTitle}</h3>
+                <h3>Five Things You Didn't Know About {member.data.shortName}</h3>
                 <ol class="tm-list tm-ol">
                   {member.data.facts.map((fact) => (
                     <li set:html={fact} />
