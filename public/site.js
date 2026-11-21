@@ -1,7 +1,32 @@
 // Vitality Family Chiropractic — small, dependency-free site script.
 (() => {
   const d = document, root = d.documentElement;
+
+  // Reveal on scroll. `.js` hides every `.reveal` until it gains `.in`.
+  // Mark blocks already in the viewport before that class is added, so the
+  // first paint keeps them visible. The observer used to require 8% of the
+  // element's own height, which a tall bio never reaches until you scroll
+  // even when its heading is already on screen.
+  const revealEls = [...d.querySelectorAll(".reveal")];
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const viewH = window.innerHeight || root.clientHeight;
+  const viewW = window.innerWidth || root.clientWidth;
+  const onScreen = (el) => {
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < viewH && r.right > 0 && r.left < viewW;
+  };
+  const pendingReveal = [];
+  if ("IntersectionObserver" in window && !reducedMotion) {
+    revealEls.forEach((el) => (onScreen(el) ? el.classList.add("in") : pendingReveal.push(el)));
+  } else revealEls.forEach((el) => el.classList.add("in"));
   root.classList.add("js");
+  if (pendingReveal.length && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add("in"); io.unobserve(en.target);
+    }), { rootMargin: "0px 0px -8% 0px", threshold: 0 });
+    pendingReveal.forEach((el) => io.observe(el));
+  }
 
   // Header shadow once the page scrolls
   const header = d.querySelector("[data-header]");
@@ -39,15 +64,6 @@
     if (e.target.closest(".primary .has-sub")) return;
     d.querySelectorAll(".primary .sub.open").forEach((s) => { s.classList.remove("open"); s.closest(".has-sub").querySelector(".sub-toggle").setAttribute("aria-expanded", "false"); });
   });
-
-  // Gentle reveal on scroll
-  const els = d.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
-      if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
-    }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
-    els.forEach((el) => io.observe(el));
-  } else els.forEach((el) => el.classList.add("in"));
 
   // Mobile call bar appears after the welcome section
   const bar = d.querySelector("[data-mbar]"), hero = d.querySelector(".hero, .pg-intro, .tm-hero, .pr-hero");
