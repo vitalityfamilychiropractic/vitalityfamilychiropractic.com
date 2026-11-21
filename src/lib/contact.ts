@@ -14,10 +14,10 @@ import {
   DEFAULT_CONTACT_FROM_EMAIL,
   DEFAULT_CONTACT_FROM_NAME,
   PREVIEW_CONTACT_TO,
+  PRODUCTION_BRANCH,
 } from '../config/site';
 
-/** Cloudflare Pages production branch. Preview branches are everything else. */
-export const PRODUCTION_BRANCH = 'main';
+export { PRODUCTION_BRANCH };
 
 /** Production inbox on `main`. Preview inbox on every other branch, including when the branch is unset. */
 export function contactRecipient(

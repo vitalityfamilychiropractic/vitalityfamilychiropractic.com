@@ -130,7 +130,9 @@ every office menu and links to `/{office}/shop/`. The catalog is the
 `products` list in `src/content/pages/shop.md`. Buy links are `example.com`
 stand-ins until a real store URL is ready. Do not guess one. `shop.inNav` in
 `src/config/site.ts` turns the item on or off for every office. While that is
-false, production menus omit it and the dev server still shows the link in gray.
+false, production menus omit it. The dev server and any Cloudflare Pages
+branch other than `main` still show the link in gray. Gather & Grow follows
+the same rule through `community.inNav`.
 
 There is no Our Values page. `/our-values/` and `/{office}/our-values/`
 redirect to the office home. Old Jekyll paths (`/specialties/pregnancy-care/`,

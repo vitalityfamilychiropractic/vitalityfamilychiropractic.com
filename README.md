@@ -84,8 +84,9 @@ Each office is a directory under its slug.
 Massage is a child of Our Care, and only at offices that list it in
 `services`. Celebration does not. Shop is one item for every office, linking
 to `/{office}/shop/`. Turn it on or off with `shop.inNav` in `src/config/site.ts`.
-While that is false, production menus omit it and the dev server still shows
-it in gray.
+While that is false, production menus omit it. The dev server and any
+Cloudflare Pages branch other than `main` still show it in gray. Gather &
+Grow follows the same rule through `community.inNav`.
 
 Old paths such as `/specialties/`, `/team/`, `/pricing/`, and `/our-values/`
 redirect. Astro redirects are in `astro.config.mjs` (one key per path).

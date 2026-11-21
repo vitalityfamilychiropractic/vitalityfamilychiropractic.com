@@ -7,6 +7,19 @@
  * local `wrangler pages dev`, uses the preview inbox.
  */
 
+/** Cloudflare Pages production branch. Preview branches are everything else. */
+export const PRODUCTION_BRANCH = 'main';
+
+/**
+ * Menu items with `inNav: false` still appear on the dev server and on a
+ * Cloudflare Pages build of any branch other than `main`. A local production
+ * build does not set `CF_PAGES_BRANCH`, so those items stay out of the menu.
+ */
+export function showOffNav(dev: boolean, branch: string | undefined): boolean {
+  if (dev) return true;
+  return typeof branch === 'string' && branch.length > 0 && branch !== PRODUCTION_BRANCH;
+}
+
 /** Inbox for contact-form mail when `CF_PAGES_BRANCH` is `main`. */
 export const CONTACT_TO = 'info@vitalityfamilychiropractic.com';
 
@@ -35,9 +48,10 @@ export const site = {
     facebook: 'vitalityfamilychiropractic',
   },
   /**
-   * Shop in every office menu. The item links to `/{office}/shop/`.
-   * Set `inNav` to false to leave it out of production menus. The dev server
-   * still shows the link, in gray.
+   * Gather & Grow and Shop, linking to `/{office}/our-community/` and
+   * `/{office}/shop/`. Set `inNav` to false to leave an item out of production
+   * menus. The dev server and non-production Cloudflare Pages branches still
+   * show it, in gray.
    */
   community: {
     inNav: false,

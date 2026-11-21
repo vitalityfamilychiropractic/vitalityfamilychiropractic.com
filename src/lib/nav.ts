@@ -1,4 +1,4 @@
-import { site } from '../config/site';
+import { showOffNav, site } from '../config/site';
 import type { Location } from '../config/types';
 import { servicesFor } from './services';
 
@@ -9,8 +9,8 @@ export interface NavItem {
   /** A button that opens the menu, rather than a link to a section page. */
   heading?: boolean;
   /**
-   * Drawn in gray. Set when link is turned off in `site.ts` and this is the
-   * dev server, so the link can still be opened.
+   * Drawn in gray. Set when the link is turned off in `site.ts` but still
+   * shown, on the dev server or a non-production Cloudflare Pages branch.
    */
   devOnly?: boolean;
 }
@@ -20,12 +20,14 @@ export interface NavItem {
  * location's slug, so each office reads as a standalone site.
  *
  * Massage is a child of Our Care, and only at offices that offer it.
- * Shop is the same for every office. `site.shop.inNav` turns it off in
- * production; the dev server keeps the gray link.
+ * Shop is the same for every office. `inNav` turns Gather & Grow and Shop
+ * off in production. The dev server and non-production Cloudflare branches
+ * keep the gray link. `CF_PAGES_BRANCH` is set for the Pages build.
  */
 export async function buildNav(location: Location): Promise<NavItem[]> {
   const services = await servicesFor(location);
   const base = `/${location.slug}`;
+  const offNav = showOffNav(import.meta.env.DEV, process.env.CF_PAGES_BRANCH);
 
   const items: NavItem[] = [
     {
@@ -47,7 +49,7 @@ export async function buildNav(location: Location): Promise<NavItem[]> {
     },
   ];
 
-  if (site.community.inNav || import.meta.env.DEV) {
+  if (site.community.inNav || offNav) {
     items.push({
       label: 'Gather & Grow',
       href: `${base}/our-community/`,
@@ -59,7 +61,7 @@ export async function buildNav(location: Location): Promise<NavItem[]> {
     });
   }
 
-  if (site.shop.inNav || import.meta.env.DEV) {
+  if (site.shop.inNav || offNav) {
     items.push({
       label: 'Shop',
       href: `${base}/shop/`,

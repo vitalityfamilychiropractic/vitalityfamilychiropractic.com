@@ -16,8 +16,9 @@ interface Props {
 
 const { items, pathname, variant, label } = Astro.props;
 const mobile = variant === 'mobile';
-// `devOnly` grays a link on the dev server. On a parent it also grays the
-// parent's toggle and every child; a child can also set it for itself.
+// `devOnly` grays a link that `inNav` has turned off. Those links stay visible
+// on the dev server and on non-production Cloudflare branches. On a parent it
+// also grays the parent's toggle and every child; a child can also set it.
 ---
 
 <nav class={mobile ? undefined : 'primary'} aria-label={label}>

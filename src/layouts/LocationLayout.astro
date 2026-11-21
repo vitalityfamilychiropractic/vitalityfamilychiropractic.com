@@ -40,9 +40,10 @@ const {
   noindex: noindexProp = false,
 } = Astro.props;
 
-// Sections switched off in `site.ts` still build (the dev server links them),
-// so keep them out of search until they go live. The sitemap filter in
-// `astro.config.mjs` applies the same rule.
+// Sections switched off in `site.ts` still build. The dev server and
+// non-production Cloudflare branches link them, so keep them out of search
+// until they go live. The sitemap filter in `astro.config.mjs` applies the
+// same rule.
 const hiddenSection =
   (!site.shop.inNav && /^\/[^/]+\/shop\//.test(path)) ||
   (!site.community.inNav && /^\/[^/]+\/our-community\//.test(path));
