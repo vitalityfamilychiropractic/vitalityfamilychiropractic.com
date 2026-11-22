@@ -119,31 +119,44 @@ include Email Sending, and the Email Sending docs say to use the REST API from
 anything that is not a Worker. The function calls
 `POST /accounts/{account_id}/email/sending/send`. No token is stored in the repo.
 
-With scripting off, the browser posts the form and lands on
-`/{office}/contact/thanks/` or `/{office}/contact/error/`. Those addresses are
-paths only. Field values are never copied into a URL. With scripting on, the
-page stays put and shows the same success or error styling it already used.
-The script does not call `gtag` or `dataLayer`. The only analytics call on the
-site is the existing page-view `gtag('config', …)` in `BaseLayout.astro`.
+With scripting off, and Turnstile not configured, the browser posts the form
+and lands on `/{office}/contact/thanks/` or `/{office}/contact/error/`. Those
+addresses are paths only. Field values are never copied into a URL. With
+scripting on, the page stays put and shows the same success or error styling
+it already used. The script does not call `gtag` or `dataLayer`. The only
+analytics call on the site is the existing page-view `gtag('config', …)` in
+`BaseLayout.astro`.
 
-The honeypot fields and the "do not include protected health information" note
-stay. A filled honeypot is not emailed. The server checks the method, the
-content type, the size, required fields, lengths, the email shape, the phone
-shape, and the office slug. Header characters are stripped before anything is
-placed in a subject or address. Five posts from one address are accepted in
-ten minutes; the sixth is refused. That counter lives in the isolate, so it
-slows a burst rather than capping the whole site.
+The form has one honeypot, a text field named `vfc_hp_field`. It sits off
+screen (not `type="hidden"`), out of tab order, with `aria-hidden` and
+`autocomplete="off"`. A filled honeypot, including the old `_gotcha` and
+`botcheck` names if a bot still sends them, gets the success response and
+is not emailed. The server also refuses a field it does not know, a repeated
+field, a name that contains a web address, and a message with more than two
+links. It still checks the method, the content type, the size, required
+fields, lengths, the email shape, the phone shape, and the office slug.
+Header characters are stripped before anything is placed in a subject or
+address. Five posts from one address are accepted in ten minutes; the sixth
+is refused. That counter lives in the isolate, so it slows a burst rather
+than capping the whole site.
 
-Turnstile is optional until both of its values are set. The widget is baked
-into the page from `TURNSTILE_SITE_KEY` at build time. The function
-checks `TURNSTILE_SECRET` with siteverify, and it requires the action
-`contact` and a hostname of `www.vitalityfamilychiropractic.com` or
-`vitalityfamilychiropractic.com`, plus the hostname of the request itself,
-so a Pages preview matches without an extra variable. `TURNSTILE_HOSTNAMES`
-adds more hostnames. It does not remove the production ones. A normal
-browser post, with scripting off, still sends, because Turnstile cannot issue
-a token without JavaScript. A scripted post is refused until the token checks
-out.
+Turnstile is optional until `TURNSTILE_SECRET` is set. The widget is baked
+into the page from `TURNSTILE_SITE_KEY` at build time. With the secret set,
+every post needs a token, including a browser with scripting off. The
+function calls siteverify and accepts the token only when `success` is true,
+`action` is `contact`, and `hostname` is `www.vitalityfamilychiropractic.com`,
+`vitalityfamilychiropractic.com`, the request host, or a host listed in
+`TURNSTILE_HOSTNAMES`. `TURNSTILE_HOSTNAMES` adds hostnames. It does not
+remove the production ones. A network error, a non-200 response, or a body
+that is not JSON is a rejection. A failed check is never treated as success.
+
+The same secret signs a timestamp from `GET /api/contact-stamp`. The page
+fetches it on load. A post that arrives in under two seconds, or after
+twelve hours, or with a missing or altered stamp, is refused. If the secret
+is unset, siteverify and the timer are skipped and the function log says so.
+A token that arrives anyway is rejected, because it cannot be checked. The
+widget alone does not stop a bot: a post that simply omits the token used
+to be accepted.
 
 ### What to set in the Cloudflare dashboard
 
@@ -204,9 +217,10 @@ Turnstile, when you want it:
      writes it into the form. It is not a runtime variable, and `.dev.vars`
      does not supply it. A new deploy is required after it changes.
    - `TURNSTILE_SECRET`, secret, **runtime** only. Production and Preview.
-3. Redeploy. Until both values are present, the form still sends and the
-   widget is hidden. After the secret is present, a scripted submit without a
-   valid token is refused.
+3. Redeploy. Until the secret is present, the form still sends and the
+   widget is hidden. After the secret is present, a submit without a valid
+   token is refused, with or without JavaScript. The stamp endpoint starts
+   enforcing the two-second wait at the same time.
 
 Local mail needs the runtime names in `.dev.vars` (gitignored) next to
 `package.json`: `EMAIL_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, and, when you

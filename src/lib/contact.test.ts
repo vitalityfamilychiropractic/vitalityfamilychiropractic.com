@@ -1,7 +1,15 @@
 import { afterEach, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { mailForBranch } from '../../functions/api/contact';
-import { contactRecipient, contactSubject, handleContact, resetContactLimits, type ContactEnv } from './contact';
+import {
+  contactRecipient,
+  contactSubject,
+  handleContact,
+  handleContactStamp,
+  issueContactStamp,
+  resetContactLimits,
+  type ContactEnv,
+} from './contact';
 
 const ACCOUNT = 'a'.repeat(32);
 const TOKEN = 'test-token';
@@ -109,9 +117,6 @@ test('sends an HTML body with escaped values and the plain-text fields', async (
         name: 'Jane & "Jo" <admin>',
         comments: 'First line\n<script>alert(1)</script>\nThird',
         phone: '',
-        _gotcha: '',
-        botcheck: '',
-        from_name: 'Vitality Family Chiropractic website',
         page: '/celebration/contact/',
       },
       { accept: 'application/json', ip: '203.0.113.190' },
@@ -153,20 +158,120 @@ test('builds a header-safe subject from the office and the visitor name', () => 
 
 test('drops a honeypot submission without sending', async () => {
   const sent: unknown[] = [];
-  const traps: Array<{ fields: Record<string, string>; ip: string }> = [
-    { fields: { _gotcha: 'spam' }, ip: '203.0.113.30' },
+  const traps: Array<{ fields: Record<string, string>; ip: string; accept?: string }> = [
+    { fields: { vfc_hp_field: 'https://spam.example' }, ip: '203.0.113.30' },
+    { fields: { vfc_hp_field: '   ' }, ip: '203.0.113.32' },
+    { fields: { _gotcha: 'spam' }, ip: '203.0.113.33' },
     { fields: { botcheck: 'on' }, ip: '203.0.113.31' },
+    { fields: { vfc_hp_field: 'filled' }, ip: '203.0.113.34', accept: 'application/json' },
   ];
   for (const trap of traps) {
     const response = await handleContact(
-      post({ ...validFields(), ...trap.fields }, { ip: trap.ip }),
+      post({ ...validFields(), ...trap.fields }, { ip: trap.ip, accept: trap.accept }),
       readyEnv(),
       { fetch: mockFetch(sent) },
     );
-    expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe('/celebration/contact/thanks/');
+    if (trap.accept === 'application/json') {
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({ ok: true });
+    } else {
+      expect(response.status).toBe(303);
+      expect(response.headers.get('location')).toBe('/celebration/contact/thanks/');
+    }
   }
   expect(sent).toHaveLength(0);
+});
+
+test('rejects an unexpected or repeated field', async () => {
+  const cases = [
+    { ...validFields(), from_name: 'Vitality Family Chiropractic website' },
+    { ...validFields(), website: 'https://spam.example' },
+    { ...validFields(), extra: '' },
+  ];
+  for (const [index, fields] of cases.entries()) {
+    const sent: unknown[] = [];
+    const response = await handleContact(
+      post(fields, { accept: 'application/json', ip: `203.0.113.${21 + index}` }),
+      readyEnv(),
+      { fetch: mockFetch(sent) },
+    );
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ ok: false, error: 'That form could not be sent.' });
+    expect(sent).toHaveLength(0);
+  }
+
+  const body = new URLSearchParams(validFields());
+  body.append('name', 'Second Name');
+  const sent: unknown[] = [];
+  const duplicate = await handleContact(
+    new Request('https://www.vitalityfamilychiropractic.com/api/contact', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        accept: 'application/json',
+        origin: 'https://www.vitalityfamilychiropractic.com',
+        'cf-connecting-ip': '203.0.113.29',
+      },
+      body,
+    }),
+    readyEnv(),
+    { fetch: mockFetch(sent) },
+  );
+  expect(duplicate.status).toBe(400);
+  expect(sent).toHaveLength(0);
+
+  const cached = await handleContact(
+    post(
+      { ...validFields(), _gotcha: '', botcheck: '' },
+      { accept: 'application/json', ip: '203.0.113.28' },
+    ),
+    readyEnv(),
+    { fetch: mockFetch(sent) },
+  );
+  expect(cached.status).toBe(200);
+  expect(sent).toHaveLength(1);
+});
+
+test('rejects a web address in the name and a message with too many links', async () => {
+  const cases = [
+    { ...validFields(), name: 'https://spam.example' },
+    { ...validFields(), name: 'www.spam.example' },
+    { ...validFields(), name: 'Jane example.com' },
+    {
+      ...validFields(),
+      comments: 'See https://a.example and https://b.example and www.c.example',
+    },
+  ];
+  for (const [index, fields] of cases.entries()) {
+    const sent: unknown[] = [];
+    const response = await handleContact(
+      post(fields, { accept: 'application/json', ip: `198.51.100.${index + 1}` }),
+      readyEnv(),
+      { fetch: mockFetch(sent) },
+    );
+    expect(response.status).toBe(400);
+    expect(sent).toHaveLength(0);
+    const body = await response.json();
+    expect(body.ok).toBe(false);
+    expect(JSON.stringify(body)).not.toContain('spam.example');
+  }
+
+  const sent: unknown[] = [];
+  const allowed = await handleContact(
+    post(
+      {
+        ...validFields(),
+        name: "Dr. Mary-Jane O'Neil",
+        comments: 'Found you on google.com. Thursday works.\nhttps://maps.example/place and www.example.com/hours',
+      },
+      { accept: 'application/json', ip: '198.51.100.20' },
+    ),
+    readyEnv(),
+    { fetch: mockFetch(sent) },
+  );
+  expect(allowed.status).toBe(200);
+  expect(sent).toHaveLength(1);
+  expect(sent[0]).toMatchObject({ reply_to: 'jane@example.com' });
 });
 
 test('strips header-injection characters and keeps them out of headers', async () => {
@@ -175,7 +280,7 @@ test('strips header-injection characters and keeps them out of headers', async (
     post(
       {
         ...validFields(),
-        name: 'Ann\r\nBcc: evil@example.com',
+        name: 'Ann\r\nBcc: someone',
         email: 'ann@example.com',
         comments: 'Hello\r\nthere',
       },
@@ -186,11 +291,11 @@ test('strips header-injection characters and keeps them out of headers', async (
   );
 
   expect(response.status).toBe(200);
-  expect(sent[0]?.subject).toBe('Message - Celebration (Ann Bcc: evil@example.com)');
+  expect(sent[0]?.subject).toBe('Message - Celebration (Ann Bcc: someone)');
   expect(sent[0]?.reply_to).toBe('ann@example.com');
   expect(sent[0]?.subject).not.toMatch(/[\r\n]/);
   expect(sent[0]?.reply_to).not.toMatch(/[\r\n]/);
-  expect(sent[0]?.text).toContain('Ann Bcc: evil@example.com');
+  expect(sent[0]?.text).toContain('Ann Bcc: someone');
   expect(sent[0]?.text).toContain('Hello\nthere');
   expect(sent[0]?.text).not.toContain('\r');
   expect(sent[0]?.html).toContain('Hello<br>there');
@@ -259,70 +364,221 @@ test('does not redirect an unknown office to a path built from the field', async
   expect(await response.text()).not.toContain('jane');
 });
 
-test('requires Turnstile for the scripted path and lets a no-JS post through', async () => {
+test('requires a Turnstile token on every post once the secret is set', async () => {
   const sent: unknown[] = [];
-  const env = { ...readyEnv(), TURNSTILE_SECRET: 'turnstile-secret', TURNSTILE_HOSTNAMES: 'www.vitalityfamilychiropractic.com' };
-  const fetchImpl = mockFetch(sent, { turnstile: { success: true, action: 'contact', hostname: 'www.vitalityfamilychiropractic.com' } });
+  const env = turnstileEnv({ TURNSTILE_HOSTNAMES: 'www.vitalityfamilychiropractic.com' });
+  const now = 1_700_000_000_000;
+  const fetchImpl = mockFetch(sent, {
+    turnstile: { success: true, action: 'contact', hostname: 'www.vitalityfamilychiropractic.com' },
+  });
 
   const missing = await handleContact(
-    post(validFields(), { accept: 'application/json', ip: '203.0.113.80' }),
+    post(await agedFields(validFields(), env, now), { accept: 'application/json', ip: '203.0.113.80' }),
     env,
-    { fetch: fetchImpl },
+    { fetch: fetchImpl, now: () => now },
   );
   expect(missing.status).toBe(403);
   expect(sent).toHaveLength(0);
 
-  const noJs = await handleContact(post(validFields(), { ip: '203.0.113.81' }), env, { fetch: fetchImpl });
+  const noJs = await handleContact(
+    post(await agedFields(validFields(), env, now), { ip: '203.0.113.81' }),
+    env,
+    { fetch: fetchImpl, now: () => now },
+  );
   expect(noJs.status).toBe(303);
-  expect(noJs.headers.get('location')).toBe('/celebration/contact/thanks/');
-  expect(sent).toHaveLength(1);
+  expect(noJs.headers.get('location')).toBe('/celebration/contact/error/');
+  expect(sent).toHaveLength(0);
+
+  const unconfigured = await handleContact(
+    post(validFields(), { accept: 'application/json', ip: '203.0.113.84' }),
+    readyEnv(),
+    { fetch: mockFetch([]) },
+  );
+  expect(unconfigured.status).toBe(200);
+
+  const tokenWithoutSecret = await handleContact(
+    post(
+      { ...validFields(), 'cf-turnstile-response': 'token-unchecked' },
+      { accept: 'application/json', ip: '203.0.113.85' },
+    ),
+    readyEnv(),
+    { fetch: mockFetch([]) },
+  );
+  expect(tokenWithoutSecret.status).toBe(403);
+
+  const tooSoon = await handleContact(
+    post(await agedFields(validFields(), env, now, 500), { accept: 'application/json', ip: '203.0.113.86' }),
+    env,
+    { fetch: fetchImpl, now: () => now },
+  );
+  expect(tooSoon.status).toBe(400);
+  expect(await tooSoon.json()).toEqual({ ok: false, error: 'Please wait a moment and try again.' });
+  expect(sent).toHaveLength(0);
 
   const verified = await handleContact(
     post(
-      { ...validFields(), 'cf-turnstile-response': 'token-ok' },
+      await agedFields({ ...validFields(), 'cf-turnstile-response': 'token-ok' }, env, now),
       { accept: 'application/json', ip: '203.0.113.82' },
     ),
     env,
-    { fetch: fetchImpl },
+    { fetch: fetchImpl, now: () => now },
   );
   expect(verified.status).toBe(200);
-  expect(sent).toHaveLength(2);
+  expect(sent).toHaveLength(1);
 });
 
 test('rejects a Turnstile token with the wrong action, hostname, or a failed check', async () => {
-  const env = { ...readyEnv(), TURNSTILE_SECRET: 'turnstile-secret' };
-  const cases = [
+  const env = turnstileEnv();
+  const cases: Array<{ success?: boolean; action?: string; hostname?: string }> = [
     { success: true, action: 'signup', hostname: 'www.vitalityfamilychiropractic.com' },
     { success: true, action: 'contact', hostname: 'evil.example' },
     { success: false, action: 'contact', hostname: 'www.vitalityfamilychiropractic.com' },
+    { success: true, hostname: 'www.vitalityfamilychiropractic.com' },
+    { success: true, action: 'contact' },
   ];
   for (const [index, turnstile] of cases.entries()) {
     const sent: unknown[] = [];
+    const now = 1_700_000_100_000 + index;
     const response = await handleContact(
       post(
-        { ...validFields(), 'cf-turnstile-response': 'token' },
+        await agedFields({ ...validFields(), 'cf-turnstile-response': 'token' }, env, now),
         { accept: 'application/json', ip: `203.0.113.${90 + index}` },
       ),
       env,
-      { fetch: mockFetch(sent, { turnstile }) },
+      { fetch: mockFetch(sent, { turnstile }), now: () => now },
     );
     expect(response.status).toBe(403);
     expect(sent).toHaveLength(0);
   }
 });
 
-test('fails closed when siteverify is unreachable', async () => {
-  const response = await handleContact(
-    post(
-      { ...validFields(), 'cf-turnstile-response': 'token' },
-      { accept: 'application/json', ip: '203.0.113.100' },
-    ),
-    { ...readyEnv(), TURNSTILE_SECRET: 'turnstile-secret' },
+test('fails closed when siteverify errors', async () => {
+  const env = turnstileEnv();
+  const now = 1_700_000_200_000;
+  const fields = await agedFields({ ...validFields(), 'cf-turnstile-response': 'token' }, env, now);
+  const unreachable = await handleContact(
+    post(fields, { accept: 'application/json', ip: '203.0.113.100' }),
+    env,
+    { fetch: () => Promise.reject(new Error('network')), now: () => now },
+  );
+  expect(unreachable.status).toBe(403);
+
+  const httpError = await handleContact(
+    post(fields, { accept: 'application/json', ip: '203.0.113.101' }),
+    env,
     {
-      fetch: () => Promise.reject(new Error('network')),
+      fetch: () => Promise.resolve(new Response('nope', { status: 500 })),
+      now: () => now,
     },
   );
-  expect(response.status).toBe(403);
+  expect(httpError.status).toBe(403);
+
+  const badJson = await handleContact(
+    post(fields, { accept: 'application/json', ip: '203.0.113.102' }),
+    env,
+    {
+      fetch: () => Promise.resolve(new Response('not-json', { status: 200 })),
+      now: () => now,
+    },
+  );
+  expect(badJson.status).toBe(403);
+});
+
+test('rejects a stamp that is missing, altered, or too old', async () => {
+  const env = turnstileEnv();
+  const now = 1_700_000_300_000;
+  const token = { ...validFields(), 'cf-turnstile-response': 'token' };
+  const missing = await handleContact(
+    post(token, { accept: 'application/json', ip: '203.0.113.111' }),
+    env,
+    { fetch: mockFetch([]), now: () => now },
+  );
+  expect(missing.status).toBe(400);
+  expect(await missing.json()).toEqual({
+    ok: false,
+    error: 'Please reload the page and send the form again.',
+  });
+
+  const stamp = await issueContactStamp(env, now - 5_000);
+  expect(stamp).toBeTruthy();
+  const flipped = `${stamp!.slice(0, -1)}${stamp!.endsWith('a') ? 'b' : 'a'}`;
+  const altered = await handleContact(
+    post({ ...token, form_loaded: flipped }, { accept: 'application/json', ip: '203.0.113.112' }),
+    env,
+    { fetch: mockFetch([]), now: () => now },
+  );
+  expect(altered.status).toBe(400);
+
+  const expired = await handleContact(
+    post(
+      await agedFields(token, env, now, 12 * 60 * 60 * 1000 + 1),
+      { accept: 'application/json', ip: '203.0.113.113' },
+    ),
+    env,
+    { fetch: mockFetch([]), now: () => now },
+  );
+  expect(expired.status).toBe(400);
+  expect(await expired.json()).toEqual({
+    ok: false,
+    error: 'Please reload the page and send the form again.',
+  });
+});
+
+test('issues a stamp the contact handler will accept after the minimum wait', async () => {
+  const env = turnstileEnv();
+  const now = 1_700_000_400_000;
+  const issued = await handleContactStamp(
+    new Request('https://www.vitalityfamilychiropractic.com/api/contact-stamp', {
+      headers: { accept: 'application/json', origin: 'https://www.vitalityfamilychiropractic.com' },
+    }),
+    env,
+    { now: () => now - 5_000 },
+  );
+  expect(issued.status).toBe(200);
+  expect(issued.headers.get('cache-control')).toBe('no-store');
+  const body = (await issued.json()) as { ok: boolean; required: boolean; stamp: string };
+  expect(body.ok).toBe(true);
+  expect(body.required).toBe(true);
+  expect(body.stamp).not.toContain('turnstile-secret');
+
+  const sent: unknown[] = [];
+  const accepted = await handleContact(
+    post(
+      { ...validFields(), 'cf-turnstile-response': 'token', form_loaded: body.stamp },
+      { accept: 'application/json', ip: '203.0.113.120' },
+    ),
+    env,
+    {
+      fetch: mockFetch(sent, {
+        turnstile: { success: true, action: 'contact', hostname: 'www.vitalityfamilychiropractic.com' },
+      }),
+      now: () => now,
+    },
+  );
+  expect(accepted.status).toBe(200);
+  expect(sent).toHaveLength(1);
+
+  const open = await handleContactStamp(
+    new Request('https://www.vitalityfamilychiropractic.com/api/contact-stamp'),
+    readyEnv(),
+  );
+  expect(await open.json()).toEqual({ ok: true, required: false });
+
+  const denied = await handleContactStamp(
+    new Request('https://www.vitalityfamilychiropractic.com/api/contact-stamp', {
+      method: 'POST',
+    }),
+    env,
+  );
+  expect(denied.status).toBe(405);
+
+  const foreign = await handleContactStamp(
+    new Request('https://preview.example.pages.dev/api/contact-stamp', {
+      headers: { accept: 'application/json', origin: 'https://evil.example' },
+    }),
+    env,
+  );
+  expect(foreign.status).toBe(403);
 });
 
 test('rate limits an address after five posts', async () => {
@@ -449,9 +705,11 @@ test('allows a same-origin preview host and still rejects a cross-site origin', 
 test('accepts a Turnstile hostname that matches the request host', async () => {
   const preview = 'https://cursor-native-contact-form-a.vitalityfamilychiro.pages.dev/api/contact';
   const sent: unknown[] = [];
+  const env = turnstileEnv();
+  const now = 1_700_000_500_000;
   const accepted = await handleContact(
     post(
-      { ...validFields(), 'cf-turnstile-response': 'token' },
+      await agedFields({ ...validFields(), 'cf-turnstile-response': 'token' }, env, now),
       {
         accept: 'application/json',
         ip: '203.0.113.182',
@@ -459,7 +717,7 @@ test('accepts a Turnstile hostname that matches the request host', async () => {
         origin: 'https://cursor-native-contact-form-a.vitalityfamilychiro.pages.dev',
       },
     ),
-    { ...readyEnv(), TURNSTILE_SECRET: 'turnstile-secret' },
+    env,
     {
       fetch: mockFetch(sent, {
         turnstile: {
@@ -468,6 +726,7 @@ test('accepts a Turnstile hostname that matches the request host', async () => {
           hostname: 'cursor-native-contact-form-a.vitalityfamilychiro.pages.dev',
         },
       }),
+      now: () => now,
     },
   );
   expect(accepted.status).toBe(200);
@@ -475,7 +734,7 @@ test('accepts a Turnstile hostname that matches the request host', async () => {
 
   const mismatched = await handleContact(
     post(
-      { ...validFields(), 'cf-turnstile-response': 'token' },
+      await agedFields({ ...validFields(), 'cf-turnstile-response': 'token' }, env, now),
       {
         accept: 'application/json',
         ip: '203.0.113.183',
@@ -483,11 +742,12 @@ test('accepts a Turnstile hostname that matches the request host', async () => {
         origin: 'https://cursor-native-contact-form-a.vitalityfamilychiro.pages.dev',
       },
     ),
-    { ...readyEnv(), TURNSTILE_SECRET: 'turnstile-secret' },
+    env,
     {
       fetch: mockFetch([], {
         turnstile: { success: true, action: 'contact', hostname: 'other.pages.dev' },
       }),
+      now: () => now,
     },
   );
   expect(mismatched.status).toBe(403);
@@ -523,6 +783,7 @@ test('form sources do not send field values to a URL or to analytics', () => {
     'src/pages/[location]/contact/thanks.astro',
     'src/pages/[location]/contact/error.astro',
     'functions/api/contact.ts',
+    'functions/api/contact-stamp.ts',
   ];
   for (const file of files) {
     const source = readFileSync(file, 'utf8');
@@ -540,13 +801,22 @@ test('form sources do not send field values to a URL or to analytics', () => {
   const form = readFileSync('src/components/ContactForm.astro', 'utf8');
   expect(form).toContain('action="/api/contact"');
   expect(form).toContain('method="POST"');
-  expect(form).toContain('name="_gotcha"');
-  expect(form).toContain('name="botcheck"');
+  expect(form).toContain('name="vfc_hp_field"');
+  expect(form).toContain('tabindex="-1"');
+  expect(form).toContain('autocomplete="off"');
+  expect(form).toContain('aria-hidden="true"');
+  expect(form).toContain('left:-9999px');
+  expect(form).not.toContain('name="_gotcha"');
+  expect(form).not.toContain('name="botcheck"');
+  expect(form).not.toContain('type="hidden" name="vfc_hp_field"');
   expect(form).toContain('Please do not include protected health information');
 
   const handler = readFileSync('src/lib/contact.ts', 'utf8');
   expect(handler).toContain("url.search = ''");
   expect(handler).toContain('Location: url.pathname');
+  expect(handler).toContain('vfc_hp_field');
+  expect(handler).toContain('_gotcha');
+  expect(handler).toContain('siteverify');
 });
 
 const BODY_TOO_BIG = 32 * 1024 + 1;
@@ -600,6 +870,20 @@ function readyEnv(): ContactEnv {
   return { CLOUDFLARE_ACCOUNT_ID: ACCOUNT, EMAIL_API_TOKEN: TOKEN, CF_PAGES_BRANCH: 'main' };
 }
 
+function turnstileEnv(extra: ContactEnv = {}): ContactEnv {
+  return { ...readyEnv(), TURNSTILE_SECRET: 'turnstile-secret', ...extra };
+}
+
+async function agedFields(
+  fields: Record<string, string>,
+  env: ContactEnv,
+  now: number,
+  age = 5_000,
+): Promise<Record<string, string>> {
+  const stamp = await issueContactStamp(env, now - age);
+  return stamp ? { ...fields, form_loaded: stamp } : fields;
+}
+
 function validFields(): Record<string, string> {
   return {
     office: 'celebration',
@@ -630,7 +914,7 @@ function post(
 
 function mockFetch(
   sent: unknown[],
-  options: { turnstile?: { success: boolean; action: string; hostname: string } } = {},
+  options: { turnstile?: { success?: boolean; action?: string; hostname?: string } } = {},
 ): typeof fetch {
   return (async (input, init) => {
     const url = String(input);
@@ -638,6 +922,7 @@ function mockFetch(
       const params = new URLSearchParams(String(init?.body ?? ''));
       expect(params.get('secret')).toBe('turnstile-secret');
       expect(params.get('response')).toBeTruthy();
+      expect(params.get('remoteip')).toMatch(/^\d{1,3}(?:\.\d{1,3}){3}$/);
       return new Response(JSON.stringify(options.turnstile));
     }
     expect(url).toBe(`https://api.cloudflare.com/client/v4/accounts/${ACCOUNT}/email/sending/send`);

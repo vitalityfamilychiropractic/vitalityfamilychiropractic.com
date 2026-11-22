@@ -1,5 +1,6 @@
 ---
 import { TURNSTILE_SITE_KEY } from 'astro:env/server';
+import { MIN_SUBMIT_MS } from '../lib/contact';
 import type { Location } from '../config/types';
 
 interface Props {
@@ -33,21 +34,65 @@ const page = `/${location.slug}/contact/`;
     method="POST"
     action="/api/contact"
     data-fallback-email={location.email}
+    data-min-submit={MIN_SUBMIT_MS}
     aria-labelledby="contact-form-title"
   >
     <input type="hidden" name="office" value={location.slug} />
     <input type="hidden" name="page" value={page} />
+    <input type="hidden" name="form_loaded" id="form-loaded" value="" autocomplete="off" />
 
     {/*
-      Honeypot. A person never sees these fields. Either one being filled
-      is treated as spam and is not emailed.
+      Honeypot. Off screen, out of tab order, and hidden from assistive tech.
+      Not type=hidden: bots that skip hidden inputs still fill a text field.
+      The label reads as a real field. A person never sees it. Autofill is off
+      so a saved profile does not fill it and get discarded.
     */}
-    <div class="fm-honeypot" aria-hidden="true">
-      <label for="botcheck">Leave this field empty</label>
-      <input id="botcheck" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
-      <label for="gotcha">Leave this field empty</label>
-      <input id="gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+    <div
+      class="fm-honeypot"
+      aria-hidden="true"
+      inert
+      style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"
+    >
+      <label for="vfc_hp_field">Website</label>
+      <input
+        id="vfc_hp_field"
+        name="vfc_hp_field"
+        type="text"
+        tabindex="-1"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-hidden="true"
+        data-1p-ignore="true"
+        data-lpignore="true"
+        value=""
+      />
     </div>
+    <script is:inline>
+      (function () {
+        var input = document.getElementById('form-loaded');
+        if (!input) return;
+        fetch('/api/contact-stamp', {
+          headers: { Accept: 'application/json' },
+          cache: 'no-store',
+        })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (payload) {
+            if (!payload || typeof payload.stamp !== 'string' || !payload.stamp) {
+              input.setAttribute('data-stamp', 'skip');
+              return;
+            }
+            input.value = payload.stamp;
+            input.setAttribute('data-received', String(Date.now()));
+            input.setAttribute('data-stamp', 'ready');
+          })
+          .catch(function () {
+            input.setAttribute('data-stamp', 'skip');
+          });
+      })();
+    </script>
 
     <div class="fm-grid">
       <p class="fm-field">
@@ -245,6 +290,46 @@ const page = `/${location.slug}/contact/`;
       });
     }
 
+    /** Stamp age is server time. This wait keeps an instant click from losing the race. */
+    async function waitForStamp() {
+      const input = form?.querySelector<HTMLInputElement>('input[name="form_loaded"]');
+      if (!input) return;
+      const started = Date.now();
+      while (!input.getAttribute('data-stamp') && Date.now() - started < 4000) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+      if (input.getAttribute('data-stamp') !== 'ready') return;
+      const received = Number(input.getAttribute('data-received') ?? '');
+      if (!input.value || !Number.isFinite(received)) return;
+      const min = Number(form?.getAttribute('data-min-submit') ?? '2000');
+      const remaining = min + 500 - (Date.now() - received);
+      if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, remaining));
+    }
+
+    async function refreshStamp() {
+      const input = form?.querySelector<HTMLInputElement>('input[name="form_loaded"]');
+      if (!input) return;
+      input.value = '';
+      input.removeAttribute('data-received');
+      input.removeAttribute('data-stamp');
+      try {
+        const response = await fetch('/api/contact-stamp', {
+          headers: { Accept: 'application/json' },
+          cache: 'no-store',
+        });
+        const payload = (await response.json().catch(() => null)) as { stamp?: string } | null;
+        if (!payload || typeof payload.stamp !== 'string' || !payload.stamp) {
+          input.setAttribute('data-stamp', 'skip');
+          return;
+        }
+        input.value = payload.stamp;
+        input.setAttribute('data-received', String(Date.now()));
+        input.setAttribute('data-stamp', 'ready');
+      } catch {
+        input.setAttribute('data-stamp', 'skip');
+      }
+    }
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
 
@@ -265,6 +350,8 @@ const page = `/${location.slug}/contact/`;
 
       status.dataset.state = '';
       status.textContent = 'Sending your message…';
+
+      await waitForStamp();
 
       const mailto = form.dataset.fallbackEmail;
       const fallback = mailto
@@ -290,6 +377,7 @@ const page = `/${location.slug}/contact/`;
         status.textContent = 'Thank you. Your message has been sent. We will be in touch shortly.';
         form.reset();
         for (const field of fields) field.setAttribute('aria-invalid', 'false');
+        void refreshStamp();
       } catch {
         status.dataset.state = 'error';
         status.textContent = fallback;
