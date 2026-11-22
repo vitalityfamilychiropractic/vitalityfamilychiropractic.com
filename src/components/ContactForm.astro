@@ -33,7 +33,8 @@ const page = `/${location.slug}/contact/`;
     id="contact-form"
     method="POST"
     action="/api/contact"
-    data-fallback-email={location.email}
+    data-fallback-user={location.email?.split('@')[0]}
+    data-fallback-domain={location.email?.split('@')[1]}
     data-min-submit={MIN_SUBMIT_MS}
     aria-labelledby="contact-form-title"
   >
@@ -353,7 +354,10 @@ const page = `/${location.slug}/contact/`;
 
       await waitForStamp();
 
-      const mailto = form.dataset.fallbackEmail;
+      // The address is stored in two halves so plain-text scrapers do not
+      // find a complete email address in the page source.
+      const { fallbackUser, fallbackDomain } = form.dataset;
+      const mailto = fallbackUser && fallbackDomain ? `${fallbackUser}@${fallbackDomain}` : '';
       const fallback = mailto
         ? `Sorry, we could not send that. Please email us at ${mailto} or give us a call.`
         : 'Sorry, we could not send that. Please give us a call and we will get you booked in.';
