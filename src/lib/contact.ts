@@ -48,8 +48,36 @@ const PHONE_MAX = 40;
 const COMMENTS_MAX = 4000;
 const BODY_MAX = 32 * 1024;
 const TOKEN_MAX = 2048;
+const PAGE_MAX = 300;
+const STAMP_MAX = 200;
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
+
+/** How long a signed stamp must age before a post is accepted. */
+export const MIN_SUBMIT_MS = 2000;
+/** A stamp older than this is stale. The visitor reloads the form. */
+const MAX_SUBMIT_MS = 12 * 60 * 60 * 1000;
+/** Links (`http://`, `https://`, or `www.`) allowed in a message. */
+const MAX_LINKS = 2;
+
+const ALLOWED_FIELDS = new Set([
+  'office',
+  'page',
+  'name',
+  'email',
+  'phone',
+  'contactMethod',
+  'comments',
+  'cf-turnstile-response',
+  'form_loaded',
+  'vfc_hp_field',
+  // Previous honeypot names. A cached page still posts them empty.
+  '_gotcha',
+  'botcheck',
+]);
+
+/** Filled means a bot. `_gotcha` and `botcheck` are the previous honeypot names. */
+const HONEYPOT_FIELDS = ['vfc_hp_field', '_gotcha', 'botcheck'];
 
 const DEFAULT_HOSTS = ['www.vitalityfamilychiropractic.com', 'vitalityfamilychiropractic.com'];
 const DEFAULT_TURNSTILE_HOSTS = ['www.vitalityfamilychiropractic.com', 'vitalityfamilychiropractic.com'];
@@ -142,6 +170,13 @@ async function handle(
     return clientSuccess(request, form);
   }
 
+  if (hasUnexpectedFields(form)) {
+    return clientError(request, form, 400, UNEXPECTED_FIELD);
+  }
+
+  const stamp = await verifyStamp(form, env, now());
+  if (!stamp.ok) return clientError(request, form, 400, stamp.error);
+
   const turnstile = await verifyTurnstile(request, form, env, fetchImpl);
   if (!turnstile.ok) {
     return clientError(
@@ -154,6 +189,9 @@ async function handle(
 
   const parsed = parseFields(form);
   if (!parsed.ok) return clientError(request, form, 400, parsed.error);
+
+  const spam = spamReason(parsed.name, parsed.comments);
+  if (spam) return clientError(request, form, 400, spam);
 
   const from = senderAddress(env, deps.fromEmail);
   if (!from) {
@@ -189,6 +227,11 @@ async function handle(
 
 const NOT_READY = 'This form is not ready to send yet. Please email us or call.';
 const SEND_FAILED = 'Sorry, we could not send that. Please email us or call.';
+const UNEXPECTED_FIELD = 'That form could not be sent.';
+const STAMP_TOO_SOON = 'Please wait a moment and try again.';
+const STAMP_INVALID = 'Please reload the page and send the form again.';
+const NAME_LINK = 'Please enter your name without a web address.';
+const TOO_MANY_LINKS = 'Please include at most a couple of links in your message.';
 
 interface ParsedFields {
   ok: true;
@@ -361,19 +404,28 @@ async function sendEmail(
   return false;
 }
 
+/**
+ * Siteverify. A missing secret means the check is not configured: posts with
+ * no token still send, and a token we cannot check is rejected. Once the
+ * secret is set, every post needs a token. Scripted and no-JS posts are held
+ * to the same rule. Errors fail closed.
+ */
 async function verifyTurnstile(
   request: Request,
   form: FormData,
   env: ContactEnv,
   fetchImpl: typeof fetch,
 ): Promise<{ ok: boolean }> {
-  const secret = (env.TURNSTILE_SECRET ?? '').trim();
-  if (!secret) return { ok: true };
-
-  const token = textField(form, 'cf-turnstile-response');
-  // Turnstile needs JavaScript. A normal browser navigation still posts.
-  if (!token) return { ok: !wantsJson(request) };
+  const secret = turnstileSecret(env);
+  const token = textField(form, 'cf-turnstile-response').trim();
   if (token.length > TOKEN_MAX || /[\u0000-\u001F\u007F]/.test(token)) return { ok: false };
+
+  if (!secret) {
+    noteMissingTurnstileSecret();
+    return { ok: token.length === 0 };
+  }
+
+  if (!token) return { ok: false };
 
   const requestHost = new URL(request.url).hostname.toLowerCase();
   const expected = hostSet(env.TURNSTILE_HOSTNAMES, [...DEFAULT_TURNSTILE_HOSTS, requestHost]);
@@ -381,14 +433,13 @@ async function verifyTurnstile(
 
   let response: Response;
   try {
+    const params = new URLSearchParams({ secret, response: token });
+    const ip = clientIp(request);
+    if (ip !== 'unknown') params.set('remoteip', ip);
     response = await fetchImpl('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        secret,
-        response: token,
-        remoteip: clientIp(request),
-      }),
+      body: params,
       signal: AbortSignal.timeout(10_000),
     });
   } catch (error) {
@@ -397,14 +448,18 @@ async function verifyTurnstile(
     return { ok: false };
   }
 
-  if (!response.ok) return { ok: false };
+  if (!response.ok) {
+    console.error(`Turnstile siteverify failed: HTTP ${response.status}`);
+    return { ok: false };
+  }
 
-  let result: { success?: boolean; action?: string; hostname?: string };
+  let result: { success?: boolean; action?: string; hostname?: string } | null = null;
   try {
     result = await response.json();
   } catch {
-    return { ok: false };
+    result = null;
   }
+  if (!result || typeof result !== 'object') return { ok: false };
 
   const hostname = (result.hostname ?? '').toLowerCase();
   return {
@@ -413,7 +468,130 @@ async function verifyTurnstile(
 }
 
 function honeypotTripped(form: FormData): boolean {
-  return textField(form, '_gotcha').length > 0 || textField(form, 'botcheck').length > 0;
+  return HONEYPOT_FIELDS.some((name) => textField(form, name).length > 0);
+}
+
+function hasUnexpectedFields(form: FormData): boolean {
+  const seen = new Set<string>();
+  for (const [key, value] of form.entries()) {
+    if (seen.has(key)) return true;
+    seen.add(key);
+    if (!ALLOWED_FIELDS.has(key) || typeof value !== 'string') return true;
+    if (key === 'page' && value.length > PAGE_MAX) return true;
+    if (key === 'form_loaded' && value.length > STAMP_MAX) return true;
+  }
+  return false;
+}
+
+function turnstileSecret(env: ContactEnv): string {
+  return (env.TURNSTILE_SECRET ?? '').trim();
+}
+
+let warnedMissingSecret = false;
+
+function noteMissingTurnstileSecret(): void {
+  if (warnedMissingSecret) return;
+  warnedMissingSecret = true;
+  console.error(
+    'Contact form TURNSTILE_SECRET is unset, so Turnstile and the submit timer are not enforced',
+  );
+}
+
+function randomNonce(): string {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return hex(bytes);
+}
+
+function hex(bytes: Uint8Array): string {
+  return [...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+async function hmacHex(secret: string, message: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  );
+  const signature = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
+  return hex(new Uint8Array(signature));
+}
+
+/** Signed `issuedAt.nonce.hmac` for the minimum-time check. Null when Turnstile is not configured. */
+export async function issueContactStamp(env: ContactEnv, now = Date.now()): Promise<string | null> {
+  const secret = turnstileSecret(env);
+  if (!secret) return null;
+  const nonce = randomNonce();
+  const signature = await hmacHex(secret, `${now}.${nonce}`);
+  return `${now}.${nonce}.${signature}`;
+}
+
+function safeEqual(left: string, right: string): boolean {
+  if (left.length !== right.length) return false;
+  let mismatch = 0;
+  for (let index = 0; index < left.length; index += 1) {
+    mismatch |= left.charCodeAt(index) ^ right.charCodeAt(index);
+  }
+  return mismatch === 0;
+}
+
+async function verifyStamp(
+  form: FormData,
+  env: ContactEnv,
+  now: number,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const secret = turnstileSecret(env);
+  if (!secret) return { ok: true };
+
+  const match = /^(\d{10,16})\.([a-f0-9]{32})\.([a-f0-9]{64})$/.exec(textField(form, 'form_loaded').trim());
+  if (!match) return { ok: false, error: STAMP_INVALID };
+  const issuedAt = Number(match[1]);
+  const nonce = match[2] ?? '';
+  const signature = match[3] ?? '';
+  if (!Number.isSafeInteger(issuedAt)) return { ok: false, error: STAMP_INVALID };
+
+  const expected = await hmacHex(secret, `${issuedAt}.${nonce}`);
+  if (!safeEqual(expected, signature)) return { ok: false, error: STAMP_INVALID };
+
+  const age = now - issuedAt;
+  if (age < MIN_SUBMIT_MS) return { ok: false, error: STAMP_TOO_SOON };
+  if (age > MAX_SUBMIT_MS) return { ok: false, error: STAMP_INVALID };
+  return { ok: true };
+}
+
+/** `GET /api/contact-stamp`. Issues the signed timer. Uncached. */
+export async function handleContactStamp(
+  request: Request,
+  env: ContactEnv,
+  deps: ContactDeps = {},
+): Promise<Response> {
+  if (request.method !== 'GET') {
+    return plain(405, 'Method not allowed', { Allow: 'GET' });
+  }
+  const originError = checkOrigin(request, env);
+  if (originError) return originError;
+
+  const now = deps.now ?? Date.now;
+  const stamp = await issueContactStamp(env, now());
+  const body = stamp ? { ok: true, required: true, stamp } : { ok: true, required: false };
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: {
+      'content-type': 'application/json; charset=utf-8',
+      'cache-control': 'no-store',
+    },
+  });
+}
+
+function spamReason(name: string, comments: string): string | null {
+  const nameHasUrl =
+    /(?:https?:\/\/|www\.)|\b[a-z0-9-]+\.(?:com|net|org|info|biz|io|xyz|co|shop|online|site)\b/i.test(name);
+  if (nameHasUrl) return NAME_LINK;
+  const links = comments.match(/https?:\/\/|www\./gi);
+  if (links && links.length > MAX_LINKS) return TOO_MANY_LINKS;
+  return null;
 }
 
 function checkOrigin(request: Request, env: ContactEnv): Response | null {
